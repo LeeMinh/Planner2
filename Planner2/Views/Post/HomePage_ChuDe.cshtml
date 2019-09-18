@@ -1,0 +1,21 @@
+﻿@model  IEnumerable<Planner2.Models.MainTask>
+<header class="entry-header">
+    <div class="bor-bot">
+        <div class="title">
+            <h1 class="entry-title">
+                @ViewBag.TitleChuDe
+            </h1>
+            <span class="icon-house"></span>
+        </div>
+    </div>
+</header><!-- .page-header -->
+<div class="list-realty">
+    <ul>
+        @{
+            Html.RenderPartial("~/Views/Post/PV/_TableGrid.cshtml", Model);
+        }
+    </ul>
+</div>
+<div class="clear clearfix more_link_ar">
+    <a href="/Post/index?ChuDe=@ViewBag.SeoUrl" title="Xem thêm">Xem thêm @ViewBag.TitleChuDe</a>
+</div>

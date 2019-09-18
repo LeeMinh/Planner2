@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Views/Shared/_NavPub.cshtml";
+    Planner2Entities db = new Planner2Entities();
+    var HomePage = db.Categories.Where(Z => Z.Menu.ToUpper().Contains("HOMEPAGE")).OrderBy(z => z.STT).ToList();
+    foreach (var item in HomePage)
+    {
+        try
+        {
+            Html.RenderAction(item.Menu, new { SeoUrl = item.SeoUrl });
+        }
+        catch 
+        {
+
+        }
+    }
+
+
+}
+<style>
+    #primary .carousel {
+        display: inline-block;
+        position: relative;
+    }
+</style>

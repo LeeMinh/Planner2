@@ -1,0 +1,717 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Planner2Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Bank">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BankName" Type="nvarchar" MaxLength="500" />
+          <Property Name="ChuTaiKhoan" Type="nvarchar" MaxLength="500" />
+          <Property Name="ChiNhanh" Type="nvarchar" MaxLength="500" />
+          <Property Name="SoTaiKhoan" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="CategoryRowID" />
+          </Key>
+          <Property Name="CategoryRowID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="ParentID" Type="int" />
+          <Property Name="SeoUrl" Type="nvarchar" MaxLength="500" />
+          <Property Name="Menu" Type="nvarchar" MaxLength="50" />
+          <Property Name="STT" Type="int" />
+          <Property Name="Price7Day" Type="float" />
+          <Property Name="Price15Day" Type="float" />
+          <Property Name="Price30Day" Type="float" />
+          <Property Name="Price2Month" Type="float" />
+          <Property Name="Price3Month" Type="float" />
+          <Property Name="Price6Month" Type="float" />
+          <Property Name="Price1Year" Type="float" />
+          <Property Name="Price2Year" Type="float" />
+          <Property Name="Price5Year" Type="float" />
+        </EntityType>
+        <EntityType Name="CommentTask">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskID" Type="int" />
+          <Property Name="NOIDUNG" Type="nvarchar(max)" />
+          <Property Name="HoTen" Type="nvarchar" MaxLength="550" />
+          <Property Name="DienThoai" Type="nvarchar" MaxLength="550" />
+          <Property Name="DiaChi" Type="nvarchar" MaxLength="550" />
+          <Property Name="TieuDe" Type="nvarchar" MaxLength="550" />
+          <Property Name="MucDich" Type="nvarchar" MaxLength="550" />
+          <Property Name="DateCreate" Type="datetime" />
+          <Property Name="Note" Type="nvarchar(max)" />
+          <Property Name="FileUpload" Type="nvarchar(max)" />
+          <Property Name="Type" Type="int" />
+          <Property Name="ParentID" Type="int" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="History">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskID" Type="int" />
+          <Property Name="StaffID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DATECREATE" Type="datetime" />
+          <Property Name="NOIDUNG" Type="nvarchar(max)" />
+          <Property Name="Type" Type="int" />
+        </EntityType>
+        <EntityType Name="MainTask">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskName" Type="nvarchar(max)" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="AttendPerson" Type="nvarchar" MaxLength="500" />
+          <Property Name="NgayDang" Type="datetime" />
+          <Property Name="DienTich" Type="float" />
+          <Property Name="Gia" Type="float" />
+          <Property Name="TyGia" Type="nvarchar" MaxLength="50" />
+          <Property Name="KhuVuc_TP" Type="int" />
+          <Property Name="KhuVuc_Huyen" Type="int" />
+          <Property Name="KhuVuc_Xa" Type="int" />
+          <Property Name="Map_DiaDiem" Type="nvarchar" MaxLength="250" />
+          <Property Name="Map_LoaiBatDongSan" Type="nvarchar" MaxLength="250" />
+          <Property Name="Map_Huong" Type="nvarchar" MaxLength="250" />
+          <Property Name="Map_SoPhongNgu" Type="int" />
+          <Property Name="Map_DuAn" Type="nvarchar" MaxLength="250" />
+          <Property Name="Map_TenLienLac" Type="nvarchar" MaxLength="250" />
+          <Property Name="Map_DienThoai" Type="nvarchar" MaxLength="250" />
+          <Property Name="Map_Zalo" Type="nvarchar" MaxLength="250" />
+          <Property Name="Map_Skyper" Type="nvarchar" MaxLength="250" />
+          <Property Name="Map_Email" Type="nvarchar" MaxLength="250" />
+          <Property Name="Tag" Type="nvarchar" MaxLength="500" />
+          <Property Name="Publish" Type="bit" />
+          <Property Name="SeoUrl" Type="nvarchar" MaxLength="500" />
+          <Property Name="Comment" Type="bit" />
+          <Property Name="Picture" Type="nvarchar" MaxLength="500" />
+          <Property Name="Viewer" Type="int" />
+          <Property Name="Page" Type="bit" />
+          <Property Name="UuTien" Type="int" Nullable="false" />
+          <Property Name="Youtube" Type="nvarchar" MaxLength="1550" />
+        </EntityType>
+        <EntityType Name="MainTask_ChuDe">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskID" Type="int" />
+          <Property Name="CategoryRowID" Type="int" />
+        </EntityType>
+        <EntityType Name="Notify">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskID" Type="int" />
+          <Property Name="URL" Type="nvarchar" MaxLength="550" />
+          <Property Name="NOIDUNG" Type="nvarchar" MaxLength="2000" />
+          <Property Name="CREATED" Type="datetime" />
+          <Property Name="CREATE_BY" Type="nvarchar" MaxLength="50" />
+          <Property Name="NotifyType" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="NotifyUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskID" Type="int" />
+          <Property Name="NotifyID" Type="int" />
+          <Property Name="ToUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReadNotify" Type="bit" Nullable="false" />
+          <Property Name="Time_Read" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SettingData">
+          <Key>
+            <PropertyRef Name="KeyID" />
+          </Key>
+          <Property Name="KeyID" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Value" Type="nvarchar" MaxLength="500" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" />
+          <Property Name="Value10" Type="nvarchar" MaxLength="500" />
+          <Property Name="Value9" Type="nvarchar" MaxLength="500" />
+          <Property Name="Value8" Type="nvarchar" MaxLength="500" />
+          <Property Name="Value7" Type="nvarchar" MaxLength="500" />
+          <Property Name="Value6" Type="nvarchar" MaxLength="500" />
+          <Property Name="Value5" Type="nvarchar" MaxLength="500" />
+          <Property Name="Value4" Type="nvarchar" MaxLength="500" />
+          <Property Name="Value3" Type="nvarchar" MaxLength="500" />
+          <Property Name="Value2" Type="nvarchar" MaxLength="500" />
+          <Property Name="Value1" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="ThanhPho">
+          <Key>
+            <PropertyRef Name="MaThanhPho" />
+            <PropertyRef Name="MaQuanHuyen" />
+            <PropertyRef Name="MaPhuongXa" />
+          </Key>
+          <Property Name="TenThanhPho" Type="nvarchar" MaxLength="255" />
+          <Property Name="MaThanhPho" Type="int" Nullable="false" />
+          <Property Name="QuanHuyen" Type="nvarchar" MaxLength="255" />
+          <Property Name="MaQuanHuyen" Type="int" Nullable="false" />
+          <Property Name="PhuongXa" Type="nvarchar" MaxLength="255" />
+          <Property Name="MaPhuongXa" Type="int" Nullable="false" />
+          <Property Name="Cap" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="UploadFile">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="1550" />
+          <Property Name="UrlFile" Type="nvarchar" MaxLength="1550" />
+          <Property Name="TableName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ColumnName" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Note" Type="nvarchar" MaxLength="1550" />
+          <Property Name="TaskID" Type="int" />
+        </EntityType>
+        <EntityType Name="User_Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="250" />
+          <Property Name="CategoryRowID" Type="int" />
+          <Property Name="Category" Type="nvarchar" MaxLength="250" />
+          <Property Name="NgayHetHan" Type="date" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="250" />
+          <Property Name="StaffName" Type="nvarchar" MaxLength="150" />
+          <Property Name="StaffID" Type="nvarchar" MaxLength="50" />
+          <Property Name="NgDuyet" Type="nvarchar" MaxLength="50" />
+          <Property Name="Dept" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SupperAdmin" Type="int" />
+          <Property Name="Parts" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="500" />
+          <Property Name="Active" Type="nvarchar" MaxLength="50" />
+          <Property Name="SoTien" Type="int" />
+        </EntityType>
+        <Function Name="SplitString" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="List" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Delim" Type="varchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Value" Type="nvarchar(max)" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <EntityContainer Name="Planner2ModelStoreContainer">
+          <EntitySet Name="Bank" EntityType="Self.Bank" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CommentTask" EntityType="Self.CommentTask" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="History" EntityType="Self.History" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MainTask" EntityType="Self.MainTask" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MainTask_ChuDe" EntityType="Self.MainTask_ChuDe" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notify" EntityType="Self.Notify" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NotifyUser" EntityType="Self.NotifyUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SettingData" EntityType="Self.SettingData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThanhPho" EntityType="Self.ThanhPho" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UploadFile" EntityType="Self.UploadFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_Category" EntityType="Self.User_Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Planner2Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Planner2Entities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="SplitString" IsComposable="true" ReturnType="Collection(String)">
+            <Parameter Name="List" Mode="In" Type="String" />
+            <Parameter Name="Delim" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SyncDailyTask">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="update_newTask" />
+          <FunctionImport Name="Update_Status">
+            <Parameter Name="TaskId" Mode="In" Type="Int32" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="Banks" EntityType="Planner2Model.Bank" />
+          <EntitySet Name="Categories" EntityType="Planner2Model.Category" />
+          <EntitySet Name="CommentTasks" EntityType="Planner2Model.CommentTask" />
+          <EntitySet Name="Histories" EntityType="Planner2Model.History" />
+          <EntitySet Name="MainTasks" EntityType="Planner2Model.MainTask" />
+          <EntitySet Name="MainTask_ChuDe" EntityType="Planner2Model.MainTask_ChuDe" />
+          <EntitySet Name="Notifies" EntityType="Planner2Model.Notify" />
+          <EntitySet Name="NotifyUsers" EntityType="Planner2Model.NotifyUser" />
+          <EntitySet Name="SettingDatas" EntityType="Planner2Model.SettingData" />
+          <EntitySet Name="ThanhPhoes" EntityType="Planner2Model.ThanhPho" />
+          <EntitySet Name="UploadFiles" EntityType="Planner2Model.UploadFile" />
+          <EntitySet Name="User_Category" EntityType="Planner2Model.User_Category" />
+          <EntitySet Name="Users" EntityType="Planner2Model.User" />
+          </EntityContainer>
+        <EntityType Name="Bank">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BankName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ChuTaiKhoan" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ChiNhanh" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SoTaiKhoan" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryRowID" />
+          </Key>
+          <Property Name="CategoryRowID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="SeoUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Menu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="STT" Type="Int32" />
+          <Property Name="Price7Day" Type="Double" />
+          <Property Name="Price15Day" Type="Double" />
+          <Property Name="Price30Day" Type="Double" />
+          <Property Name="Price2Month" Type="Double" />
+          <Property Name="Price3Month" Type="Double" />
+          <Property Name="Price6Month" Type="Double" />
+          <Property Name="Price1Year" Type="Double" />
+          <Property Name="Price2Year" Type="Double" />
+          <Property Name="Price5Year" Type="Double" />
+        </EntityType>
+        <EntityType Name="CommentTask">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskID" Type="Int32" />
+          <Property Name="NOIDUNG" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="HoTen" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <Property Name="DienThoai" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <Property Name="DiaChi" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <Property Name="TieuDe" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <Property Name="MucDich" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreate" Type="DateTime" Precision="3" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FileUpload" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="ParentID" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="History">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskID" Type="Int32" />
+          <Property Name="StaffID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DATECREATE" Type="DateTime" Precision="3" />
+          <Property Name="NOIDUNG" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Int32" />
+        </EntityType>
+        <EntityType Name="MainTask">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="AttendPerson" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="NgayDang" Type="DateTime" Precision="3" />
+          <Property Name="DienTich" Type="Double" />
+          <Property Name="Gia" Type="Double" />
+          <Property Name="TyGia" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="KhuVuc_TP" Type="Int32" />
+          <Property Name="KhuVuc_Huyen" Type="Int32" />
+          <Property Name="KhuVuc_Xa" Type="Int32" />
+          <Property Name="Map_DiaDiem" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Map_LoaiBatDongSan" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Map_Huong" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Map_SoPhongNgu" Type="Int32" />
+          <Property Name="Map_DuAn" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Map_TenLienLac" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Map_DienThoai" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Map_Zalo" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Map_Skyper" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Map_Email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Tag" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Publish" Type="Boolean" />
+          <Property Name="SeoUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Comment" Type="Boolean" />
+          <Property Name="Picture" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Viewer" Type="Int32" />
+          <Property Name="Page" Type="Boolean" />
+          <Property Name="UuTien" Type="Int32" Nullable="false" />
+          <Property Name="Youtube" Type="String" MaxLength="1550" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MainTask_ChuDe">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskID" Type="Int32" />
+          <Property Name="CategoryRowID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Notify">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskID" Type="Int32" />
+          <Property Name="URL" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <Property Name="NOIDUNG" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="CREATED" Type="DateTime" Precision="3" />
+          <Property Name="CREATE_BY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NotifyType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="NotifyUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskID" Type="Int32" />
+          <Property Name="NotifyID" Type="Int32" />
+          <Property Name="ToUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReadNotify" Type="Boolean" Nullable="false" />
+          <Property Name="Time_Read" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="SettingData">
+          <Key>
+            <PropertyRef Name="KeyID" />
+          </Key>
+          <Property Name="KeyID" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Value10" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value9" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value8" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value7" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value6" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value5" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value4" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value3" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value2" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value1" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ThanhPho">
+          <Key>
+            <PropertyRef Name="MaThanhPho" />
+            <PropertyRef Name="MaQuanHuyen" />
+            <PropertyRef Name="MaPhuongXa" />
+          </Key>
+          <Property Name="TenThanhPho" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="MaThanhPho" Type="Int32" Nullable="false" />
+          <Property Name="QuanHuyen" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="MaQuanHuyen" Type="Int32" Nullable="false" />
+          <Property Name="PhuongXa" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="MaPhuongXa" Type="Int32" Nullable="false" />
+          <Property Name="Cap" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="UploadFile">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileName" Type="String" MaxLength="1550" FixedLength="false" Unicode="true" />
+          <Property Name="UrlFile" Type="String" MaxLength="1550" FixedLength="false" Unicode="true" />
+          <Property Name="TableName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ColumnName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Note" Type="String" MaxLength="1550" FixedLength="false" Unicode="true" />
+          <Property Name="TaskID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="User_Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="UserName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryRowID" Type="Int32" />
+          <Property Name="Category" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="NgayHetHan" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="StaffName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="StaffID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NgDuyet" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Dept" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SupperAdmin" Type="Int32" />
+          <Property Name="Parts" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SoTien" Type="Int32" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Planner2ModelStoreContainer" CdmEntityContainer="Planner2Entities">
+          <FunctionImportMapping FunctionImportName="SplitString" FunctionName="Planner2Model.Store.SplitString" />
+          <EntitySetMapping Name="Banks">
+            <EntityTypeMapping TypeName="Planner2Model.Bank">
+              <MappingFragment StoreEntitySet="Bank">
+                <ScalarProperty Name="SoTaiKhoan" ColumnName="SoTaiKhoan" />
+                <ScalarProperty Name="ChiNhanh" ColumnName="ChiNhanh" />
+                <ScalarProperty Name="ChuTaiKhoan" ColumnName="ChuTaiKhoan" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="Planner2Model.Category">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="Price5Year" ColumnName="Price5Year" />
+                <ScalarProperty Name="Price2Year" ColumnName="Price2Year" />
+                <ScalarProperty Name="Price1Year" ColumnName="Price1Year" />
+                <ScalarProperty Name="Price6Month" ColumnName="Price6Month" />
+                <ScalarProperty Name="Price3Month" ColumnName="Price3Month" />
+                <ScalarProperty Name="Price2Month" ColumnName="Price2Month" />
+                <ScalarProperty Name="Price30Day" ColumnName="Price30Day" />
+                <ScalarProperty Name="Price15Day" ColumnName="Price15Day" />
+                <ScalarProperty Name="Price7Day" ColumnName="Price7Day" />
+                <ScalarProperty Name="STT" ColumnName="STT" />
+                <ScalarProperty Name="Menu" ColumnName="Menu" />
+                <ScalarProperty Name="SeoUrl" ColumnName="SeoUrl" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryRowID" ColumnName="CategoryRowID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CommentTasks">
+            <EntityTypeMapping TypeName="Planner2Model.CommentTask">
+              <MappingFragment StoreEntitySet="CommentTask">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="FileUpload" ColumnName="FileUpload" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="DateCreate" ColumnName="DateCreate" />
+                <ScalarProperty Name="MucDich" ColumnName="MucDich" />
+                <ScalarProperty Name="TieuDe" ColumnName="TieuDe" />
+                <ScalarProperty Name="DiaChi" ColumnName="DiaChi" />
+                <ScalarProperty Name="DienThoai" ColumnName="DienThoai" />
+                <ScalarProperty Name="HoTen" ColumnName="HoTen" />
+                <ScalarProperty Name="NOIDUNG" ColumnName="NOIDUNG" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Histories">
+            <EntityTypeMapping TypeName="Planner2Model.History">
+              <MappingFragment StoreEntitySet="History">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="NOIDUNG" ColumnName="NOIDUNG" />
+                <ScalarProperty Name="DATECREATE" ColumnName="DATECREATE" />
+                <ScalarProperty Name="StaffID" ColumnName="StaffID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MainTasks">
+            <EntityTypeMapping TypeName="Planner2Model.MainTask">
+              <MappingFragment StoreEntitySet="MainTask">
+                <ScalarProperty Name="Youtube" ColumnName="Youtube" />
+                <ScalarProperty Name="UuTien" ColumnName="UuTien" />
+                <ScalarProperty Name="Page" ColumnName="Page" />
+                <ScalarProperty Name="Viewer" ColumnName="Viewer" />
+                <ScalarProperty Name="Picture" ColumnName="Picture" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="SeoUrl" ColumnName="SeoUrl" />
+                <ScalarProperty Name="Publish" ColumnName="Publish" />
+                <ScalarProperty Name="Tag" ColumnName="Tag" />
+                <ScalarProperty Name="Map_Email" ColumnName="Map_Email" />
+                <ScalarProperty Name="Map_Skyper" ColumnName="Map_Skyper" />
+                <ScalarProperty Name="Map_Zalo" ColumnName="Map_Zalo" />
+                <ScalarProperty Name="Map_DienThoai" ColumnName="Map_DienThoai" />
+                <ScalarProperty Name="Map_TenLienLac" ColumnName="Map_TenLienLac" />
+                <ScalarProperty Name="Map_DuAn" ColumnName="Map_DuAn" />
+                <ScalarProperty Name="Map_SoPhongNgu" ColumnName="Map_SoPhongNgu" />
+                <ScalarProperty Name="Map_Huong" ColumnName="Map_Huong" />
+                <ScalarProperty Name="Map_LoaiBatDongSan" ColumnName="Map_LoaiBatDongSan" />
+                <ScalarProperty Name="Map_DiaDiem" ColumnName="Map_DiaDiem" />
+                <ScalarProperty Name="KhuVuc_Xa" ColumnName="KhuVuc_Xa" />
+                <ScalarProperty Name="KhuVuc_Huyen" ColumnName="KhuVuc_Huyen" />
+                <ScalarProperty Name="KhuVuc_TP" ColumnName="KhuVuc_TP" />
+                <ScalarProperty Name="TyGia" ColumnName="TyGia" />
+                <ScalarProperty Name="Gia" ColumnName="Gia" />
+                <ScalarProperty Name="DienTich" ColumnName="DienTich" />
+                <ScalarProperty Name="NgayDang" ColumnName="NgayDang" />
+                <ScalarProperty Name="AttendPerson" ColumnName="AttendPerson" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MainTask_ChuDe">
+            <EntityTypeMapping TypeName="Planner2Model.MainTask_ChuDe">
+              <MappingFragment StoreEntitySet="MainTask_ChuDe">
+                <ScalarProperty Name="CategoryRowID" ColumnName="CategoryRowID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notifies">
+            <EntityTypeMapping TypeName="Planner2Model.Notify">
+              <MappingFragment StoreEntitySet="Notify">
+                <ScalarProperty Name="NotifyType" ColumnName="NotifyType" />
+                <ScalarProperty Name="CREATE_BY" ColumnName="CREATE_BY" />
+                <ScalarProperty Name="CREATED" ColumnName="CREATED" />
+                <ScalarProperty Name="NOIDUNG" ColumnName="NOIDUNG" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NotifyUsers">
+            <EntityTypeMapping TypeName="Planner2Model.NotifyUser">
+              <MappingFragment StoreEntitySet="NotifyUser">
+                <ScalarProperty Name="Time_Read" ColumnName="Time_Read" />
+                <ScalarProperty Name="ReadNotify" ColumnName="ReadNotify" />
+                <ScalarProperty Name="ToUser" ColumnName="ToUser" />
+                <ScalarProperty Name="NotifyID" ColumnName="NotifyID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SettingDatas">
+            <EntityTypeMapping TypeName="Planner2Model.SettingData">
+              <MappingFragment StoreEntitySet="SettingData">
+                <ScalarProperty Name="Value1" ColumnName="Value1" />
+                <ScalarProperty Name="Value2" ColumnName="Value2" />
+                <ScalarProperty Name="Value3" ColumnName="Value3" />
+                <ScalarProperty Name="Value4" ColumnName="Value4" />
+                <ScalarProperty Name="Value5" ColumnName="Value5" />
+                <ScalarProperty Name="Value6" ColumnName="Value6" />
+                <ScalarProperty Name="Value7" ColumnName="Value7" />
+                <ScalarProperty Name="Value8" ColumnName="Value8" />
+                <ScalarProperty Name="Value9" ColumnName="Value9" />
+                <ScalarProperty Name="Value10" ColumnName="Value10" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="KeyID" ColumnName="KeyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ThanhPhoes">
+            <EntityTypeMapping TypeName="Planner2Model.ThanhPho">
+              <MappingFragment StoreEntitySet="ThanhPho">
+                <ScalarProperty Name="Cap" ColumnName="Cap" />
+                <ScalarProperty Name="MaPhuongXa" ColumnName="MaPhuongXa" />
+                <ScalarProperty Name="PhuongXa" ColumnName="PhuongXa" />
+                <ScalarProperty Name="MaQuanHuyen" ColumnName="MaQuanHuyen" />
+                <ScalarProperty Name="QuanHuyen" ColumnName="QuanHuyen" />
+                <ScalarProperty Name="MaThanhPho" ColumnName="MaThanhPho" />
+                <ScalarProperty Name="TenThanhPho" ColumnName="TenThanhPho" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UploadFiles">
+            <EntityTypeMapping TypeName="Planner2Model.UploadFile">
+              <MappingFragment StoreEntitySet="UploadFile">
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
+                <ScalarProperty Name="TableName" ColumnName="TableName" />
+                <ScalarProperty Name="UrlFile" ColumnName="UrlFile" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_Category">
+            <EntityTypeMapping TypeName="Planner2Model.User_Category">
+              <MappingFragment StoreEntitySet="User_Category">
+                <ScalarProperty Name="NgayHetHan" ColumnName="NgayHetHan" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="CategoryRowID" ColumnName="CategoryRowID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Planner2Model.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="SoTien" ColumnName="SoTien" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Parts" ColumnName="Parts" />
+                <ScalarProperty Name="SupperAdmin" ColumnName="SupperAdmin" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Dept" ColumnName="Dept" />
+                <ScalarProperty Name="NgDuyet" ColumnName="NgDuyet" />
+                <ScalarProperty Name="StaffID" ColumnName="StaffID" />
+                <ScalarProperty Name="StaffName" ColumnName="StaffName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

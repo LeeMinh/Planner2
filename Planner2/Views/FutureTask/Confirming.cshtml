@@ -1,0 +1,194 @@
+﻿
+@{
+    ViewBag.Title = "Confirming";
+}
+
+<h2>Danh sách công việc chờ xử lý</h2>
+<div class="row">
+    <div class="col-12">
+        <div id="grvListTast" style="width:100%;"></div>
+        <div id="loadTask"></div>
+    </div>
+</div>
+<script>
+        //Converdate
+    function FromJsonToDate(value) {
+        if (value != null) {
+            return new Date(parseInt(value.replace('/Date(', '')));
+        }
+        return;
+    }
+    var listTask = []; 
+    var grvListTast = $("#grvListTast").dxDataGrid({
+            dataSource: [],
+            selection: { mode: "single" },
+            columnResizingMode: "widget",
+            showBorders: true,
+            paging: { enabled: true },
+            filterRow: { visible: true, applyFilter: "auto" },
+            showColumnHeaders: true,
+            showColumnLines: true,
+            showRowLines: true,
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [100, 200, 500, 1000],
+                showInfo: true
+            },
+            paging: { pageSize: 50 },
+            allowColumnResizing: true,
+            columnFixing: { enabled: true },
+            hoverStateEnabled: true,
+            headerFilter: { visible: true },
+            columnsAutoWidth: true,
+            allowColumnReordering: true, 
+        columns: [
+            {
+                dataField: "Id",
+                visible: false
+            },
+            {
+                dataField: "ParentID",
+                visible: false,
+                minWidth: 50
+            },
+            {
+                dataField: "TaskName", 
+                minWidth: 100,
+                width: 300,
+                maxWidth: 500,
+            },
+            {
+                dataField: "StartDate",
+                caption: "Ngày bắt đầu",
+
+                dataType: "date",
+                format: "dd/MM/yyyy",
+                allowHeaderFiltering: false,
+                minWidth: 100,
+            },
+            {
+                dataField: "DueDate",
+                caption: "Thời hạn",
+                dataType: "date",
+                format: "dd/MM/yyyy",
+                allowHeaderFiltering: false,
+                minWidth: 100
+            },
+            {
+                dataField: "Master",
+                caption: "Người thực hiện",
+                minWidth: 130,
+            },
+            {
+                dataField: "TaskAssigner",
+                caption: "Người giao việc",
+                minWidth: 130,
+            },
+            {
+                dataField: "TaskChecker",
+                caption: "Người giám sát",
+                minWidth: 130,
+            },
+            {
+                dataField: "Authorized",
+                caption: "Người ủy quyền",
+                minWidth: 130,
+            },
+
+            {
+                dataField: "Status",
+                caption: "Tình trạng",
+                minWidth: 120
+            },
+
+            {
+                dataField: "Days",
+                caption: "Số ngày báo trước",
+                minWidth: 130
+            },
+            {
+                dataField: "Priority",
+                caption: "Mức độ ưu tiên",
+                minWidth: 150
+            }
+        ],
+            onCellPrepared: function (e) {
+                if (e.rowType == "header") {
+                    e.cellElement.addClass('headerTree');
+                }
+            },
+            scrolling: {
+                scrollByContent: true
+            },
+            onContextMenuPreparing: function (e) {
+                if (e.row.rowType == "data") {
+                    e.items = [
+                        {
+                            text: "Xem chi tiết",
+                            icon: 'fa fa-info-circle',
+                            useIcons: true,
+                            onItemClick: function () {
+                                window.location.href = '/Home/DetailsTsuika?IdTsuika=' + e.row.data.Id + '';
+                            }
+                        }
+                    ]
+                }
+            } 
+        });
+
+    $(function () {
+        $("#loadListTask").dxLoadPanel({
+            closeOnOutsideClick: false,
+            message: "Xin chờ chút ạ ...",
+            visible: true,
+            position: { of: "#grvListTast", at: "center", my: "center" },
+            shading: true
+        });
+        $.ajax({
+            url: '/FutureTask/GetListConfirming',
+            type: 'POST',
+            datatype: 'json',
+            success: function (data) {
+                console.log(data);
+                $.each(data, function (i, item) {
+                    var obj = {
+                        Id: item.Id,
+                        ParentID: item.ParentID,
+                        TaskName: item.TaskName,
+                        StartDate: FromJsonToDate(item.StartDate),
+                        DueDate: FromJsonToDate(item.DueDate),
+                        TaskAssigner: item.TaskAssigner,
+                        TaskChecker: item.TaskChecker,
+                        Authorized: item.Authorized,
+                        Master: item.Master,
+                        Status: item.Status,
+                        Days: item.Days,
+                        Priority: item.Priority
+                    };
+                    listTask.push(obj);
+                });
+                $("#grvListTast").dxTreeList({
+                    dataSource: listTask
+                });
+                $("#loadListTask").dxLoadPanel({
+                    closeOnOutsideClick: false,
+                    message: "Xin chờ chút ạ ...",
+                    visible: false,
+                    position: { of: "#grvListTast", at: "center", my: "center" },
+                    shading: true
+                });
+            },
+            error: function (data) {
+                $("#loadListTask").dxLoadPanel({
+                    closeOnOutsideClick: false,
+                    message: "Xin chờ chút ạ ...",
+                    visible: false,
+                    position: { of: "#grvListTast", at: "center", my: "center" },
+                    shading: true
+                });
+                alert(data);
+            }
+
+        });
+    });
+</script>

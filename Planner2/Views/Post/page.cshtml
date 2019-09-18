@@ -1,0 +1,26 @@
+﻿@model Planner2.Models.MainTask
+    @{ 
+        if (ViewBag.Page==1)
+        {
+                Layout = "~/Views/Shared/_NavPub.cshtml";
+        }
+    }
+<main id="main" class="site-main" role="main">
+
+
+    <article id="post-6" class="post-6 page type-page status-publish hentry">
+        <header class="entry-header">
+            <h1 class="entry-title">
+                @ViewBag.TitleChuDe
+            </h1>
+        </header><!-- .entry-header -->
+
+        <div class="entry-content">
+          @Html.Raw(Model.Description)
+        </div><!-- .entry-content -->
+
+        <footer class="entry-footer">
+        </footer><!-- .entry-footer -->
+    </article><!-- #post-## -->
+
+</main>

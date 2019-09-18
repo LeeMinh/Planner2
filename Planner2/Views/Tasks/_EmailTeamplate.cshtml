@@ -1,0 +1,55 @@
+﻿@model Planner2.Models.MainTask
+@using Planner2.Extentions
+@{
+    var link = MvcApplication.HostUrl + "/Tasks/Info?ID=" + Model.Id;
+}
+<p>Gửi Anh,Chị.</p>
+<p>@Html.Raw(ViewData["NOIDUNGMAIL"])</p>
+<p>----------------------<i>Thông tin công việc----------------------</i></p>
+<div style="width:100%">
+    <table border="1" style="width:100%">
+        <tbody>
+            <tr style="height: 22px;">
+                <td style="width: 162px; text-align: right; height: 22px;"><strong>Xem chi tiết :</strong></td>
+                <td style="min-width: 358px; height: 22px;"><a title="S" href="@link" target="_blank" rel="noopener"><span style="color: #0000ff;">@link</span></a></td>
+            </tr>
+            <tr style="height: 22px;">
+                <td style="width: 162px; text-align: right; height: 22px;"><strong>Tên công việc :</strong></td>
+                <td style="min-width: 358px; height: 22px;">@Model.TaskName</td>
+            </tr>
+            <tr style="height: 22px;">
+                <td style="width: 162px; text-align: right; height: 22px;"><strong>Nội dung công việc :</strong></td>
+                <td style="min-width: 358px; height: 22px;">@Html.Raw(Model.Description)</td>
+            </tr>
+            <tr style="height: 22px;">
+                <td style="width: 162px; text-align: right; height: 22px;"><strong><label>Thời gian bắt đầu :</label></strong></td>
+                <td style="min-width: 358px; height: 22px;">@Model.StartDate.ToString_N()</td>
+            </tr>
+            <tr style="height: 22px;">
+                <td style="width: 162px; text-align: right; height: 22px;"><strong>Thời gian kết thúc :</strong></td>
+                <td style="min-width: 358px; height: 22px;">@Model.DueDate.ToString_N()</td>
+            </tr>
+            <tr style="height: 22px;">
+                <td style="width: 162px; text-align: right; height: 22px;"><strong>Người giao việc :</strong></td>
+                <td style="min-width: 358px; height: 22px;">@Model.TaskAssigner</td>
+            </tr>
+            <tr style="height: 23px;">
+                <td style="width: 162px; text-align: right; height: 23px;"><strong>Người được ủy quyền :</strong></td>
+                <td style="min-width: 358px; height: 22px;">@Model.Authorized</td>
+            </tr>
+            <tr style="height: 23px;">
+                <td style="width: 162px; text-align: right; height: 23px;"><strong>Người thực hiện chính:</strong></td>
+                <td style="min-width: 358px; height: 23px;">@Model.Master</td>
+            </tr> 
+            <tr style="height: 23px;">
+                <td style="width: 162px; text-align: right; height: 23px;"><strong>Người giám sát:</strong></td>
+                <td style="min-width: 358px; height: 23px;">@Model.TaskChecker</td>
+            </tr>
+            <tr style="height: 23px;">
+                <td style="width: 162px; text-align: right; height: 23px;"><strong>Tình trạng :</strong></td>
+                <td style="min-width: 358px; height: 23px;">@Model.Status</td>
+            </tr>
+             
+        </tbody>
+    </table>
+</div>

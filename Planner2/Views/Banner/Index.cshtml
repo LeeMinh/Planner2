@@ -1,0 +1,255 @@
+﻿<style>
+    .ViewCT {
+        width: 200PX !important
+    }
+
+    .FileChose {
+        display: none !important
+    }
+</style>
+<div class="dx-viewport">
+    <div class="demo-container">
+        <div class="d-flex align-items-start justify-content-between">
+            <h2>
+                Banner
+            </h2>
+        </div>
+        <div id="DataGrid"></div>
+        <div id="panelLoader"></div>
+
+        <div style="height:0px;overflow:hidden">
+            <input class="form-control" type="file" id="UploadFile_Staff" name="fileInput" onchange="return Onchange_ImportExcel_Staff()">
+        </div>
+    </div>
+</div>
+<form method="post" style="display:none" id="UploadFILEBanner" action="/Banner/UploadFILEBanner" enctype="multipart/form-data">
+    <input type="hidden" name="BannerID" id="BannerID" />
+    <input type="file" name="File_Banner" id="File_Banner" value="" />
+
+</form>
+<script>
+    $("#File_Banner").change(function (e) {
+
+        $('#UploadFILEBanner').submit();
+
+    });
+
+    var DataGrid = $("#DataGrid").dxDataGrid({
+        dataSource: [],
+        showRowLines: true,
+        showBorders: true,
+        autoExpandAll: true,
+        paging: {
+            enabled: true,
+            pageSize: 100
+        },
+        filterRow: {
+            visible: true,
+            applyFilter: "auto"
+        },
+        columnChooser: {
+            enabled: true
+        },
+        scrolling: {
+            mode: "standard"
+        },
+        pager: {
+            showPageSizeSelector: true,
+            allowedPageSizes: [100, 200, 500, 1000],
+            showNavigationButtons: true
+        },
+        allowColumnResizing: true,
+        columnFixing: {
+            enabled: true
+        },
+        hoverStateEnabled: true,
+        headerFilter: {
+            visible: true
+        },
+        wordWrapEnabled: true,
+        searchPanel: {
+            visible: true,
+            width: 240,
+            placeholder: "Search..."
+        },
+        columnsAutoWidth: true,
+        allowColumnReordering: true,
+        rowAlternationEnabled: true,
+        "export": {
+            enabled: true,
+            fileName: "DataList",
+            allowExportSelectedData: true
+        },
+
+        filterPanel: { visible: true },
+        summary: {
+            totalItems: [{
+                column: "KeyID",
+                summaryType: "count"
+            }]
+        },
+        columns:
+            [
+
+
+                {
+                    dataField: "KeyID",
+                    caption: "Banner",
+                    allowEditing: false,
+                    width: 100
+                }, {
+                    dataField: "ValueNew",
+                    caption: "LINK",
+                    cellTemplate: function (container, options) {
+                        var Value = options.data.Value;
+                        if (Value != "" && Value != null) {
+                            container.html('<A  href="' + Value + '">' + Value + '</A>');
+                        }
+
+                    }
+
+                },
+                {
+                    dataField: "Value",
+                    caption: "Ảnh",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                    width: 200,
+                    cellTemplate: function (container, options) {
+                        var Value = options.data.Value;
+                        if (Value != "" && Value != null) {
+                            container.html('<A  target="_blank" href="' + Value + '"    ><img src="' + Value + '" class="ViewCT"    /img> </A>');
+                        }
+
+                    }
+                },
+                {
+                    dataField: "ValueNew",
+                    width: 150,
+                    caption: "",
+                    cellTemplate: function (container, options) {
+                        var KeyID = options.data.KeyID;
+                        var htmlx = '<A  class="btn btn-primary btn-sm  text-white ChonAnh" data-ID="' + KeyID + '">Chọn ảnh</A>';
+                         if (KeyID != "" && KeyID != null) {
+                            container.html(htmlx+'<A   class="XoaAnh   text-white btn btn-danger btn-sm"   data-ID="' + KeyID + '" href="' + KeyID + '"    >Xóa </A>');
+                        }
+
+                    }
+                }
+            ],
+
+
+
+        //update
+        onRowUpdating: function (e) {
+
+            e.newData.KeyID = e.oldData.KeyID;
+            $.ajax({
+                url: '/Banner/Update_StaffOn',
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+                data: e.newData,
+                success: function (data) {
+                    if (data.result == true) {
+                        DevExpress.ui.notify("Dữ liệu này đã được chỉnh sửa thành công!", "success");
+                    }
+                    else {
+                        DevExpress.ui.notify("Dữ liệu này không thể được cập nhật!", "error");
+                    }
+                },
+                error: function (err) {
+                    DevExpress.ui.notify("Dữ liệu này không thể được cập nhật!", "error");
+                }
+            });
+        },
+
+
+        onCellPrepared: function onCellPrepared(e) {
+            if (e.rowType == "header") {
+                e.cellElement.css("text-align", "left");
+                e.cellElement.addClass('headerTree');
+                e.cellElement.css("vertical-align", "middle");
+            }
+
+            if (e.rowType == "data") {
+                e.cellElement.css("text-align", "left");
+
+
+                e.cellElement.css("vertical-align", "middle");
+            }
+        },
+    });
+
+    $(function () {
+        LoadData_Data();
+    });
+
+    function LoadData_Data() {
+        $("#loadPanel").dxLoadPanel({
+            closeOnOutsideClick: false,
+            message: "Xin chờ ...",
+            visible: true,
+            position: {
+                of: "#DataGrid",
+                at: "center",
+                my: "center"
+            },
+            shading: true
+        });
+
+        $.ajax({
+            url: '/Banner/GetData_Data',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var datagrid = $("#DataGrid").dxDataGrid("instance");
+                datagrid.option("dataSource", data);
+
+                $("#loadPanel").dxLoadPanel({
+                    closeOnOutsideClick: false,
+                    message: "Xin chờ ...",
+                    visible: false,
+                    position: {
+                        of: "#DataGrid",
+                        at: "center",
+                        my: "center"
+                    },
+                    shading: true
+                });
+
+            },
+            error: function (err) {
+            }
+        });
+    }
+
+    $(document).on("click", ".ChonAnh", function () {
+        var val = $(this).attr("data-ID");
+
+        $('#BannerID').val(val);
+        $('#File_Banner').click();
+    });
+    $(document).on("click", ".XoaAnh", function () {
+        var ID = $(this).attr("data-ID");
+        var r = confirm("Bạn có chắc chắn muốn xóa anh!");
+        if (r == true) {
+
+            $.ajax({
+                type: "POST",
+                url: "/Banner/XoaAnh",
+                data: {
+                    ID:ID
+                },
+                dataType: "json",
+                success: function (response) {
+                    window.location.reload();
+                }
+            });
+          }
+
+    });
+
+</script>
+

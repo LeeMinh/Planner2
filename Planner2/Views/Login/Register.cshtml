@@ -1,0 +1,83 @@
+﻿@{
+    Layout = "~/Views/Shared/_NavPub.cshtml";
+    Random rd = new Random();
+    int a = rd.Next(1,10);
+    int b = rd.Next(1,10);
+    int c = a + b;
+}
+<div class="row">
+
+    <div class="login register">
+        <div class="login-title">
+            <h3>
+                Đăng ký
+            </h3>
+            <div class="login-other">
+                <span>Đã là thành viên? <a href="/login/index">Đăng nhập</a> tại đây</span>
+            </div>
+        </div>
+        <div>
+            <form class="form-horizontal" method="post" action="/login/register" id="frmregister" role="form">
+                <div class="mod-login clearfix">
+                    <div class="mod-login-col1 clearfix">
+                        <div class="mod-input mod-login-input-email mod-input-id">
+                            <label>Tên đăng nhập</label>
+                            <input type="text"   placeholder="Vui lòng nhập tên tài khoản" name="username" id="username" value="" required >
+                            
+                        </div>
+
+                        <div class="mod-input mod-input-password mod-login-input-password mod-input-password">
+                            <label>Mật khẩu</label>
+                            <input type="password" name="pwd1" id="pwd1"  placeholder="Mật khẩu" value="" required >
+                           
+                        </div>
+
+                        <div class="mod-input mod-input-password mod-login-input-re-password mod-input-re-password">
+                            <label>Nhập lại mật khẩu</label>
+                            <input type="password" name="pwd2" id="pwd2"  placeholder="Nhập lại mật khẩu" value="" required>
+                           
+                        </div>
+                        <div class="mod-input mod-input-captcha">
+                            <label>@a + @b = ?</label>
+                            <input id="captcha" name="answer" type="number">
+                        </div>
+                    
+                        <input type="hidden" id="post_nonce_field" name="post_nonce_field" value="ac3fc9d856"><input type="hidden" name="_wp_http_referer" value="/dang-ky/">							<div class="mod-input mod-login-input-email mod-input-email">
+                            <label>Địa chỉ email</label>
+                            <input type="email" name="email" id="email" placeholder="Email" value="" required >
+                          
+                        </div>
+                        <div class="mod-login-btn">
+                            <button type="submit" class="next-btn next-btn-primary next-btn-large">ĐĂNG KÍ</button>
+                         </div>
+                        
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        $("#frmregister").submit(function (e) {
+
+            var pwd1 = $('#pwd1').val();
+            var pwd2 = $('#pwd2').val();
+            var captcha = $('#captcha').val();
+            if (pwd1 != pwd2) {
+                alert("Mật khẩu không khớp");
+                 e.preventDefault();
+            }
+            if (pwd1.length<6) {
+                alert("Mật khẩu tối thiểu phải có 6 ký tự");
+                 e.preventDefault();
+            }
+             if (captcha != '@c') {
+                alert("Câu trả lời không chính xác");
+                 e.preventDefault();
+            }
+
+
+        });
+    </script>
+   
+</div>

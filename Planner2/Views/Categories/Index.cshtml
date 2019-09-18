@@ -1,0 +1,367 @@
+﻿
+<div class="dx-viewport">
+    <div class="demo-container">
+        <div class="d-flex align-items-start justify-content-between">
+            <h2>
+                Categories
+            </h2>
+        </div>
+        <div id="DataGrid"></div>
+        <div id="panelLoader"></div>
+
+        <div style="height:0px;overflow:hidden">
+            <input class="form-control" type="file" id="UploadFile_Staff" name="fileInput" onchange="return Onchange_ImportExcel_Staff()">
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+    var DataGrid = $("#DataGrid").dxDataGrid({
+        dataSource: [],
+        showRowLines: true,
+        showBorders: true,
+        autoExpandAll: true,
+        paging: {
+            enabled: true,
+            pageSize: 100
+        },
+        filterRow: {
+            visible: true,
+            applyFilter: "auto"
+        },
+        columnChooser: {
+            enabled: true
+        },
+      scrolling: {
+            scrollByContent: true
+        },
+        pager: {
+            showPageSizeSelector: true,
+            allowedPageSizes: [100, 200, 500, 1000],
+            showNavigationButtons: true
+        },
+        allowColumnResizing: true,
+        columnFixing: {
+            enabled: true
+        },
+        hoverStateEnabled: true,
+        headerFilter: {
+            visible: true
+        },
+        wordWrapEnabled: true,
+        searchPanel: {
+            visible: true,
+            width: 240,
+            placeholder: "Search..."
+        },
+
+        columnsAutoWidth: true,
+        allowColumnReordering: true,
+        rowAlternationEnabled: true,
+        "export": {
+            enabled: true,
+            fileName: "DataList",
+            allowExportSelectedData: true
+        },
+        editing: {
+            mode: "popup",
+            allowUpdating: true,
+            allowDeleting: true,
+            allowAdding: true,
+            useIcons: true
+        },
+        filterPanel: { visible: true },
+        summary: {
+            totalItems: [{
+                column: "KeyID",
+                summaryType: "count"
+            }]
+        },
+        columnMinWidth: 200,
+        columns:
+            [
+ 
+                {
+                    dataField: "CategoryName",
+                    caption: "CategoryName",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                    width:250
+
+                },
+                {
+                    dataField: "Description",
+                    caption: "Description",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                }, 
+                {
+                    dataField: "Menu",
+                    caption: "Menu",
+                    minWidth:100,
+
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                    lookup: {
+                        dataSource: function (rowData) {
+                            var dataSourceConfiguration = {
+                                store: [
+                                     { "name":"Top" },
+                                    { "name":"Right" },
+                                    { "name":"Left" },
+                                    { "name":"HomePage_Table" },
+                                    { "name":"HomePage_Slide" },
+                                    { "name":"HomePage_ChuDe" }
+                                ]
+                            };
+
+                            return dataSourceConfiguration;
+                        },
+                        
+                        valueExpr: "name",
+                        displayExpr: "name",
+                        searchMode: 'startswith'
+                    },
+                },
+                {
+                    dataField: "ParentID",
+                    caption: "ParentID",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                    lookup: {
+                        dataSource: function (rowData) {
+                            var dataSourceConfiguration = {
+                                store: []
+                            };
+
+                            return dataSourceConfiguration;
+                        },
+                        valueExpr: "CategoryRowID",
+                        displayExpr: "CategoryName",
+                        searchMode: 'startswith'
+                    },
+                },{
+                    dataField: "STT",
+                    caption: "STT",
+                    minWidth:100,
+                              dataType: "number"
+  
+                } , {
+                    dataField: "Price7Day",
+                    caption: "Giá 7 ngày (VND)",
+                    dataType: "number",
+                   format: "#,##0.## VND"  
+
+
+                }, {
+                    dataField: "Price15Day",
+                    caption: "Giá 15 ngày (VND)",
+                    dataType: "number",
+                   format: "#,##0.## VND"  
+
+
+                }, {
+                    dataField: "Price30Day",
+                    caption: "Giá 30 ngày (VND)",
+                    dataType: "number",
+                   format: "#,##0.## VND"  
+
+
+                }, {
+                    dataField: "Price2Month",
+                    caption: "Giá 2 tháng (VND)",
+                    dataType: "number",
+                   format: "#,##0.## VND"  
+
+
+                }, {
+                    dataField: "Price3Month",
+                    caption: "Giá 3 tháng (VND)",
+                    dataType: "number",
+                   format: "#,##0.## VND"  
+
+
+                }, {
+                    dataField: "Price6Month",
+                    caption: "Giá 6 tháng (VND)",
+                    dataType: "number",
+                   format: "#,##0.## VND"  
+
+
+                }, {
+                    dataField: "Price1Year",
+                    caption: "Giá 1 năm (VND)",
+                    dataType: "number",
+                   format: "#,##0.## VND"  
+
+
+                }, {
+                    dataField: "Price2Year",
+                    caption: "Giá 2 năm (VND)",
+                    dataType: "number",
+                   format: "#,##0.## VND"  
+
+
+                }, {
+                    dataField: "Price5Year",
+                    caption: "Giá 5 năm (VND)",
+                    dataType: "number",
+                   format: "#,##0.## VND"  
+
+
+                }
+
+            ],
+
+        //insert
+        onRowInserting: function (e) {
+            var obj = e.data;
+
+            $.ajax({
+                url: '/Categories/AddNew',
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+                data: { obj },
+                success: function (data) {
+                    if (data.result == true) {
+                        DevExpress.ui.notify("This record was added successfully!", "success");
+                        e.data.CategoryRowID = data.obj.CategoryRowID;
+                        LoadData_Data();
+                    }
+                    else {
+                        DevExpress.ui.notify("This record can't be add!", "error");
+                        e.cancel = true;
+                    }
+                },
+                error: function (err) {
+                    DevExpress.ui.notify("This record can't be add!", "error");
+                    e.cancel = true;
+                }
+            });
+        },
+
+
+        //update
+        onRowUpdating: function (e) {
+
+            e.newData.CategoryRowID = e.oldData.CategoryRowID;
+            if (e.newData.ParentID == e.oldData.CategoryRowID) {
+                DevExpress.ui.notify("ParentID không được giống CategoryRowID", "error");
+                return;
+            }
+            $.ajax({
+                url: '/Categories/Update_StaffOn',
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+                data: e.newData,
+                success: function (data) {
+                    if (data.result == true) {
+                        DevExpress.ui.notify("Dữ liệu này đã được chỉnh sửa thành công!", "success");
+                    }
+                    else {
+                        DevExpress.ui.notify("Dữ liệu này không thể được cập nhật!", "error");
+                    }
+                },
+                error: function (err) {
+                    DevExpress.ui.notify("Dữ liệu này không thể được cập nhật!", "error");
+                }
+            });
+        },
+        //delete
+        onRowRemoving: function (e) {
+            var id = e.data.CategoryRowID;
+            $.ajax({
+                url: '/Categories/Delete',
+                type: 'POST',
+                dataType: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data == true) {
+                        DevExpress.ui.notify("This record was deleted successfully!", "success");
+                    }
+                    else
+                        if (data == false) {
+                            DevExpress.ui.notify("This record can't be delete!", "error");
+                            e.cancel = true;
+                        }
+                },
+                error: function (err) {
+                    DevExpress.ui.notify("This record can't be delete!", "error");
+                    e.cancel = true;
+                }
+            });
+
+        },
+
+        onCellPrepared: function onCellPrepared(e) {
+            if (e.rowType == "header") {
+                e.cellElement.css("text-align", "left");
+                e.cellElement.addClass('headerTree');
+                e.cellElement.css("vertical-align", "middle");
+            }
+
+            if (e.rowType == "data") {
+                e.cellElement.css("text-align", "left");
+
+
+                e.cellElement.css("vertical-align", "middle");
+            }
+        },
+    });
+
+    $(function () {
+        LoadData_Data();
+    });
+
+    function LoadData_Data() {
+        $("#loadPanel").dxLoadPanel({
+            closeOnOutsideClick: false,
+            message: "Xin chờ ...",
+            visible: true,
+            position: {
+                of: "#DataGrid",
+                at: "center",
+                my: "center"
+            },
+            shading: true
+        });
+
+        $.ajax({
+            url: '/Categories/GetData_Data',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var datagrid = $("#DataGrid").dxDataGrid("instance");
+                datagrid.option("dataSource", data);
+                datagrid.columnOption('ParentID', 'lookup.dataSource', data);
+
+                $("#loadPanel").dxLoadPanel({
+                    closeOnOutsideClick: false,
+                    message: "Xin ch? ...",
+                    visible: false,
+                    position: {
+                        of: "#DataGrid",
+                        at: "center",
+                        my: "center"
+                    },
+                    shading: true
+                });
+
+            },
+            error: function (err) {
+            }
+        });
+    }
+
+
+
+</script>

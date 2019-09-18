@@ -1,0 +1,499 @@
+﻿@model Planner2.Models.MainTask
+@{
+    var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
+    var FileUpload = (List<Planner2.Models.UploadFile>)ViewBag.FileUpload;
+    Model.NgayDang = Model.NgayDang ?? DateTime.Now;
+    Planner2Entities db = new Planner2Entities();
+    var Categories = (List<Planner2.Models.Category>)ViewBag.Categories;
+    var CategoriesVIP = (List<Planner2.Models.Category>)ViewBag.CategoriesVIP;
+    var TinhThanh = db.ThanhPhoes.GroupBy(z => z.MaThanhPho).Select(v => new { Name = v.FirstOrDefault().TenThanhPho, Key = v.FirstOrDefault().MaThanhPho }).ToList();
+    var cd = db.MainTask_ChuDe.Where(v => v.TaskID == Model.Id).Select(z => z.CategoryRowID).ToList();
+    cd =cd?? new List<int?>();
+}
+
+@{
+    if (Categories.Count() == 0)
+    {
+        <h1>"Oh, bạn chưa có quyền đăng bài vào bất kỳ chyên mục nào, hãy mua ngay nhé !"</h1>
+
+        <a href="/Profile/addDanhMuc" class="btn btn-outline-danger btn-lg text-danger"><i class="fa fa-shopping-bag"></i> Mua ngay</a>
+        return;
+    }
+}<style>
+    .tooltip {
+        position: relative;
+        display: inline-block;
+    }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 140px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 150%;
+            left: 50%;
+            margin-left: -75px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .tooltip .tooltiptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+ 
+    .cke_top {
+        Position: sticky;
+        top: 0;
+    }
+
+    #cke_editor {
+        width: 100% !important;
+        border: 0 !important
+    }
+
+    #layouteditor .v-input__slot {
+        padding: 0 !important
+    }
+
+    ol, ul {
+        padding-left: 0;
+        LIST-STYLE: NONE;
+    }
+ 
+    .form-group {
+        margin-bottom: 10px
+    }
+
+    [type=number] {
+        width: auto;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .row-item .h2 span {
+        font: bold 12px/32px Arial, sans-serif;
+        color: #fff;
+        display: inline-table;
+        white-space: nowrap;
+        padding: 0 20px;
+        background: #d30003;
+        text-transform: uppercase;
+    }
+
+    .row-item .h2 {
+        margin-bottom: 10px;
+        border-bottom: 1px solid #d30003;
+    }
+</style>
+
+
+<form action="/Tasks/Create" id="frmCreateBLOG" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="row">
+        <div class="col-10" style="padding-right:10px ">
+            <div class="col-12 form-group">
+                <div class="row-item">
+                    <div class="h2">
+                        <span>Thông tin cơ bản</span>
+                        @if (!string.IsNullOrEmpty(@Model.Status))
+                        {
+                            <i>Bài đăng đang ở chế độ : @Model.Status</i>
+                        }
+                    </div>
+
+                </div>
+                @if (Model.Id != 0)
+                {
+            <div class="row col-12">
+                <label>
+                    Seo URL
+                </label>
+                <a class="btn btn-sm btn-outline-dark pull-right" onclick="CoppySeoLink()">Copy text</a>
+
+                <div class="tooltip">
+                    <button onclick="CoppySeoLink()">
+                        <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+                        Copy text
+                    </button>
+                </div>
+            </div>
+                    <input type="text" readonly class="form-control" id="SeoUrl" value="@ViewBag.SeoUrl" />
+
+                }
+                <label>
+                    Tiêu đề *
+                </label>
+                <input type="text" name="TaskName" required class="form-control" value="@Model.TaskName" />
+            </div>
+            <div class="row">
+
+
+                <div class="col-3">
+                    <label>Diện tích (m2) (*)</label>
+                    <input type="number" name="DienTich" required class="form-control" value="@Model.DienTich" />
+                </div>
+                <div class="col-3">
+                    <label>Gía   (*)</label>
+                    <input type="number" name="Gia" required class="form-control" value="@Model.Gia" />
+                </div>
+                <div class="col-3">
+                    <label>Tỷ giá  (*) </label>
+
+                    <select name="TyGia" class="form-control" required>
+                        @{
+                            foreach (var item in Planner2.Common.ConstVal.data)
+                            {
+                                <option @(Model.TyGia == item ? "selected" : "") value="@item">@item</option>
+
+                            }
+                        }
+
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label>Ảnh đại diện   </label>
+                    <input type="file" name="Picture" id="Picture" class="form-control" value="@Model.Picture" />
+                    @if (!string.IsNullOrEmpty(Model.Picture))
+                    {<div>
+
+                            <a href="@Model.Picture" target="_blank">Xem ảnh</a>
+                            <a class="btn btn-sm btn-danger text-white" id="Xoaanhnow">Xóa ảnh</a>
+                        </div>
+                    }
+                </div>  
+                
+                <div class="col-12">
+                    <label>Link video Youtube</label>
+                    <input type="text" name="Youtube" id="Youtube" class="form-control" value="@Model.Youtube" />
+                    
+                </div>
+
+            </div>
+            <div style="border:1PX solid #dee2e6">
+                <div class="row-item col-12">
+                    <div class="h2">
+                        <span>
+                            Mô tả chi tiết 
+                        </span>
+                    </div>
+                </div>
+                <div id="editor">
+                    <div class="col-12">
+                        @Html.Raw(Model.Description)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row-item col-12">
+                    <div class="h2">
+                        <span>
+                            THÔNG TIN CHI TIẾT
+                        </span>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <label>Khu vực (Thành phố)    </label>
+                    <select id="KhuVuc_TP" name="KhuVuc_TP" class="form-control">
+                        <option>Không xác định</option>
+                        @foreach (var item in TinhThanh)
+                        {
+                            <option @(Model.KhuVuc_TP == item.Key ? "selected" : "") value="@item.Key">@item.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-3">
+                    <label>Khu vực (Quận/Huyện)  </label>
+                    <select id="KhuVuc_Huyen" name="KhuVuc_Huyen" class="form-control">
+                        <option>Không xác định</option>
+                        @if (Model.KhuVuc_Huyen.HasValue)
+                        {
+                            <option selected value="@Model.KhuVuc_Huyen">@db.ThanhPhoes.Where(v => v.MaQuanHuyen == Model.KhuVuc_Huyen).Select(z => z.QuanHuyen).FirstOrDefault() </option>
+
+                        }
+                    </select>
+
+                </div>
+                <div class="col-3">
+                    <label>Khu vực (Phường/Xã)    </label>
+                    <select id="KhuVuc_Xa" name="KhuVuc_Xa" class="form-control">
+                        <option>Không xác định</option>
+                        @if (Model.KhuVuc_Xa.HasValue)
+                        {
+                            <option selected value="@Model.KhuVuc_Xa">@db.ThanhPhoes.Where(v => v.MaPhuongXa == Model.KhuVuc_Xa).Select(z => z.PhuongXa).FirstOrDefault() </option>
+
+                        }
+                    </select>
+                </div>
+
+                <div class="col-3">
+                    <label>Loại bất động sản   </label>
+                    <select id="Map_LoaiBatDongSan" name="Map_LoaiBatDongSan" class="form-control">
+                        <option>Không xác định</option>
+                        @foreach (var item in db.SettingDatas.Where(v => v.Type == "Loại BĐS"))
+                        {
+                            <option value="@item.KeyID">@item.Value</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label>Hướng    </label>
+                    <select id="Map_Huong" name="Map_Huong" class="form-control">
+                        <option>Không xác định</option>
+                        @foreach (var item in db.SettingDatas.Where(v => v.Type == "Hướng"))
+                        {
+                            <option value="@item.KeyID">@item.Value</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label>Số phòng ngủ  </label>
+                    <input type="number" name="Map_SoPhongNgu" class="form-control" value="@Model.Map_SoPhongNgu" />
+                </div>
+                <div class="col-3">
+                    <label>Dự án   </label>
+                    <input type="text" name="Map_DuAn" class="form-control" value="@Model.Map_DuAn" />
+                </div>
+
+               
+
+                <div class="col-12">
+                    <label>Mục đăng tin </label>
+                    <select id="ChuDe" name="ChuDe" multiple   class="form-control">
+                        @foreach (var item in Categories)
+                        {
+                            var x = cd.Where(z => z == item.CategoryRowID).Count();
+                            <option @(x != 0 ? "selected" : "") value="@item.CategoryRowID">@item.CategoryName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label>Tên liên lạc  </label>
+                    <input type="text" name="Map_TenLienLac" class="form-control" value="@Model.Map_TenLienLac" />
+                </div>
+                <div class="col-3">
+                    <label>Điện thoại </label>
+                    <input type="text" name="Map_DienThoai" class="form-control" value="@Model.Map_DienThoai" />
+                </div>
+                <div class="col-3">
+                    <label>Zalo </label>
+                    <input type="text" name="Map_Zalo" class="form-control" value="@Model.Map_Zalo" />
+                </div>
+                <div class="col-3">
+                    <label>Skype </label>
+                    <input type="text" name="Map_Skyper" class="form-control" value="@Model.Map_Skyper" />
+                </div>
+                <div class="col-3">
+                    <label>Email </label>
+                    <input type="email" name="Map_Email" class="form-control" value="@Model.Map_Email" />
+                </div>
+            </div>
+
+            @*<div class="row" style="margin-top:10px">
+            <label class="col-2">File đính kèm</label>
+            <input class="col-10" type="file" multiple name="FileDinhKem" id="FileDinhKem" value="" />
+        </div>
+
+        @if (FileUpload.Count > 0)
+        {
+
+            foreach (var item in FileUpload)
+            {
+                <p class="col-12">
+                    <a class="text-danger btn btn-sm btn-outline-danger XoaFile" data-ID="@item.ID"><i class="fa fa-trash"></i> Xóa</a>
+                    <a href="@item.UrlFile" target="_blank"><i class="fa fa-file-archive-o"></i> @item.FileName</a>
+                </p>
+            }
+        }*@
+        </div>
+        <div class="col-2" style="background-color: #FFF!important;border:1PX solid #dee2e6; padding:10px">
+            <label>
+                <input type="checkbox" name="Type" @(Model.Status == Planner2.Common.ConstTrangThai.CongKhai || Model.Status == null ? "checked" : "") value="@Planner2.Common.ConstTrangThai.CongKhai" />
+                Công khai
+            </label>
+            <button type="submit" class=" btn btn-primary  text-white col-12 right">Lưu dữ liệu</button>
+            @if (Model.Id != 0)
+            {
+                <a href="/post/info?id=@Model.SeoUrl" target="_blank" class=" btn btn-success  text-white col-12 right">Xem</a>
+                <a id="XoaBai" class=" btn btn-outline-secondary  text--black col-12 right">Xóa bài</a>
+
+            }
+            <div class="row-item col-12" style="margin-top:100PX">
+                <div class="h2">
+                    <span>
+                       Chuyên mục VIP
+                    </span>
+                </div>
+            </div>
+            <ul>
+                @foreach (var item in CategoriesVIP)
+                {
+                    <li><label><input type="checkbox" @(cd.Contains(item.CategoryRowID)?"checked" : "")   name="ChuDeVIP" value="@item.CategoryRowID" />@item.CategoryName</label></li>
+                }
+            </ul>
+        </div>
+    </div>
+
+</form>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+<script>
+
+
+    function CoppySeoLink() {
+  /* Get the text field */
+    var copyText = document.getElementById("SeoUrl");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  
+  var tooltip = document.getElementById("myTooltip");
+  tooltip.innerHTML = "Copied: " + copyText.value;
+}
+
+    $('select').select2();
+  $("#KhuVuc_TP").change(function (e) {
+        var ID = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: "/Tasks/LoadKhuVuc_Huyen",
+            data: {
+                ID: ID
+            },
+            dataType: "json",
+            success: function (response) {
+                var html = "";
+                for (var i = 0; i < response.length; i++) {
+                    html += "<option value='" + response[i].Key + "'>" + response[i].Name + " </option>";
+                }
+                $('#KhuVuc_Huyen').html(html);
+            }
+        });
+
+        e.preventDefault();
+    });
+    $("#KhuVuc_Huyen").change(function (e) {
+
+        var ID = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: "/Tasks/LoadKhuVuc_Xa",
+            data: {
+                ID: ID
+            },
+            dataType: "json",
+            success: function (response) {
+                var html = "";
+                for (var i = 0; i < response.length; i++) {
+                    html += "<option value='" + response[i].Key + "'>" + response[i].Name + " </option>";
+                }
+                $('#KhuVuc_Xa').html(html);
+            }
+        });
+
+        e.preventDefault();
+    });
+    setTimeout(function () {
+        CKEDITOR.replace('editor');
+    }, 100);
+
+    $("#frmCreateBLOG").submit(function (e) {
+        e.preventDefault();
+
+        var Description = CKEDITOR.instances.editor.getData();
+
+        var form = document.forms.namedItem("frmCreateBLOG");
+         var Pictures = document.getElementById('Picture').files;
+        var data = new FormData(form);
+         if (Pictures.length > 0) {
+
+                data.append("Picture", Pictures[0]);
+        }
+
+        data.append("Description", Description);
+        data.append("Status", $(this).val());
+        data.append("Type", $("[name=Type]:checked").val());
+
+        $.ajax({
+            type: "POST",
+            url: "/Tasks/Create",
+            data: data,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            success: function (msg) {
+
+
+                if (msg.TT == "1") {
+                    alert(msg.Value);
+
+                } else {
+                    alert("Đã lưu dữ liệu");
+                    window.location.href='/Tasks/Create?TaskID='+msg.Value;
+
+
+                }
+            }
+        });
+
+    });
+    $("#XoaBai").click(function (e) {
+        var r = confirm("Bạn có chắc chắn muốn xóa bài viết!");
+        if (r == true) {
+            $.ajax({
+                type: "POST",
+                url: "/tasks/XoaBai",
+                data: {
+                    ID:'@Model.Id'
+                },
+                dataType: "json",
+                success: function (response) {
+                    window.location.href = '/FutureTask/Index';
+                }
+            });
+        }
+        e.preventDefault();
+
+    });
+
+
+    $("#Xoaanhnow").click(function (e) {
+
+        var r = confirm("Anh chị có chắc chắn muốn xóa ảnh, thao tác này sẽ xóa ảnh ngay lập tức!");
+
+        var ip = this;
+        if (r == true) {
+            $.ajax({
+                type: "POST",
+                url: "/Tasks/RemoveFilePicture",
+                data: {
+                    ID:'@Model.Id'
+                },
+                dataType: "json",
+                success: function (response) {
+                    $(ip).parent().html('');
+                }
+            });
+ }
+        e.preventDefault();
+
+    });
+
+</script>

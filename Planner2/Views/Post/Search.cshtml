@@ -1,0 +1,64 @@
+﻿@model PagedList.IPagedList<Planner2.Models.MainTask>
+@{
+    var item = (Planner2.Models.MainTask)ViewBag.itemSearch;
+}
+@helper itemview(string label, object value)
+{
+    if (value != null && value != "")
+    {<tr>
+            <th>@label</th>
+            <td>@value</td>
+        </tr>
+    }
+
+}
+<table class="table">
+
+    @itemview("Từ khóa", ViewBag.key)
+    @itemview("Loại bất động sản", item.Map_LoaiBatDongSan)
+    @itemview("Thành phố", ViewBag.KhuVuc_TP)
+    @itemview("Quận huyện", ViewBag.KhuVuc_Huyen)
+    @itemview("Phường xã", ViewBag.KhuVuc_Xa)
+    @itemview("Diện tích", ViewBag.DienTich)
+    @itemview("Gía", ViewBag.Gia)
+    @itemview("Hướng", item.Map_Huong)
+    @itemview("Số phòng ngủ", item.Map_SoPhongNgu)
+    @itemview("Dự án", item.Map_DuAn)
+</table>
+@{
+
+    
+        if (Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")//if ajax request
+        {
+            Context.Response.Headers["Location"] = Context.Request.Url.AbsoluteUri;//RawUrl
+            Context.Response.Headers["Cache-Control"] = "no-store";//context.HttpContext.Response.Cache.SetNoStore(); //stop caching(partial content) on client's browser
+            Layout = null;
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_NavPub.cshtml";
+        }
+    
+
+    Html.RenderPartial("~/Views/Post/Grid.cshtml", Model);
+}
+
+<script>
+    $(document).ready(function () {
+
+        setTimeout(function () {
+            $('[name=key]').val('@ViewBag.key');
+             $('[name=Map_LoaiBatDongSan]').val('@Html.Raw(item.Map_LoaiBatDongSan)').change();
+            $('[name=KhuVuc_TP]').val('@item.KhuVuc_TP').change();
+            $('[name=Map_DuAn]').val('@item.Map_DuAn').change();
+            $('[name=Gia]').val('@item.Gia').change();
+            $('[name=DienTich]').val('@ViewBag.DienTich').change();
+            $('[name=Map_SoPhongNgu]').val('@item.Map_SoPhongNgu').change();
+            $('[name=Map_Huong]').val('@Html.Raw(item.Map_Huong)').change();
+
+        }, 1000);
+
+
+
+    });
+</script>

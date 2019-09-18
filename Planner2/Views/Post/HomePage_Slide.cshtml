@@ -1,0 +1,63 @@
+﻿@model  IEnumerable<Planner2.Models.MainTask>
+@{ 
+
+    var slide = "slideHomePage_" + Guid.NewGuid();
+}
+<style>
+    .taskname{
+            color: #d30003;
+    font: bold 14px/19px tahoma;
+    text-align:center;
+    margin-top:10px;
+    margin-bottom:0px
+    }
+</style>
+<header class="entry-header">
+    <div class="bor-bot">
+        <div class="title">
+            <h1 class="entry-title">
+                @ViewBag.TitleChuDe
+            </h1>
+            <span class="icon-house"></span>
+        </div>
+    </div>
+</header><!-- .page-header -->
+
+<div id="@slide" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#@slide" data-slide-to="0" class="active"></li>
+        @for (int i = 1; i < Model.Count(); i++)
+        {
+            <li data-target="#@slide" data-slide-to="@i"></li>
+        }
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        @foreach (var item in Model)
+        {
+            var _class = (item == Model.FirstOrDefault() ? "active" : "");
+            <div class="item @_class">
+                <a href="/post/info?id=@item.SeoUrl">
+                    <img src="@item.Picture">
+                    <h2 class="taskname">@item.TaskName</h2>
+                </a>
+            </div>
+        }
+
+    </div>
+
+    <a class="left carousel-control" href="#@slide" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#@slide" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
+<div class="clear clearfix more_link_ar">
+    <a href="/Post/index?ChuDe=@ViewBag.SeoUrl" title="Xem thêm">Xem thêm @ViewBag.TitleChuDe</a>
+</div>

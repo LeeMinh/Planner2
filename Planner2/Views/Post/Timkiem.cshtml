@@ -1,0 +1,172 @@
+﻿@{
+    Planner2Entities db = new Planner2Entities();
+
+    var TinhThanh = db.ThanhPhoes.GroupBy(z => z.MaThanhPho).Select(v => new { Name = v.FirstOrDefault().TenThanhPho, Key = v.FirstOrDefault().MaThanhPho }).ToList();
+
+}
+<div class="widget-advanced-search">
+    <div class="widget-search">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="sell active">
+                <a href="#widget-sell" aria-controls="widget-sell" role="tab" data-toggle="tab">
+                    Tìm kiếm bất động sản
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="widget-sell">
+                <div class="realty-filter clearfix">
+                    <form action="/Post/Search" method="GET" id="frmTimKiem">
+                        <div class="visible-fields fields">
+                            <input id="s" class="key-search" name="key"  type="text" placeholder="Nhập từ khóa, vd:j Căn hộ vinhomes" value="@ViewBag.key">
+                            <ul class="option-select">
+                                <li>
+                                    <select id="Map_LoaiBatDongSan" name="Map_LoaiBatDongSan"  class="form-control">
+                                        <option value="">-- Chọn loại BĐS --</option>
+                                        @foreach (var item in db.SettingDatas.Where(v => v.Type == "Loại BĐS"))
+                                        {
+                                            <option value="@item.KeyID">@item.Value</option>
+                                        }
+                                    </select>
+                                </li>
+                                <li>
+                                    <select id="KhuVuc_TP" name="KhuVuc_TP"  class="form-control">
+                                        <option value="">- Chọn Tỉnh / Thành phố -</option>
+                                        @foreach (var item in TinhThanh)
+                                        {
+                                            <option value="@item.Key">@item.Name</option>
+                                        }
+                                    </select>
+                                </li>
+                                <li>
+                                    <select id="KhuVuc_Huyen"  name="KhuVuc_Huyen" class="form-control">
+                                        <option value="">- Chọn Quận / Huyện -</option>
+                                    </select>
+                                </li>
+                                <li>
+
+                                    <select id="KhuVuc_Xa"  name="KhuVuc_Xa" class="form-control">
+                                        <option value="">- Chọn phường / xã -</option>
+                                    </select>
+                                </li>
+
+                                <li>
+                                    <select name="DienTich" id="area">
+                                        <option value="" selected='selected'>Tất cả</option>
+                                        <option value="10-30">10-30 m2</option>
+                                        <option value="30-50">30-50 m2</option>
+                                        <option value="51-80">50-80 m2</option>
+                                        <option value="81-100">80-100 m2</option>
+                                        <option value="100-150">100-150 m2</option>
+                                        <option value="150-200">150-200 m2</option>
+                                        <option value="201-250">200-250 m2</option>
+                                        <option value="251-300">250-300 m2</option>
+                                        <option value="301-500">300-500 m2</option>
+                                        <option value="501">Trên 500 m2</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <select name="Gia" id="Gia">
+                                        <option value="" selected='selected'>- Chọn mức giá -</option>
+                                        <option value="1">Thỏa thuận</option>
+                                        <option value="2">< 500 triệu</option>
+                                        <option value="3">500 Triệu -1 tỷ</option>
+                                        <option value="4">1 tỷ - 3 tỷ</option>
+                                        <option value="5">3 tỷ - 5 tỷ</option>
+                                        <option value="6">> 5 tỷ</option>
+                                    </select>
+                                </li>
+                            </ul>
+                            <ul id="bs-advance" class="hidecc">
+                                <li>
+                                    <select id="Map_Huong" name="Map_Huong"  class="form-control">
+                                        <option value="">- Chọn hướng-</option>
+                                        @foreach (var item in db.SettingDatas.Where(v => v.Type == "Hướng"))
+                                        {
+                                            <option value="@item.KeyID">@item.Value</option>
+                                        }
+                                    </select>
+                                </li>
+                                <li>
+                                    <select name="Map_SoPhongNgu">
+                                        <option value="" selected='selected'>- Số phòng ngủ -</option>
+                                        <option value="khong-xac-dinh">Không xác định</option>
+                                        <option value="1">1+</option>
+                                        <option value="2">2+</option>
+                                        <option value="3">3+</option>
+                                        <option value="4">4+</option>
+                                        <option value="5">5+</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <select name="Map_DuAn" id="Map_DuAn">
+                                        <option value="">- Dự án -</option>
+                                    </select>
+                                </li>
+                            </ul>
+                            <div class="bs-action">
+                                <div class="bs-advance"><a id="hplAdvance" href="javascript:ShowBSAdvance();">Tìm kiếm nâng cao</a></div>
+                                <div class="bs-search">
+                                    <button id="btnSearch" type="submit"><i class="fa fa-search" aria-hidden="true"></i>Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+<script>
+    $('.secondary  select').select2();
+
+
+    $("#KhuVuc_TP").change(function (e) {
+        var ID = $(this).val();
+        try {
+              $.ajax({
+            type: "POST",
+            url: "/Tasks/LoadKhuVuc_Huyen",
+            data: {
+                ID: ID
+            },
+            dataType: "json",
+            success: function (response) {
+                var html = '<option value="">- Chọn Quận / Huyện -</option>';
+                for (var i = 0; i < response.length; i++) {
+                    html += "<option value='" + response[i].Key + "'>" + response[i].Name + " </option>";
+                }
+                $('#KhuVuc_Huyen').html(html);
+            }
+        });
+        } catch (ex) {
+            console.log(ex);
+        }
+
+        e.preventDefault();
+    });
+    $("#KhuVuc_Huyen").change(function (e) {
+        var ID = $(this).val();
+         $.ajax({
+            type: "POST",
+            url: "/Tasks/LoadKhuVuc_Xa",
+            data: {
+                ID: ID
+            },
+            dataType: "json",
+            success: function (response) {
+                var html = '<option value="">- Chọn Phường / Xã -</option>';
+                for (var i = 0; i < response.length; i++) {
+                    html += "<option value='" + response[i].Key + "'>" + response[i].Name + " </option>";
+                }
+                $('#KhuVuc_Xa').html(html);
+            }
+        });
+
+        e.preventDefault();
+    });
+</script>

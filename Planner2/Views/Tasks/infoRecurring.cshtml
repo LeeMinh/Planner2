@@ -1,0 +1,540 @@
+﻿@model Planner2.Models.MainTask
+@{
+    var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
+    var HT = new List<string>();
+    HT.Add(Planner2.Common.ConstTrangThai.ChuaBatDau);
+    HT.Add(Planner2.Common.ConstTrangThai.ChuaXacNhan);
+    HT.Add("Hoàn thành");
+    HT.Add("Đã hủy");
+    HT.Add("Chờ xác nhận hoàn thành");
+    Planner2.Controllers.TasksController funtask = new TasksController();
+}
+@using Planner2.Extentions
+<style>
+
+    #Info label {
+        font-size: 13px !important
+    }
+
+    #Info .labelIf {
+        font-size: 16px !important;
+        font-weight: normal !important;
+        color: #0094ff
+    }
+
+    #Info .col-md-3 {
+        padding: 3px
+    }
+
+    #Info .application--wrap {
+        min-height: 0px !important
+    }
+
+    .v-card__title {
+        padding: 5px 20px;
+    }
+
+    .btn-danger, .btn-success, .btn-primary, .btn-warning {
+        color: #fff !important
+    }
+</style>
+
+@helper ThamGia(string ViTri)
+{
+    if (ViTri != null && ViTri.Trim() != "" && Model.AttendPerson != null && Model.AttendPerson.ToUpper().Contains(ViTri.ToUpper()))
+    {
+        <i class="fa fa fa-check-square-o text-success"></i>
+    }
+
+    if (ViTri != null && Model.CreatedBy == ViTri)
+    {
+        <i class="fa    fa-plus-square text-primary" data-toggle="collapse" data-target="#CreatedBy" aria-expanded="false" aria-controls="CreatedBy"></i>
+        <div class="collapse" id="CreatedBy">
+            <div class="card card-body">
+                @ViTri là người đã tạo công việc
+            </div>
+        </div>
+    }
+}
+<div class="row  col-12">
+    <div class="col-12 row" id="Info">
+
+
+        <div class="col-xs-12 col-md-7">
+            <div style="border:1px solid #0094ff;padding:10px;background-color:#fFF;height:100%">
+                <div class="form-group row">
+                    <label class="col-md-4">
+                        Mã CV định kỳ:
+                        <label class="labelIf ">@Model.Id</label>
+
+                        @if ((nguoidung.UserName.ToUpper() == Model.TaskAssigner.ToUpper()
+                                     || nguoidung.UserName.ToUpper() == (Model.Authorized != null ? Model.Authorized.ToUpper() : "")
+                                      ) && Model.Status != Planner2.Common.ConstTrangThai.DaHuy
+                                     && Model.Status != Planner2.Common.ConstTrangThai.HoanThanh
+                                     && Model.Status != Planner2.Common.ConstTrangThai.ChoXacNhanHoanThanh
+                                     )
+                        {
+                            <br />
+                            <a class="btn btn-sm btn-outline-success" href="/Tasks/Create?TaskID=@Model.Id">Sửa <i class="fa fa-edit"></i></a>
+                            <a class="btn btn-sm btn-outline-danger" href="" id="HUY">Hủy <i class="fa fa-trash-o"></i></a>
+                            if (Model.Reecurring == 1)
+                            {
+                                <a class="btn btn-sm btn-outline-info" href="" id="HUY_DK">Hủy định kỳ lặp lại <i class="fa  fa-recycle"></i></a>
+                            }
+
+                        }
+                    </label>
+
+
+                    <div class="col-md-8">
+
+                        <p style="padding:10px;border:1px solid #0094ff;font-size:20px">
+                            @funtask.TrangThaiTask(Model)
+
+                        </p>
+                    </div>
+                    @if (Model.Reecurring == 2)
+                    {
+                        <h6 style="color:red">Công việc đã Hủy định kỳ, sẽ không lặp lại vào đợt sau.</h6>
+                    }
+
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-12">
+                        Tên công việc:
+                        <br />
+                        <label class="labelIf">@Model.TaskName</label>
+                    </label>
+
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-6">
+                        Người thực hiện chính:
+                        <br />
+                        <label class="labelIf">@ViewBag.Master</label>
+                        @ThamGia(Model.Master)
+                    </label>
+
+                    <label class="col-md-6">
+                        Người giám sát:
+                        <br />
+                        <label class="labelIf">@ViewBag.TaskChecker</label>
+
+                        @ThamGia(Model.TaskChecker)
+
+                    </label>
+                </div>
+
+                <div class="form-group row">
+
+                    <label class="col-md-6">
+                        Người giao việc:
+                        <br />
+                        <label class="labelIf">@ViewBag.TaskAssigner</label>
+                        @ThamGia(Model.TaskAssigner)
+
+                    </label>
+
+                    <label class="col-md-6">
+                        Người được ủy quyền:
+                        <br />
+                        <label class="labelIf">@ViewBag.Authorized</label>
+                        @ThamGia(Model.Authorized)
+
+                    </label>
+
+
+
+                </div>
+                <div class="form-group row">
+
+                    <label class="col-md-6">
+                        Loại định kỳ:
+                        <br />
+                        <label class="labelIf">@Model.Priority</label>
+                    </label>
+
+
+
+
+                    <label class="col-md-6">
+                        Thời hạn báo cáo:
+                        <br />
+                        <label class="labelIf">@(Model.DueDate.HasValue ? Model.DueDate.Value.ToString("dd/MM/yyyy") : "")</label>
+                    </label>
+
+
+                    <div id="_CUNGTHUCHIEN" v-cloak>
+
+                        @if (ViewBag.CTH != null)
+                        {
+                            var dl = ((List<string>)ViewBag.CTH).Where(z => z != null && z != "");
+                            if (dl.Count() > 0)
+                            {
+
+
+                                <label class="col-md-12">
+                                    Cùng thực hiện:
+                                    <br />
+
+                                </label>
+                                foreach (var item in dl)
+                                {
+                                    <v-chip color="primary" outline>
+                                        <v-avatar>
+                                            <v-icon>account_circle</v-icon>
+                                        </v-avatar>
+                                        @item
+                                    </v-chip>
+                                }
+
+
+
+
+                            }
+
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @if (Model.DateFinish.HasValue)
+                    {
+                        <label class="col-md-6">
+                            Ngày báo cáo hoàn thành:
+                            <br />
+                            <label class="labelIf">@Model.DateFinish.Value.ToString("dd/MM/yyyy")</label>
+                        </label>
+                    }
+                    @if (Model.DateEnd.HasValue)
+                    {
+                        <label class="col-md-6">
+                            Ngày được xác nhận hoàn thành:
+                            <br />
+                            <label class="labelIf">@Model.DateEnd.Value.ToString("dd/MM/yyyy")</label>
+                        </label>
+                    }
+
+                </div>
+                <div class="form-group row">
+                    <label class="col-12"> Mô tả công việc:     </label>
+
+                    @Html.Raw(Model.Description)
+
+                </div>
+                <hr style="border-top: 1px dotted #17a2b8;" />
+
+                <div class="form-group row">
+
+
+                    <div id="AppCacThucHien" v-cloak>
+
+
+                        <div>
+
+                            <label class="col-12">
+                                Cách thực hiện:
+
+                                @if (nguoidung.UserName.ToUpper() == Model.Master.ToUpper())
+                                {
+                                    <a class="btn btn-sm btn-success" @@click="dialog=true" slot="activator">Bổ sung</a>
+
+                                }
+
+                            </label>
+
+                            <v-dialog v-model="dialog" persistent max-width="600px">
+                                <v-card>
+                                    <v-card-title>
+                                        <span class="headline">Các thực hiện</span>
+                                    </v-card-title>
+                                    <v-card-text>
+                                        <v-layout wrap>
+                                            <v-textarea placeholder="Nhập cách thực hiện công việc vào đây..."
+                                                        auto-grow autofocus id="ND_CachThucHien"
+                                                        label=" "
+                                                        value="@Model.CachThucHien" rows="12"></v-textarea>
+                                        </v-layout>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn color="blue darken-1" flat @@click="dialog = false">Đóng</v-btn>
+                                        <v-btn color="blue darken-1" flat @@click="dialog = false;save()">Lưu</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <div class="row">
+                    @Html.Raw(Model.CachThucHien != null ? Model.CachThucHien.Replace("\n", "<br>") : "")
+
+                </div>
+
+                <hr style="border-top: 1px dotted #17a2b8;" />
+
+                <div class="form-group row">
+
+
+
+                    <div id="AppCachKiemSoat" v-cloak>
+
+
+                        <div>
+
+                            <label class="col-12">
+                                Cách kiểm soát:
+                                @if (nguoidung.UserName.ToUpper() == Model.Master.ToUpper())
+                                {
+                                    <a class="btn btn-sm btn-success" @@click="dialog=true" slot="activator">Bổ sung</a>
+
+                                }
+
+                            </label>
+
+                            <v-dialog v-model="dialog" persistent max-width="600px">
+                                <v-card>
+                                    <v-card-title>
+                                        <span class="headline">Các kiểm soát</span>
+                                    </v-card-title>
+                                    <v-card-text>
+                                        <v-layout wrap>
+                                            <v-textarea placeholder="Nhập cách kiểm soát công việc vào đây..."
+                                                        auto-grow autofocus id="ND_CachKiemSoat"
+                                                        label=" "
+                                                        value="@Model.CachKiemSoat" rows="12"></v-textarea>
+                                        </v-layout>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn color="blue darken-1" flat @@click="dialog = false">Đóng</v-btn>
+                                        <v-btn color="blue darken-1" flat @@click="dialog = false;save()">Lưu</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <div class="row">
+                    @Html.Raw(Model.CachKiemSoat != null ? Model.CachKiemSoat.Replace("\n", "<br>") : "")
+
+                </div>
+
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-5">
+
+            <div style="border:1px solid #0094ff;padding:10px;background-color:#fFF;height:100%">
+                @{
+                    if (nguoidung.UserName.ToUpper() == Model.Master.ToUpper())
+                    {
+                        if (!HT.Contains(ViewBag.TinhTrang))
+                        {
+                            <a id="HOANTHANH" class="btn btn-success  pull-right">Click để báo cáo hoàn thành công việc</a>
+
+                            <hr />
+                            <h3>Công việc định kỳ không phải xác nhận tình trạng hàng ngày</h3>
+                        }
+
+                    }
+                    Html.RenderAction("choxuly", "Tasks", new { TaskID = Model.Id });
+                }
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin:10PX">
+
+
+        <div>
+            @if (Model.ParentID != 0)
+            {
+                <a href="/Tasks/Info?ID=@Model.ParentID" class="btn  btn-sm btn-primary"><i class="fa fa-info-circle"></i> Chi tiết công việc chính</a>
+
+            }
+
+            @{Html.RenderAction("index", "FutureTask", new { TaskID = Model.Id });}
+
+
+
+        </div>
+
+
+    </div>
+    <div class="col-12 row">
+        <div class="col-xs-12 col-md-7">
+            <div style="border:1px solid #0094ff;padding:10px;background-color:#fFF" id="Comment">
+
+                @{Html.RenderAction("Comment", "Tasks", new { TaskID = Model.Id });}
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-5">
+            <div style="border:1px solid #0094ff;padding:10px;background-color:#fFF" id="Comment">
+                @{Html.RenderAction("History", "Tasks", new { TaskID = Model.Id });}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var vmCUNGTHUCHIEN = new Vue({
+
+        el: "#_CUNGTHUCHIEN"
+
+    })
+    var vmAppCacThucHien = new Vue({
+
+        el: "#AppCacThucHien",
+        data: {
+            dialog: false,
+            NOIDUNG: null//
+
+        }, methods: {
+
+            save: function () {
+                var Noidung = $('#ND_CachThucHien').val();
+                $.ajax({
+                    type: "POST",
+                    url: "/Tasks/BS_CachThucHien",
+                    data: {
+                        TaskID: '@Model.Id',
+                        Noidung: Noidung
+
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        Reload();
+                    }
+                });
+            },
+            saveKS: function () {
+                var Noidung = $('#ND_CachThucHien').val();
+                $.ajax({
+                    type: "POST",
+                    url: "/Tasks/BS_CachThucHien",
+                    data: {
+                        TaskID: '@Model.Id',
+                        Noidung: Noidung
+
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        Reload();
+                    }
+                });
+            }
+        }
+    });
+    var vmAppCachKiemSoat = new Vue({
+
+        el: "#AppCachKiemSoat",
+        data: {
+            dialog: false,
+            NOIDUNG: null//
+
+        }, methods: {
+
+
+             save: function () {
+                 var Noidung = $('#ND_CachKiemSoat').val();
+                 $.ajax({
+                    type: "POST",
+                     url: "/Tasks/BS_CachKiemSat",
+                    data: {
+                        TaskID: '@Model.Id',
+                        Noidung: Noidung
+
+                    },
+                    dataType: "json",
+                     success: function (response) {
+                    Reload();
+                    }
+                });
+            }
+        }
+    })
+
+
+    $("#HOANTHANH").click(function (e) {
+        var r = confirm("Anh chị có chắc chắn muốn hoàn thành công việc");
+        if (r == true) {
+
+            $.ajax({
+                type: "POST",
+                url: "/Tasks/BCHoanThanh",
+                data: {
+                    TaskID: '@Model.Id'
+                },
+                dataType: "json",
+                success: function (response) {
+                    GoDangThucHien();
+                }
+            });
+        } else {
+        }
+        e.preventDefault();
+
+    });
+    function Reload() {
+        GoLink('/Tasks/info?ID=' + '@Model.Id');
+    }
+    function GoDangThucHien() {
+        GoLink("/FutureTask/Master");
+    }
+    $("#HUY").click(function (e) {
+        Huy();
+        e.preventDefault();
+
+    });
+    $("#HUY_DK").click(function (e) {
+        var Id = '@Model.Id';
+              var lydo = prompt('Vui lòng nhập lý do bỏ định kỳ lặp lại này ạ, công việc sẽ không tự động tạo mới vào tháng sau, công việc hiện tại tiếp tục thực hiện.');
+            if (lydo != '' && lydo != null) {
+            $.ajax({
+                url: '/Tasks/CancelDinhKy',
+                type: 'POST',
+                datatype: 'json',
+                data: { Id: Id, Lydo: lydo },
+                success: function (data) {
+                    window.location.reload();
+
+                }
+
+
+            });
+        }
+        e.preventDefault();
+
+    });
+    function Huy() {
+        var Id = '@Model.Id';
+        var lydo = prompt('Vui lòng nhập lý do hủy công việc định này ạ');
+        if (lydo != '' && lydo != null) {
+            $.ajax({
+                url: '/FutureTask/CancelTaskById',
+                type: 'POST',
+                datatype: 'json',
+                data: { Id: Id, Lydo: lydo },
+                success: function (data) {
+                    window.location.reload();
+
+                }
+
+
+            });
+        }
+    }
+</script>
+
+

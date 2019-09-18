@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3ea85b1e56c44e3491a8c1e37e3bd485" Name="Diagram1" ZoomLevel="93">
+        <EntityTypeShape EntityType="Planner2Model.Bank" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Planner2Model.Category" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Planner2Model.CommentTask" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Planner2Model.History" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="Planner2Model.MainTask" Width="1.5" PointX="2.75" PointY="5.75" />
+        <EntityTypeShape EntityType="Planner2Model.MainTask_ChuDe" Width="1.5" PointX="4.75" PointY="5.75" />
+        <EntityTypeShape EntityType="Planner2Model.Notify" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Planner2Model.NotifyUser" Width="1.5" PointX="6.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Planner2Model.SettingData" Width="1.5" PointX="6.75" PointY="7.75" />
+        <EntityTypeShape EntityType="Planner2Model.ThanhPho" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Planner2Model.UploadFile" Width="1.5" PointX="8.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Planner2Model.User_Category" Width="1.5" PointX="8.75" PointY="8.75" />
+        <EntityTypeShape EntityType="Planner2Model.User" Width="1.5" PointX="10.75" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,355 @@
+﻿@model Planner2.Models.MainTask
+@{
+    var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
+
+}
+
+<div id="app">
+    <v-app id="inspire">
+        <v-form v-model="valid">
+
+            <div id="CVCHINH">
+                <v-flex xs12 md12>
+                    <v-text-field v-model="TaskName" :rules="NotEmpty" prepend-icon="chat" outline label="Tên công việc ĐỊNH KỲ*" placeholder=" " required :disabled="Id!=0"></v-text-field>
+                </v-flex>
+
+                <v-layout style="padding:0" id="layouteditor">
+
+
+
+                    <div class="flex xs12 md12">
+                        <div class="v-input v-text-field v-text-field--enclosed v-text-field--outline v-text-field--placeholder theme--light">
+                            <div class="v-input__prepend-outer">
+                                <div class="v-input__icon v-input__icon--prepend">
+                                    <i aria-hidden="true" class="v-icon material-icons theme--light">chat</i>
+                                </div>
+                            </div><div class="v-input__control">
+                                <div class="v-input__slot">
+                                    <div id="editor">
+                                        <div class="col-12">
+                                            @Html.Raw(Model.Description)
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </v-layout>
+                <div class="row">
+                    <v-flex xs12 md3>
+                        <v-dialog ref="dialog"
+                                  v-model="modal"
+                                  lazy
+                                  full-width
+                                  width="290px">
+                            <v-text-field slot="activator"
+                                          v-model="DueDate"
+                                          label="Ngày báo cáo đầu tiên *"
+                                          placeholder=" "
+                                          outline
+                                          :rules="NotEmpty"
+                                          prepend-icon="event"
+                                          readonly></v-text-field>
+                            <v-date-picker @@change="modal=false"  :min="minDate" v-model="DueDate">
+                            </v-date-picker>
+                        </v-dialog>
+                    </v-flex>
+
+                   
+                    <v-flex xs12 md3>
+                        <v-select :items="Prioritys"
+                                  v-model="Priority"
+                                  prepend-icon="priority_high"
+                                  label="Loại định kỳ *" outline :rules="NotEmpty" :disabled="DueDate=='' "></v-select>
+                    </v-flex>
+
+                    <v-flex xs12 md3 class="container" v-if="ListNgayBC.length >0" style="padding-top: 0px;padding-bottom: 0;">
+                        <label>10 ngày báo cáo gần nhất</label>
+                        <div v-for="it in ListNgayBC">
+                            <a> ⁎ {{it}}</a>
+                        </div>
+
+                    </v-flex>
+                </div>
+                <div class="row">
+                    <v-flex xs12 md3>
+                        <v-autocomplete style="font-size:14px" :rules="NotEmpty"
+                                        :items="ListAssigner"
+                                        item-text="StaffName"
+                                        item-value="UserName"
+                                        v-model="TaskAssigner"
+                                        placeholder=" "
+                                        prepend-icon="person"
+                                        clearable
+                                        outline
+                                        flat
+                                        hide-no-data
+                                        hide-details
+                                        label="Người giao việc *" :disabled="Id!=0"></v-autocomplete>
+                    </v-flex>
+                    <v-flex xs12 md3>
+
+                        <v-autocomplete style="font-size:14px" :items="ListMasters"
+                                        item-text="StaffName"
+                                        item-value="UserName"
+                                        v-model="Master"
+                                        clearable
+                                        prepend-icon="person"
+                                        placeholder=" "
+                                        outline flat
+                                        hide-no-data
+                                        hide-details  
+                                        label="Người thực hiện chính *" :disabled="!TaskAssigner|| Id!=0">
+
+
+                        </v-autocomplete>
+                    </v-flex>
+
+
+                    <v-flex xs12 md3>
+                        <v-autocomplete style="font-size:14px" :items="ListMasters"
+                                        item-text="StaffName"
+                                        item-value="UserName"
+                                        v-model="Authorized"
+                                        placeholder=" "
+                                        clearable
+                                        prepend-icon="person"
+                                        outline flat
+                                        hide-no-data
+                                        hide-details
+                                        label="Người được ủy quyền" :disabled="!TaskAssigner"></v-autocomplete>
+                    </v-flex>
+                    <v-flex xs12 md3>
+                        <v-autocomplete style="font-size:14px" :items="ListMasters"
+                                        item-text="StaffName"
+                                        item-value="UserName"
+                                        v-model="TaskChecker"
+                                        clearable
+                                        prepend-icon="person"
+                                        placeholder=" "
+                                        outline flat
+                                        hide-no-data
+                                        hide-details
+                                        label="Người giám sát" :disabled="!TaskAssigner"></v-autocomplete>
+                    </v-flex>
+                </div>
+                <div class="row" style="margin-top:10px">
+                    <v-flex xs12>
+                        <v-autocomplete style="font-size:14px" :items="ListGroup"
+                                        item-text="StaffName"
+                                        item-value="UserName"
+                                        v-model="CungThucHien"
+                                        cache-items
+                                        clearable
+                                        prepend-icon="person"
+                                        placeholder=" "
+                                        outline flat
+                                        hide-no-data
+                                        hide-details multiple
+                                        label="Người cùng thực hiện  " :disabled="!TaskAssigner">
+
+
+                        </v-autocomplete>
+                    </v-flex>
+                </div>
+            </div>
+            <hr />
+
+
+
+
+
+            <v-btn @@click="submit" :disabled="!valid" color="info  " style="float:right">
+                <v-icon dark>save</v-icon> &nbsp;
+                @(Model.Id == 0 ? "Tạo công việc" : "Lưu lại")
+            </v-btn>
+            <span style="font-size:30PX;float:right">  {{SAVE}} </span>
+
+        </v-form>
+    </v-app>
+</div>
+<script> 
+
+
+    $.ajax({
+        type: "POST",
+        url: "/Tasks/GetAssigner",
+        dataType: "json",
+        success: function (response) {
+            app.ListAssigner = response;
+        }
+    });
+    $.ajax({
+        type: "POST",
+        url: "/Tasks/GetGroup",
+        dataType: "json",
+        success: function (response) {
+            app.ListGroup = response;
+        }
+    });
+    $("#CVCHINH").prop("disabled", false); //Disable
+
+    var CungThucHien = "@Model.CungThucHien".split(",");
+    var Master = ['','@Model.Master'];
+      var app = new Vue({
+        el: '#app',
+        data: () => ({
+            valid: false,
+            Id: '@Model.Id',
+            TaskName: '@Html.Raw(Model.TaskName)',
+            Description: '',
+            SAVE: '',
+            minDate:'@DateTime.Now.ToString("yyyy-MM-dd")',
+            DueDate: '@(Model.DueDate.HasValue? Model.DueDate.Value.ToString("yyyy-MM-dd"):"")',
+             TaskChecker: '@Model.TaskChecker',
+            Master:'@Model.Master',
+            Authorized: '@Model.Authorized',
+            TaskAssigner: '@Model.TaskAssigner',
+            Days: '@(Model.Days!=null? Model.Days:3)',
+            ListUser: [],
+            CungThucHien: CungThucHien,
+             ListMasters: [],
+            ListAssigner: [],
+
+            Prioritys: ['Hàng tuần', 'Hàng tháng', 'Hàng quý', 'Hàng năm'],
+            ListNgayBC: [ ],
+            Priority: '@Html.Raw(Model.Priority)',
+            NotEmpty: [
+                v => !!v  || 'Không được để trống',
+            ],
+            modal: false,
+            modal1: false,
+        }),
+        watch: {
+              'TaskAssigner': function () {
+                this.TaskChecker = '';
+                this.Authorized = '';
+                this.Master = '';
+                app.ListMasters.length = 0;
+                $.ajax({
+                    type: "POST",
+                    url: "/Tasks/GetMaster",
+                    data: {
+                        TaskAssigner: this.TaskAssigner
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        app.ListMasters = response;
+                    //  app.$forceUpdate();
+                     }
+                });
+             },
+
+          'Priority': function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/TasksRecurring/GetListBC",
+                    data: {
+                        DueDate: app.DueDate,
+                         Priority: app.Priority
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        app.ListNgayBC = response;
+
+                    }
+                });
+
+            }
+        } ,
+
+        methods: {
+
+            submit: function (event) {
+
+                if (this.Priority == null || this.Priority == '') {
+                    alert('Loại định kỳ không được để trống');
+                    return;
+                }
+
+                this.valid = false;
+                this.SAVE = "Xin chờ chút, đang lưu dữ liệu....";
+                 var editorText = "";
+               editorText   =   CKEDITOR.instances.editor.getData();
+                app.Description = editorText;
+                $.ajax({
+                    type: "POST",
+                    url: "/Tasks/Create",
+                    data: {
+                        Id: app.Id,
+                        ListMaster: app.ListMaster,
+                        TaskName: app.TaskName,
+                        CungThucHien: app.CungThucHien,
+                        Description: app.Description,
+                        DueDate: app.DueDate,
+                         TaskChecker: app.TaskChecker,
+                        Master: app.Master,
+                        Authorized: app.Authorized,
+                        TaskAssigner: app.TaskAssigner,
+                        Days: app.Days,
+                        Reecurring: true,
+                        Priority: app.Priority,
+                        Reecurring:1
+
+                    },
+                    dataType: "json",
+                    success: function (msg) {
+                        if (msg.TT == "1") {
+                            alert(msg.Value);
+                            app.valid = true;
+                            app.SAVE = "";
+                        } else {
+                             GoLink('/Tasks/Info?ID=' + msg.Value[0]);
+
+                            for (var i = 1; i < msg.Value.length; i++) {
+                                 window.open('/Tasks/Info?ID=' + msg.Value[i], '_blank');
+
+                             }
+
+                        }
+                    }
+                });
+            },
+            Deleted: function (index) {
+                this.ListMaster.splice(index, 1);
+             }
+
+        }
+
+    })
+    function Split(array,master) {
+        if (array == null || (array != null && array.length == 0) || master== 1) {
+            return false;
+        }
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] != "" && array[i] != null && array[i].trim() != '') {
+                return true;
+            }
+        }
+        return false;
+
+    }
+</script>
+<script>
+
+    setTimeout(function () {
+        CKEDITOR.replace('editor');
+    }, 100);
+
+</script>
+<style>
+    .cke_top {
+        Position: sticky;
+        top: 0;
+    }
+
+    #cke_editor {
+        width: 100% !important;
+        border: 0 !important
+    }
+
+    #layouteditor .v-input__slot {
+        padding: 0 !important
+    }
+</style>

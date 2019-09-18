@@ -1,0 +1,85 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<Planner2.Models.MainTask>
+
+<div id="PagedListPager">
+
+
+    <main id="main" class="site-main" role="main">
+        <div class="wrapper-realty">
+            <header class="entry-header">
+                <div class="bor-bot">
+                    <div class="title">
+                        <h1 class="entry-title">
+                            @ViewBag.TitleChuDe
+                        </h1>
+                        <span class="icon-house"></span>
+                    </div>
+                </div>
+            </header><!-- .page-header -->
+            
+            <div class="quick-search">
+                <span class="right-result">
+                    Có <span>   @Model.TotalItemCount</span> bất động sản được tìm thấy.
+
+
+                </span>
+                <form method="post">
+                    <select name="sort" id="sort" class="">
+                        <option @(ViewBag.sort == "df" ? "selected" : "") value="df">Mặc định</option>
+                        <option @(ViewBag.sort == "dd" ? "selected" : "") value="dd">Mới nhất</option>
+                        <option @(ViewBag.sort == "du" ? "selected" : "") value="du">Cũ nhất</option>
+                        <option @(ViewBag.sort == "pd" ? "selected" : "") value="pd">Giá cao nhất</option>
+                        <option @(ViewBag.sort == "pu" ? "selected" : "") value="pu">Giá thấp nhất</option>
+                    </select>
+                </form>
+
+            </div><!-- .quick-search -->
+
+            <div id="PagedListPager">
+
+                   <div class="list-realty">
+                    <ul>
+                        @{
+                            Html.RenderPartial("~/Views/Post/PV/_TableGrid.cshtml", Model);
+                        }
+
+                    </ul>
+                </div>
+
+                @Html.PagedListPager(Model, page => Url.Action(ViewBag.action,
+              new { page, sort = ViewBag.sort, ChuDe = ViewBag.ChuDe }))
+
+            </div>
+        </div>
+
+
+
+
+    </main><!-- #main -->
+
+    <script>
+    $("#sort").change(function (e) {
+
+        var val = $(this).val();
+      var _href= "/Post/index?page=1&ChuDe=@ViewBag.ChuDe&sort=" + val;
+      Loading("#PagedListPager");
+        $('#PagedListPager').load(_href);
+        e.preventDefault();
+
+    });
+     function Loading(ID) {
+
+            var html = '<div id="loader" class="cssload-loader-inner"> <div class="cssload-cssload-loader-line-wrap-wrap"> <div class="cssload-loader-line-wrap"></div> </div> <div class="cssload-cssload-loader-line-wrap-wrap"> <div class="cssload-loader-line-wrap"></div> </div> <div class="cssload-cssload-loader-line-wrap-wrap"> <div class="cssload-loader-line-wrap"></div> </div> <div class="cssload-cssload-loader-line-wrap-wrap"> <div class="cssload-loader-line-wrap"></div> </div> <div class="cssload-cssload-loader-line-wrap-wrap"> <div class="cssload-loader-line-wrap"></div> </div> </div>';
+            $(ID).html(html);
+        }
+
+    $(".pagination a[href]").click(function (e) {
+          e.preventDefault();
+        Loading("#PagedListPager");
+        $('#PagedListPager').load($(this).attr("href"));
+        $('#topcontrol').click();
+    });
+
+    </script>
+
+</div>

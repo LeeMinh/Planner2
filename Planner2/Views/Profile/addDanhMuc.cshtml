@@ -1,0 +1,136 @@
+﻿@{
+    Planner2Entities db = new Planner2Entities();
+                var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
+        nguoidung.SoTien = nguoidung.SoTien ?? 0;
+        var ST = String.Format( System.Globalization.CultureInfo.GetCultureInfo("vi-VN"), "{0:n0}", nguoidung.SoTien) + " VND";
+
+}
+@helper Choose(string Name, string Label)
+{
+    <tr>
+        <td>
+            <input type="radio" name="TYPECHOOSE" value="@Name" style="width:20PX;height:20PX" class="form-control" />
+        </td>
+        <td>@Label</td>
+        <td id="@Name">Giá</td>
+    </tr>
+}
+<h3>
+    Mua thêm Chủ đề
+    <a class="btn btn-primary text-white" id="ThanhToan">Thanh toán</a>
+</h3>
+<h3>Số tiền bạn đang có : @ST</h3>
+<div class="row">
+
+    <div class="col-12">
+        <label>Chủ đề</label>
+        <select class="form-control" id="ChooseDM">
+            <option value="">-Chọn Chủ đề-</option>
+            @foreach (var item in db.Categories.Where(z=>z.Menu!="Top"))
+            {
+                <option value="@item.CategoryRowID">@item.CategoryName</option>
+            }
+        </select>
+    </div>
+    <div class="col-12">
+        <table class="table">
+            <tr>
+                <th style="width:60px">Chọn</th>
+                <th style="width:160px">Loại</th>
+                <th>Giá tiền</th>
+            </tr>
+            @Choose("Price7Day", "Price7Day")
+            @Choose("Price15Day", "Price15Day")
+            @Choose("Price30Day", "Price30Day")
+            @Choose("Price2Month", "Price2Month")
+            @Choose("Price3Month", "Price3Month")
+            @Choose("Price6Month", "Price6Month")
+            @Choose("Price1Year", "Price1Year")
+            @Choose("Price2Year", "Price2Year")
+            @Choose("Price5Year", "Price5Year")
+
+        </table>
+
+    </div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+
+<script>
+    $("#ThanhToan").click(function (e) {
+ var r = confirm("Anh chị có chắc chắn muốn thanh toán!");
+if (r == true) {
+ 
+        var DM = $("#ChooseDM").val();
+        if (DM == "" || DM == null) {
+            alert('Vui lòng chọn Chủ đề');
+            return;
+        }
+        var TYPECHOOSE = $('[name=TYPECHOOSE]:checked').val();
+
+        if (TYPECHOOSE == "" || TYPECHOOSE == null) {
+            alert('Vui lòng chọn gói cần mua');
+            return;
+        }
+ 
+        $.ajax({
+            type: "POST",
+            url: "/profile/addDanhMuc",
+            data: {
+                DM: DM,
+                TYPECHOOSE: TYPECHOOSE,
+
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response == "") {
+                    alert("Đã thanh toán!Xin cảm ơn.");
+                    window.location.href = '/Profile/index';
+                } else {
+                    alert(response);
+                }
+            }
+        });
+        }
+        e.preventDefault();
+    
+    });
+    $('select').select2();
+    $("#ChooseDM").change(function (e) {
+
+        var val = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: "/profile/InfoDanhMuc",
+            data: {
+                ID: val
+            },
+            dataType: "json",
+            success: function (response) {
+
+                response.Price7Day = response.Price7Day.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + " VND";
+                response.Price15Day = response.Price15Day.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + " VND";
+                response.Price30Day = response.Price30Day.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + " VND";
+                response.Price2Month = response.Price2Month.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + " VND";
+                response.Price3Month = response.Price3Month.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + " VND";
+                response.Price6Month = response.Price6Month.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + " VND";
+                response.Price1Year = response.Price1Year.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + " VND";
+                response.Price2Year = response.Price2Year.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + " VND";
+                response.Price5Year = response.Price5Year.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + " VND";
+
+                $('#Price7Day').html(response.Price7Day);
+                $('#Price15Day').html(response.Price15Day);
+                $('#Price30Day').html(response.Price30Day);
+                $('#Price2Month').html(response.Price2Month);
+                $('#Price3Month').html(response.Price3Month);
+                $('#Price6Month').html(response.Price6Month);
+                $('#Price1Year').html(response.Price1Year);
+                $('#Price2Year').html(response.Price2Year);
+                $('#Price5Year').html(response.Price5Year);
+            }
+        });
+        e.preventDefault();
+
+    });
+</script>

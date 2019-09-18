@@ -1,0 +1,258 @@
+﻿@{
+    var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@Planner2.Common.SettingData.Website_Name</title>
+    <style>
+        nav .nav-item a, nav .nav-item a p {
+            color: white;
+        }
+    </style>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <!-- Ionicons -->
+    @Html.Partial("_Lib")
+</head>
+<body class="hold-transition sidebar-mini">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand border-bottom navbar-dark bg-danger">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav ">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" id="pushmenu" href="#"><i class="fa fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-sm-inline-block">
+                    <form action="/Tasks/Info" method="get">
+                        <input type="search" class="form-control" style="    max-width: 300px;width: 300px;" value="@ViewBag.ID" placeholder=" @Planner2.Common.SettingData.Search_CV" name="ID" />
+                    </form>
+                </li>
+
+            </ul>
+            <!-- SEARCH FORM -->
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Messages Dropdown Menu -->
+
+                <li class="nav-item  ">
+                    <a href="/profile/index" class="nav-link">
+                        <i class="fa fa-user-circle-o"></i> Hi,  @nguoidung.UserName
+                    </a>
+
+                </li>
+                <li class="nav-item  ">
+                    <a class="nav-link stopAjax" href="/login/logout">
+                        <i class="fa fa-sign-out"></i>  ,Thoát ra
+                    </a>
+
+                </li>
+                <!-- Notifications Dropdown Menu -->
+
+            </ul>
+        </nav>
+
+        <div>
+
+
+            <aside class="main-sidebar sidebar-dark-primary elevation-4">
+                <!-- Brand Logo -->
+                <a href="/post" class="brand-link">
+                    <img style="width:100%" src="@Planner2.Common.SettingData.Logo" />
+                </a>
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Sidebar user (optional) -->
+                    <!-- Sidebar Menu -->
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+
+                            <li class="nav-item">
+                                <a href="/Profile/index" class="nav-link">
+                                    <i class="nav-icon fa fa-user "></i>
+                                    <p>
+                                        Cá nhân
+
+
+
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Tasks/Create" class="nav-link">
+                                    <i class="nav-icon fa fa-plus-square"></i>
+                                    <p>
+                                        Thêm bài đăng
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="/FutureTask/Index" class="nav-link">
+                                    <i class="nav-icon fa fa-list-alt" style="color:#c9f4fa"></i>
+                                    <p>
+                                        @Planner2.Common.SettingData.TT_DanhSachCV
+
+                                    </p>
+                                </a>
+                            </li> 
+                            <li class="nav-item">
+                                <a href="/Comments/Index" class="nav-link">
+                                    <i class="nav-icon fa fa-comment-o" style="color:#c9f4fa"></i>
+                                    <p>
+                                      Bình luận
+
+                                    </p>
+                                </a>
+                            </li>
+                            @if (nguoidung.SupperAdmin == 1)
+                            {
+
+
+                                <li class="nav-item">
+                                    <a href="/FutureTask/all" class="nav-link">
+                                        <i class="nav-icon fa fa-cog "></i>
+                                        <p>
+                                            Tất cả bài đăng
+
+
+                                        </p>
+                                    </a>
+                                </li> <li class="nav-item">
+                                    <a href="/Settings/index" class="nav-link">
+                                        <i class="nav-icon fa fa-cog "></i>
+                                        <p>
+                                            @Planner2.Common.SettingData.Setting
+
+
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="/Categories/index" class="nav-link">
+                                        <i class="nav-icon fa fa-cog "></i>
+                                        <p>
+                                            @Planner2.Common.SettingData.Categories
+
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Banner/index" class="nav-link">
+                                        <i class="nav-icon fa fa-tags "></i>
+                                        <p>
+                                            Banner
+
+
+                                        </p>
+                                    </a>
+                                </li>       <li class="nav-item">
+                                    <a href="/Users/index" class="nav-link">
+                                        <i class="nav-icon fa fa-users "></i>
+                                        <p>
+                                            Users
+
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/User_Category/index" class="nav-link">
+                                        <i class="nav-icon fa fa-user-secret "></i>
+                                        <p>
+                                            Phân quyền
+
+
+
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="/banks/index" class="nav-link">
+                                        <i class="nav-icon fa fa-dollar "></i>
+                                        <p>
+                                            Ngân hàng
+
+
+
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="/Tasks/Page?TaskID=1090" class="nav-link">
+                                        <i class="nav-icon fa fa-info-circle "></i>
+                                        <p>
+                                            Giới thiệu
+
+
+                                        </p>
+                                    </a>
+                                </li>
+
+                            }
+                        </ul>
+                    </nav>
+                    <!-- /.sidebar-menu -->
+                </div>
+                <!-- /.sidebar -->
+            </aside>
+        </div>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+
+            <!-- Main content -->
+            <section class="content">
+                <!-- Default box -->
+                <div class="card">
+
+                    <div class="card-body clearfix" id="BodySPA">
+
+                        @RenderBody()
+                    </div>
+                    <!-- /.card-body -->
+                    <!-- /.card-footer-->
+                </div>
+                <!-- /.card -->
+            </section>
+            <!-- /.content -->
+        </div>
+
+
+
+    </div>
+
+
+    <script>
+
+        var LastUrl = "";
+        $("#BackLink").click(function (e) {
+            GoLink(LastUrl);
+
+        });
+        $("#BagThongBao").click(function (e) {
+            loading("#BoDyThongBao");
+            $("#BoDyThongBao").load("/notify/index");
+        });
+        function loading(div) {
+            $(div).html('<h4 style="color:green;text-align:center;width:100%"> <i class="fa fa-spinner fa-spin"></i> Đang tải dữ liệu </h4>');
+        }
+        $(document).ready(function () {
+            $('.nav-item').find('[href="' + window.location.pathname + '"]').addClass('active');
+        });
+    </script>
+
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

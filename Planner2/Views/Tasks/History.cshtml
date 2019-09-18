@@ -1,0 +1,33 @@
+﻿
+@model  IEnumerable<Planner2.Models.History>
+
+<style>
+    .table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+        padding: 5px;
+        font-size: 12PX
+    }
+</style>
+<br />
+<div class="KHUNG table-responsive "  style="width:100%">
+    <table style="width:100%" class="table-bordered">
+        <tr>
+            <th colspan="4">Lịch sử</th>
+        </tr>
+        <tr>
+            <th style="width:90PX">Người xử lý</th>
+            <th>Nội dung</th>
+        </tr>
+        @foreach (var item in Model.OrderByDescending(z => z.DATECREATE))
+        {
+            <tr>
+                <td>
+                    <b style="font-weight:bold">[@item.StaffID]</b><br />
+                    <i>@item.DATECREATE.Value.ToString("dd/MM/yy HH:mm")</i>
+                </td>
+                <td>@Html.Raw(item.NOIDUNG != null ? item.NOIDUNG : "")</td>
+
+            </tr>
+        }
+    </table>
+
+</div>

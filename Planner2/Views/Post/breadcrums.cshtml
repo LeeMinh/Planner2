@@ -1,0 +1,13 @@
+﻿@model  IEnumerable<Planner2.Controllers.PostController._breadcrums>
+<div class="hrm-breadcrums">
+    <div id="crumbs">
+        <a href="/post/">Trang chủ</a>
+        @foreach (var item in Model.OrderByDescending(z => z.ParentID))
+        {
+            <a href="/Post/index?ChuDe=@item.SeoUrl">
+                <i class="fa fa-angle-double-right"></i>
+                <span class="current">@item.CategoryName</span>
+            </a>
+        }
+    </div>
+</div>

@@ -1,0 +1,186 @@
+﻿
+
+@model  IEnumerable<Planner2.Models.CommentTask>
+
+
+@helper AddComment(int ID)
+{
+    <form action="/Tasks/Comment" enctype="multipart/form-data" method="post" style="margin-bottom:10px">
+        <v-textarea placeholder="Nhập nội dung phải hồi tại đây..."
+                    auto-grow
+                    label="Nội dung phải hồi"
+                    value="" hint="Ấn CTRL+ENTER để gửi nhanh" id="NODUNG"></v-textarea>
+
+        <div class="bottom-comment">
+            <div class="comment-date">
+                <input type="hidden" name="JobID" value="@ViewBag.TaskID" />
+                <input type="hidden" name="ParentID" id="ParentID" value="@ID" />
+                <input type="file" style="max-width:100%" multiple id="fileBase_@ID" />
+            </div>
+
+            <div style="text-align:right">
+                <label><input type="checkbox" id="GuiMail" value="1" />Gửi thông báo qua Email</label>
+                <a class="btn btn-xs btn-info text-white submit" data-ID="@ID" id="submit">Gửi phản hồi</a>
+            </div>
+        </div>
+    </form>
+}
+@helper FunItem(CommentTask item)
+{
+
+    <div class="comment-wrap">
+
+        <div class="comment-block">
+
+            <v-card>
+                <div style="text-align:right;padding-left:0px!important;margin-left:0px" class="col-12">
+                    <v-btn class="pull-left" color="orange" style="color:#fff;margin-left:0;margin-top:0">@item.StaffID</v-btn>
+                    <span style="margin:10PX">@item.DateCreate.Value.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+
+                <v-card-title style="padding-top:0" class="col-12">
+                    <div>
+                        @Html.Raw(item.NOIDUNG.Replace("\r\n", "<br>").Replace("\n", "<br>"))
+                    </div>
+                </v-card-title>
+
+                @if (item.FileUpload != "" && item.FileUpload != null)
+                {
+                    var arr = item.FileUpload.Split('|').Where(c => c != "" && c != null);
+                    var dic = new Dictionary<string, bool>();
+                    foreach (var x in arr)
+                    {
+                        var tt = Planner2.Controllers.TasksController.GetImageFormat(x);
+                        dic.Add(x, tt);
+                    }
+                    foreach (var x in dic.Where(c => c.Value == true))
+                    {
+                        <a class="stopAjax" href="@x.Key.ToString()" target="_blank">   <img src="@x.Key.ToString()" style="width:100%" /></a>
+                    }
+                    if (dic.Where(c => c.Value == false).Count() > 0)
+                    {
+                        <b>(*)</b><span>File đính kèm : </span>
+                    }
+                    foreach (var x in dic.Where(c => c.Value == false))
+                    {
+
+
+                        <P> <a class="stopAjax" download href="@x.Key">@x.Key.ToString().Replace("/FileUpload/", "")</a></P>
+                    }
+                }
+                <div class="col-12 text-right">
+                    <a href="#" style="padding:10px" data-toggle="collapse" data-target="#Reply_@item.ID" aria-expanded="false" aria-controls="Reply_@item.ID">Trả lời</a>
+                </div>
+
+                <div style="margin-left:10px">
+                    @foreach (var it in Model.Where(z => z.ParentID == item.ID).OrderByDescending(z => z.DateCreate))
+                    {
+                        @LItem(it)
+                    }
+                </div>
+                <div class="collapse container" id="Reply_@item.ID">
+                    <hr />
+                    @AddComment(item.ID)
+                </div>
+            </v-card>
+        </div>
+    </div>
+    <br />
+}
+@helper LItem(CommentTask item)
+{
+    @FunItem(item)
+
+}
+<div id="appComment">
+    <v-app>
+        @AddComment(0)
+
+        @foreach (var item in Model.Where(z => z.ParentID == 0).OrderByDescending(z => z.DateCreate))
+        {
+
+            @LItem(item)
+        }
+
+
+
+    </v-app>
+</div>
+<script>
+    var vmComment = new Vue({
+
+        el: "#appComment",
+
+
+    })
+    $('#NODUNG').keydown(function (e) {
+
+        if (e.ctrlKey && e.keyCode == 13) {
+            $(".submit").click();
+        }
+    });
+    $(".submit").click(function () {
+
+        var base = $(this).parent().parent().parent();
+        var ID = $(this).attr("data-ID");
+        var NOIDUNG = base.find('#NODUNG').val();
+        var ParentID = base.find('#ParentID').val();
+          if (NOIDUNG == null || (NOIDUNG != null && NOIDUNG.trim() == "")) {
+            alert("Nội dung không được để trống");
+
+            return;
+        }
+        var GuiMail = base.find('#GuiMail').is(":checked");
+        var files = document.getElementById('fileBase_' + ID).files;
+        var TaskID = '@ViewBag.TaskID';
+
+            if (window.FormData !== undefined) {
+                var data = new FormData();
+                if (files.length > 0) {
+                    for (var x = 0; x < files.length; x++) {
+                    data.append(files[x].name, files[x]);
+                }
+            }
+                data.append("TaskID", TaskID);
+                data.append("GuiMail", GuiMail);
+                data.append("ParentID", ParentID);
+                data.append("NOIDUNG", NOIDUNG);
+                $.ajax({
+                    type: "POST",
+                    url: '/Tasks/UploadFile',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        if (result == 1) {
+                            vmCreate.THONGBAO = 'Đã gửi phản hồi';
+                            vmCreate.color = 'success';
+
+                            var r = $('#Comment');
+                            r.addClass("spa-loader");
+                            r.load("/Tasks/Comment?TaskID=" + TaskID);
+                            r.removeClass("spa-loader");
+
+                             } else {
+                            vmCreate.color = 'red';
+                            vmCreate.THONGBAO = 'Lỗi';
+                        }
+
+                        vmCreate.snackbar = true;
+                        setTimeout(function () {
+                            $(document).find('#NOIDUNG').focus();}, 1500);
+
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        var err = "Error " + " " + status + " " + p3 + " " + p4;
+                        if (xhr.responseText && xhr.responseText[0] == "{")
+                            err = JSON.parse(xhr.responseText).Message;
+                        console.log(err);
+                    }
+                });
+            } else {
+                alert("This browser doesn't support HTML5 file uploads!");
+            }
+
+     });
+</script>

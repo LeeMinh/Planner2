@@ -1,0 +1,607 @@
+﻿@{
+    Layout = "~/Views/Shared/_NavPub.cshtml";
+    Planner2Entities db = new Planner2Entities(); ;
+    string KhuVuc_Huyen = db.ThanhPhoes.Where(v => v.MaQuanHuyen == Model.KhuVuc_Huyen).Select(z => z.QuanHuyen).FirstOrDefault();
+    string KhuVuc_TP = db.ThanhPhoes.Where(v => v.MaThanhPho == Model.KhuVuc_TP).Select(z => z.TenThanhPho).FirstOrDefault();
+
+}
+@model  Planner2.Models.MainTask
+
+@if (Model.Status != Planner2.Common.ConstTrangThai.CongKhai)
+{
+    <h1 style="border: 4px solid #009688;
+    background: red;
+    color: #fff;
+    padding: 10px;
+    ">
+        Bài đăng đang ở chế độ : @Model.Status , chỉ duy nhất người tạo có thể nhìn thấy
+    </h1>
+}
+<div>
+    <main id="main" class="site-main realty" role="main">
+
+
+        <article id="post-33205" class="post-33205 realty type-realty status-publish hentry realty-sell-ban-nha city-realty-quan-binh-thanh city-realty-tp-ho-chi-minh quarter-khong-xac-dinh">
+            <header class="entry-header">
+                <h1 class="entry-title">@Model.TaskName</h1>
+            </header><!-- .entry-header -->
+            <div class="location-realty">
+                @if (!string.IsNullOrEmpty(Model.Picture))
+                {
+                    <img src="@Model.Picture" style="max-width:100%;margin-bottom:10px" />
+                }
+                @if (!string.IsNullOrEmpty(Model.Youtube))
+                {
+                    Model.Youtube = Model.Youtube.Replace("youtube.com/watch", "youtube.com/embed");
+                    <iframe width="560" height="315" src="@Model.Youtube" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                }
+
+                <p>
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    Ngày đăng: @Model.NgayDang.Value.ToString("dd/MM/yyyy")
+                </p>
+
+                <p><i class="fa fa-eye" aria-hidden="true"></i> Lượt xem @Model.Viewer</p>
+
+            </div><!-- .location-realty -->
+            <div class="price-area">
+                <p>
+                    <i class="fa fa-arrows" aria-hidden="true"></i>
+                    Diện tích            <span class="value">
+                        @Model.DienTich m2
+                    </span>
+                </p>
+                <p>
+                    <i class="fa fa-usd" aria-hidden="true"></i>
+                    Giá : <span class="value price">
+                        @Model.Gia @Model.TyGia
+                    </span>
+                </p>
+                <p>
+                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    <span class="location">Khu vực</span>
+                    <a href="/Post/Search?KhuVuc_Huyen=@Model.KhuVuc_Huyen" rel="tag">
+                        @KhuVuc_Huyen
+
+                    </a>,
+                    <a href="/Post/Search?KhuVuc_TP=@Model.KhuVuc_TP" rel="tag">
+                        @KhuVuc_TP
+                    </a>
+                </p>
+            </div><!-- .price-area -->
+
+
+            <div class="realty-des"></div><!-- .realty-des -->
+            <div class="entry-content">
+                <div class="realty-infor">
+                    <h3 class="info-des">Thông tin mô tả</h3>
+
+                    <div>
+                        @Html.Raw(Model.Description)
+                    </div>
+                </div><!-- .realty-infor -->
+                <div class="realty-tabs">
+
+                </div><!-- .realty-tabs -->
+                <div class="realty-contact">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3>Đặc điểm bất động sản</h3>
+                            <ul>
+                                <li>
+                                    <span class="key">Địa chỉ</span>
+                                    <span class="value">
+                                        <a href="/Post/Search?KhuVuc_Huyen=@Model.KhuVuc_Huyen" rel="tag">
+                                            @KhuVuc_Huyen
+                                        </a>,
+
+                                        <a href="/Post/Search?KhuVuc_TP=@Model.KhuVuc_TP" rel="tag">
+
+                                            @KhuVuc_TP
+
+
+                                        </a>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="key">Loại bất động sản</span>
+                                    <span class="value">
+                                        <a href="../../dat-ban/ban-nha/index.html" rel="tag">@Model.Map_LoaiBatDongSan</a>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="key">Hướng</span>
+                                    <span class="value"><a href="../../huong-nha-dat/khong-xac-dinh/index.html" rel="tag">@Model.Map_Huong</a></span>
+                                </li>
+                                <li>
+                                    <span class="key">Số phòng ngủ</span>
+                                    <span class="value">@Model.Map_SoPhongNgu</span>
+                                </li>
+                                <li>
+                                    <span class="key">Dự án</span>
+                                    <span class="value">
+                                        @Model.Map_DuAn
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6">
+                            <h3>Thông tin liên hệ</h3>
+                            <ul>
+                                <li>
+                                    <span class="key">Tên liên lạc</span>
+                                    <span class="value">@Model.Map_TenLienLac</span>
+                                </li>
+                                <li>
+                                    <span class="key">Điện thoại</span>
+                                    <span class="value">
+                                        <a href="tel:@Model.Map_DienThoai">
+                                            @Model.Map_DienThoai
+                                        </a>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="key">Zalo</span>
+                                    <span class="value">
+                                        <a href="tel:@Model.Map_Zalo">
+                                            @Model.Map_Zalo
+                                        </a>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="key">Skype</span>
+                                    <span class="value">
+                                        <a href="skype:@Model.Map_Zalo">
+                                            @Model.Map_Zalo
+                                        </a>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="key">Email</span>
+                                    <span class="value">
+                                        <a href="mailto:@Model.Map_Email">
+                                            @Model.Map_Email
+                                        </a>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div><!-- .realty-tabs -->
+                <div class="hrm-social-share">
+                    <span class="share-text">Chia sẻ bài viết này trên mạng xã hội</span>
+                    <ul class="hrm-share">
+                        <li>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=http://batdongsannhadat247.com/bat-dong-san/an-cu-sai-gon-nha-ban-nha-trung-tam-sai-gon-tang-xe-attila-bs-sai-gon/" class="facebook" target="_blank">
+                                <i class="fa fa-facebook"></i>
+                                <span>Facebook</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="https://plus.google.com/share?url=http://batdongsannhadat247.com/bat-dong-san/an-cu-sai-gon-nha-ban-nha-trung-tam-sai-gon-tang-xe-attila-bs-sai-gon/" class="google" target="_blank">
+                                <i class="fa fa-google-plus"></i>
+                                <span>Google Plus</span>
+                            </a>
+
+                        </li>
+
+                        <li>
+                            <a href="https://twitter.com/home?status=http://batdongsannhadat247.com/bat-dong-san/an-cu-sai-gon-nha-ban-nha-trung-tam-sai-gon-tang-xe-attila-bs-sai-gon/" class="twitter" target="_blank">
+                                <i class="fa fa-twitter"></i>
+                                <span>Twitter</span>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </div>
+                <div class="realty-form">
+                    <div class="title">
+                        <h3>
+
+                            <img src="~/Content/wp-content/guibinhluan.png" />
+                            GỬI YÊU CẦU CHO BẤT ĐỘNG SẢN NÀY
+                        </h3>
+                    </div>
+                    <div class="form-body">
+                        <noscript class="ninja-forms-noscript-message">
+                            Lưu ý: Cần phải có JavaScript với nội dung này.
+                        </noscript><div id="nf-form-3-cont" class="nf-form-cont" aria-live="polite" aria-labelledby="nf-form-title-3" aria-describedby="nf-form-errors-3" role="form">
+                            <span id="nf-form-title-3" class="nf-form-title">
+
+                            </span>
+                            <div class="nf-form-wrap ninja-forms-form-wrap">
+                                <div class="nf-response-msg"></div>
+                                <div class="nf-debug-msg"></div>
+                                <div class="nf-before-form">
+                                    <nf-section>
+
+                                    </nf-section>
+                                </div>
+                                <div class="nf-form-layout">
+                                    <form id="GuiPhanHoi">
+                                        <div>
+                                            <div class="nf-before-form-content">
+                                                <nf-section>
+                                                    <div class="nf-form-fields-required"></div>
+
+                                                </nf-section>
+                                            </div>
+                                            <div class="nf-form-content ">
+                                                <nf-fields-wrap>
+                                                    <nf-field>
+                                                        <div id="nf-field-12-container" class="nf-field-container textbox-container  label-left desc-none ">
+                                                            <div class="nf-before-field">
+                                                                <nf-section>
+
+                                                                </nf-section>
+                                                            </div>
+                                                            <div class="nf-field">
+                                                                <div id="nf-field-12-wrap" class="field-wrap textbox-wrap" data-field-id="12">
+
+
+
+                                                                    <div class="nf-field-label"><label for="nf-field-12" id="nf-label-field-12" class="">Họ tên  </label></div>
+
+
+                                                                    <div class="nf-field-element">
+                                                                        <input type="text" value="" required class="ninja-forms-field nf-element" placeholder="Nhập họ tên của bạn" id="HoTen" name="nf-field-12" aria-invalid="false" aria-describedby="nf-error-12" aria-labelledby="nf-label-field-12">
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="nf-after-field">
+                                                                <nf-section>
+
+                                                                    <div class="nf-input-limit"></div>
+
+                                                                    <div id="nf-error-12" class="nf-error-wrap nf-error" role="alert"></div>
+
+
+                                                                </nf-section>
+                                                            </div>
+                                                        </div>
+                                                    </nf-field>
+                                                    <nf-field>
+                                                        <div id="nf-field-13-container" class="nf-field-container textbox-container  label-left desc-none ">
+                                                            <div class="nf-before-field">
+                                                                <nf-section>
+
+                                                                </nf-section>
+                                                            </div>
+                                                            <div class="nf-field">
+                                                                <div id="nf-field-13-wrap" class="field-wrap textbox-wrap" data-field-id="13">
+
+
+
+                                                                    <div class="nf-field-label"><label for="nf-field-13" id="nf-label-field-13" class="">Điện thoại  </label></div>
+
+
+                                                                    <div class="nf-field-element">
+                                                                        <input type="text" value="" required class="ninja-forms-field nf-element" placeholder="Nhập số điện thoại của bạn" id="DienThoai" name="nf-field-13" aria-invalid="false" aria-describedby="nf-error-13" aria-labelledby="nf-label-field-13">
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="nf-after-field">
+                                                                <nf-section>
+
+                                                                    <div class="nf-input-limit"></div>
+
+                                                                    <div id="nf-error-13" class="nf-error-wrap nf-error" role="alert"></div>
+
+
+                                                                </nf-section>
+                                                            </div>
+                                                        </div>
+                                                    </nf-field>
+
+                                                    <nf-field>
+                                                        <div id="nf-field-13-container" class="nf-field-container textbox-container  label-left desc-none ">
+                                                            <div class="nf-before-field">
+                                                                <nf-section>
+
+                                                                </nf-section>
+                                                            </div>
+                                                            <div class="nf-field">
+                                                                <div id="nf-field-13-wrap" class="field-wrap textbox-wrap" data-field-id="13">
+
+
+
+                                                                    <div class="nf-field-label"><label for="nf-field-13" id="nf-label-field-13" class="">Email  </label></div>
+
+
+                                                                    <div class="nf-field-element">
+                                                                        <input type="Email" value="" required class="ninja-forms-field nf-element" placeholder="Nhập Email của bạn" id="Email" name="nf-field-13" aria-invalid="false" aria-describedby="nf-error-13" aria-labelledby="nf-label-field-13">
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="nf-after-field">
+                                                                <nf-section>
+
+                                                                    <div class="nf-input-limit"></div>
+
+                                                                    <div id="nf-error-13" class="nf-error-wrap nf-error" role="alert"></div>
+
+
+                                                                </nf-section>
+                                                            </div>
+                                                        </div>
+                                                    </nf-field>
+                                                    <nf-field>
+                                                        <div id="nf-field-14-container" class="nf-field-container textbox-container  label-left desc-none ">
+                                                            <div class="nf-before-field">
+                                                                <nf-section>
+
+                                                                </nf-section>
+                                                            </div>
+                                                            <div class="nf-field">
+                                                                <div id="nf-field-14-wrap" class="field-wrap textbox-wrap" data-field-id="14">
+
+
+
+                                                                    <div class="nf-field-label"><label for="nf-field-14" id="nf-label-field-14" class="">Địa chỉ  </label></div>
+
+
+                                                                    <div class="nf-field-element">
+                                                                        <input type="text" value="" required class="ninja-forms-field nf-element" placeholder="Nhập địa chỉ của bạn" id="DiaChi" name="nf-field-14" aria-invalid="false" aria-describedby="nf-error-14" aria-labelledby="nf-label-field-14">
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="nf-after-field">
+                                                                <nf-section>
+
+                                                                    <div class="nf-input-limit"></div>
+
+                                                                    <div id="nf-error-14" class="nf-error-wrap nf-error" role="alert"></div>
+
+
+                                                                </nf-section>
+                                                            </div>
+                                                        </div>
+                                                    </nf-field><nf-field>
+                                                        <div id="nf-field-15-container" class="nf-field-container textbox-container  label-left desc-none ">
+                                                            <div class="nf-before-field">
+                                                                <nf-section>
+
+                                                                </nf-section>
+                                                            </div>
+                                                            <div class="nf-field">
+                                                                <div id="nf-field-15-wrap" class="field-wrap textbox-wrap" data-field-id="15">
+
+
+
+                                                                    <div class="nf-field-label"><label for="nf-field-15" id="nf-label-field-15" class="">Tiêu đề  </label></div>
+
+
+                                                                    <div class="nf-field-element">
+                                                                        <input type="text" value="" required class="ninja-forms-field nf-element" placeholder="Nhập tiêu đề gửi liên hệ" id="TieuDe" name="nf-field-15" aria-invalid="false" aria-describedby="nf-error-15" aria-labelledby="nf-label-field-15">
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="nf-after-field">
+                                                                <nf-section>
+
+                                                                    <div class="nf-input-limit"></div>
+
+                                                                    <div id="nf-error-15" class="nf-error-wrap nf-error" role="alert"></div>
+
+
+                                                                </nf-section>
+                                                            </div>
+                                                        </div>
+                                                    </nf-field><nf-field>
+                                                        <div id="nf-field-16-container" class="nf-field-container textbox-container  label-left desc-none ">
+                                                            <div class="nf-before-field">
+                                                                <nf-section>
+
+                                                                </nf-section>
+                                                            </div>
+                                                            <div class="nf-field">
+                                                                <div id="nf-field-16-wrap" class="field-wrap textbox-wrap" data-field-id="16">
+
+
+
+                                                                    <div class="nf-field-label"><label for="nf-field-16" id="nf-label-field-16" class="">Mục đích  </label></div>
+
+
+                                                                    <div class="nf-field-element">
+                                                                        <input type="text" value="" required class="ninja-forms-field nf-element" placeholder="Nhập mục đích gửi liên hệ" id="MucDich" name="nf-field-16" aria-invalid="false" aria-describedby="nf-error-16" aria-labelledby="nf-label-field-16">
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="nf-after-field">
+                                                                <nf-section>
+
+                                                                    <div class="nf-input-limit"></div>
+
+                                                                    <div id="nf-error-16" class="nf-error-wrap nf-error" role="alert"></div>
+
+
+                                                                </nf-section>
+                                                            </div>
+                                                        </div>
+                                                    </nf-field><nf-field>
+                                                        <div id="nf-field-17-container" class="nf-field-container textarea-container  label-left desc-none ">
+                                                            <div class="nf-before-field">
+                                                                <nf-section>
+
+                                                                </nf-section>
+                                                            </div>
+                                                            <div class="nf-field">
+                                                                <div id="nf-field-17-wrap" class="field-wrap textarea-wrap" data-field-id="17">
+
+
+
+                                                                    <div class="nf-field-label"><label for="nf-field-17" id="nf-label-field-17" class="">Thông tin thêm  </label></div>
+
+
+                                                                    <div class="nf-field-element">
+                                                                        <textarea id="NOIDUNG" name="nf-field-17" aria-invalid="false" aria-describedby="nf-error-17" class="ninja-forms-field nf-element" aria-labelledby="nf-label-field-17"></textarea>
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="nf-after-field">
+                                                                <nf-section>
+
+                                                                    <div class="nf-input-limit"></div>
+
+                                                                    <div id="nf-error-17" class="nf-error-wrap nf-error" role="alert"></div>
+
+
+                                                                </nf-section>
+                                                            </div>
+                                                        </div>
+                                                    </nf-field><nf-field>
+                                                        <div id="nf-field-18-container" class="nf-field-container submit-container  label-null desc-none  textbox-container">
+                                                            <div class="nf-before-field">
+                                                                <nf-section>
+
+                                                                </nf-section>
+                                                            </div>
+                                                            <div class="nf-field">
+                                                                <div id="nf-field-18-wrap" class="field-wrap submit-wrap textbox-wrap" data-field-id="18">
+                                                                    <div class="nf-field-label"></div>
+                                                                    <div class="nf-field-element">
+                                                                        <input id="nf-field-18" class="ninja-forms-field nf-element " type="submit" value="Gửi liên hệ">
+                                                                    </div>
+                                                                    <div class="nf-error-wrap"></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="nf-after-field">
+                                                                <nf-section>
+
+                                                                    <div class="nf-input-limit"></div>
+
+                                                                    <div id="nf-error-18" class="nf-error-wrap nf-error" role="alert"></div>
+
+
+                                                                </nf-section>
+                                                            </div>
+                                                        </div>
+                                                    </nf-field>
+                                                </nf-fields-wrap>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="nf-after-form">
+                                    <nf-section>
+
+                                    </nf-section>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- TODO: Move to Template File. -->
+                    </div>
+                </div><!-- .realty-form -->
+            </div><!-- .entry-content -->
+        </article><!-- #post-## -->
+    </main><!-- #main -->
+    <div class="related-post widget">
+        <div class="title-related">
+            <h3>Tin đăng khác liên quan </h3>
+        </div>
+
+        <div class="list-realty">
+            <ul>
+                @{
+                    Html.RenderPartial("~/Views/Post/PV/_TableGrid.cshtml", (List<MainTask>)ViewBag.TinLienQuan);
+                }
+            </ul>
+        </div>
+    </div><!-- .related-post -->
+    <div class="realty-comment">
+        <div class="comment-title">
+            <h3>Bình luận</h3>
+        </div>
+        <div class="comment">
+            <div class="row" style="display: inline-block;">
+
+                <div class="comments-list">
+                    @foreach (var item in db.CommentTasks.Where(v => v.TaskID == Model.Id).OrderByDescending(z => z.DateCreate))
+                    {
+                        item.NOIDUNG = (item.NOIDUNG + "").Replace("\n", "<br>");
+
+                        <div class="media" style="    padding: 10px;">
+                            <p class="pull-right"><small>@item.DateCreate.Value.ToString("dd/MM/yyyy HH:mm")</small></p>
+
+                            <div class="media-body">
+
+                                <h4 class="media-heading user_name">@item.HoTen - @item.TieuDe</h4>
+                                @Html.Raw(item.NOIDUNG)
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- #primary -->
+
+
+<script>
+    $("#GuiPhanHoi").submit(function (e) {
+        e.preventDefault();
+
+         var HoTen       = $('#HoTen').val();
+        var DienThoai    = $('#DienThoai').val();
+        var NOIDUNG      = $('#NOIDUNG').val();
+        var DiaChi       = $('#DiaChi').val();
+        var TieuDe       = $('#TieuDe').val();
+        var Email      = $('#Email').val();
+        var MucDich      = $('#MucDich').val();
+        $.ajax({
+            type: "POST",
+            url: "/Post/GuiPhanHoi",
+            data: {
+                TaskID      :'@Model.Id'  ,
+                HoTen      :HoTen         ,
+                DienThoai  :DienThoai     ,
+                NOIDUNG    :NOIDUNG       ,
+                Email      :Email        ,
+                DiaChi     :DiaChi        ,
+                TieuDe     :TieuDe        ,
+                MucDich    :MucDich
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response == "") {
+                    alert("đã gửi");
+                    window.location.reload();
+
+                } else {
+
+                    alert(response);
+                }
+
+            }
+        });
+      });
+</script>
+
+<style>
+    .user_name {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .comments-list .media {
+        border-bottom: 1px dotted #ccc;
+    }
+</style>

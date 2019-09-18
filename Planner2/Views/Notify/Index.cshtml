@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Planner2.Models.V_Notifies>
+@using Planner2.Module
+<span class="dropdown-item dropdown-header">@Model.Count() thông báo mới nhất</span>
+<div class="dropdown-divider"></div>
+
+<div style="height:600px;overflow:auto;font-size:13PX!important">
+
+    @foreach (var item in Model)
+    {
+        item.NOIDUNG = item.NOIDUNG.Replace("\n", "<BR>");
+        <a href="@item.URL" data-NotifyUserID="@item.NotifyUserID" class="dropdown-item @(item.ReadNotify==false?"chuadoc":"")">
+            <p>
+                @if (item.ReadNotify == false)
+                {
+                    <img src="~/Content/icon-new.gif" width="40" />
+                }
+                [@item.TaskID] @item.TaskName
+            </p>
+            <p>
+                <i class="fa fa-user mr-2"></i>
+                <b>@item.CREATE_BY   </b>      <span class="float-right text-muted text-sm">@item.CREATED.GetAboutTime()</span>
+            </p>
+            <p>@Html.Raw(item.NOIDUNG)</p>
+        </a>
+        <div class="dropdown-divider"></div>
+    }
+</div>
+
+<a href="/notify/ReadAll" class="dropdown-item dropdown-footer">Xem tất cả thông báo</a>
+
+<style>
+    .chuadoc, .dropdown-item:focus, .chudoc .dropdown-item:hover
+    .chuadoc {
+        background-color: #009688 !important;
+        color: #FFF !important
+    }
+  
+</style>
+
+<script>
+    $(".chuadoc").click(function (e) {
+         var NotifyUserID = $(this).attr("data-NotifyUserID");
+        $.ajax({
+            type: "POST",
+            url: "/notify/read",
+            data: {
+                NotifyUserID: NotifyUserID
+            },
+            dataType: "json",
+            success: function (response) {
+
+            }
+        });
+ 
+    });
+</script>

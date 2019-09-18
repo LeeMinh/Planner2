@@ -1,0 +1,156 @@
+﻿<div class="container-fluid" id="AppDashboard" v-cloak>
+    <!-- Info boxes -->
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-3">
+            <a href="/FutureTask/Index" class="DashboardIcon">
+                <div class="info-box">
+                    <span class="info-box-icon bg-danger elevation-1">
+                        <i class="nav-icon fa fa-list-alt" style="color:#c9f4fa"></i>
+
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">
+
+                            @Planner2.Common.SettingData.TT_DanhSachCV
+
+
+                        </span>
+                        <span class="info-box-number">
+                            {{TRANGTHAI.Tong}}
+                            <small>Công việc</small>
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+            </a>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-12 col-sm-6 col-md-3">
+            <a href="/FutureTask/Confirming" class="DashboardIcon">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1">
+
+
+                        <i class="nav-icon fa fa-hourglass-half" style="color:#f7f28e"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">
+                            @Planner2.Common.SettingData.TT_ChoXN
+
+                        </span>
+                        <span class="info-box-number">{{TRANGTHAI.ChuaXacNhan}}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+            </a>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <!-- fix for small devices only -->
+        <div class="clearfix hidden-md-up"></div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <a href="/FutureTask/AssignerAndAuthorize" class="DashboardIcon">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1">
+
+
+                        <i class="nav-icon fa fa-exchange" style="color:#b6ff00"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">
+                            @Planner2.Common.SettingData.TT_CVDAGIAO
+
+                        </span>
+
+
+                        <span class="info-box-number">{{TRANGTHAI.DaGiao}}</span>
+
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+            </a>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-12 col-sm-6 col-md-3">
+            <a href="/FutureTask/Master" class="DashboardIcon">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1">
+                        <i class="nav-icon fa fa-battery-half" style="color:#f7f28e"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">
+                            @Planner2.Common.SettingData.TT_DangThucHien
+                        </span>
+                        <span class="info-box-number">   {{TRANGTHAI.DangTienHanh}}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+            </a>
+            <!-- /.info-box -->
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <a href="/FutureTask/AllTaskComplete" class="DashboardIcon">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1"> <i class="nav-icon fa fa-graduation-cap" style="color:#ffffff"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">
+
+                            @Planner2.Common.SettingData.TT_HoanThanh_Huy
+                        </span>
+                        <span class="info-box-number">   {{TRANGTHAI.HoanThanh}}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+            </a>
+            <!-- /.info-box -->
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <a href="/FutureTask/AllTaskLate" class="DashboardIcon">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1">  <i class="nav-icon fa fa-exclamation-triangle " style="color:red"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">
+
+                            @Planner2.Common.SettingData.TT_CVCham
+
+                        </span>
+                        <span class="info-box-number">   {{TRANGTHAI.Cham}}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+            </a>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+ </div>
+<style>
+    .activeNow
+    {
+        background-color:#ffd800!important
+    }
+</style>
+ 
+<script>
+
+
+    var vmDashboard = new Vue({
+
+        el: "#AppDashboard",
+        data: {
+            TRANGTHAI: {}
+        }
+
+    })
+    $(document).ready(function () {
+        setTimeout(function () { vmDashboard.TRANGTHAI = vmCreate.TRANGTHAI; }, 600);
+
+    });
+    // vmDashboard.TRANGTHAI = vmCreate.TRANGTHAI;
+
+</script>
+

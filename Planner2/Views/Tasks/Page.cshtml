@@ -1,0 +1,97 @@
+﻿@model Planner2.Models.MainTask
+@{
+    var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
+ 
+}
+<style>
+    .form-group {
+        margin-bottom: 10px
+    }
+
+    [type=number] {
+        width: auto;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .row-item .h2 span {
+        font: bold 12px/32px Arial, sans-serif;
+        color: #fff;
+        display: inline-table;
+        white-space: nowrap;
+        padding: 0 20px;
+        background: #d30003;
+        text-transform: uppercase;
+    }
+
+    .row-item .h2 {
+        margin-bottom: 10px;
+        border-bottom: 1px solid #d30003;
+    }
+</style>
+
+
+<form action="/Tasks/page" id="frmCreatePage" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="row">
+        <div class="col-10" style="padding-right:10px ">
+            
+            <div style="border:1PX solid #dee2e6">
+                <div class="row-item col-12">
+                    <div class="h2">
+                        <span>
+                           Nội dung giới thiệu
+                        </span>
+                    </div>
+                </div>
+                <div id="editor">
+                    <div class="col-12">
+                        @Html.Raw(Model.Description)
+                    </div>
+                </div>
+            </div>
+           
+ 
+        </div>
+        <input type="hidden"  name="Description"/>
+        <div class="col-2" style="background-color: #FFF!important;border:1PX solid #dee2e6; padding:10px">
+
+
+            <button type="submit" class=" btn btn-primary  text-white col-12 right" name="Type" value="@Planner2.Common.ConstTrangThai.RiengTu">SAVE</button>
+            @if (Model.Id != 0)
+            {
+                <a href="/post/info?id=@Model.SeoUrl" target="_blank" class=" btn btn-success  text-white col-12 right">GO TO</a>
+
+            }
+             <a class=" btn btn-outline-secondary  text--black col-12 right">Cancel</a>
+        </div>
+    </div>
+
+</form> 
+<style>
+    .cke_top {
+        Position: sticky;
+        top: 0;
+    }
+
+    #cke_editor {
+        width: 100% !important;
+        border: 0 !important
+    }
+
+    #layouteditor .v-input__slot {
+        padding: 0 !important
+    }
+</style>
+
+<script>
+    $("#frmCreatePage").submit(function (e) {
+
+        var Description = CKEDITOR.instances.editor.getData();
+        $('[name=Description]').val(Description);
+ 
+    });
+     setTimeout(function () {
+        CKEDITOR.replace('editor');
+    }, 100);
+</script>

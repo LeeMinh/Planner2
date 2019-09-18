@@ -1,0 +1,265 @@
+﻿
+<div class="dx-viewport">
+    <div class="demo-container">
+        <div class="d-flex align-items-start justify-content-between">
+            <h2>
+                Bình luận
+            </h2>
+        </div>
+        <div id="DataGrid"></div>
+        <div id="panelLoader"></div>
+
+        <div style="height:0px;overflow:hidden">
+            <input class="form-control" type="file" id="UploadFile_Staff" name="fileInput" onchange="return Onchange_ImportExcel_Staff()">
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function FromJsonToDate(value) {
+        if (value != null) {
+            return new Date(parseInt(value.replace('/Date(', '')));
+        }
+        return;
+    }
+
+    var DataGrid = $("#DataGrid").dxDataGrid({
+        dataSource: [],
+        showRowLines: true,
+        showBorders: true,
+        autoExpandAll: true,
+        paging: {
+            enabled: true,
+            pageSize: 100
+        },
+        filterRow: {
+            visible: true,
+            applyFilter: "auto"
+        },
+        columnChooser: {
+            enabled: true
+        },
+        scrolling: {
+            scrollByContent: true
+        },
+        pager: {
+            showPageSizeSelector: true,
+            allowedPageSizes: [100, 200, 500, 1000],
+            showNavigationButtons: true
+        },
+        allowColumnResizing: true,
+        columnFixing: {
+            enabled: true
+        },
+        hoverStateEnabled: true,
+        headerFilter: {
+            visible: true
+        },
+        wordWrapEnabled: true,
+        searchPanel: {
+            visible: true,
+            width: 240,
+            placeholder: "Search..."
+        },
+
+        columnsAutoWidth: true,
+        allowColumnReordering: true,
+        rowAlternationEnabled: true,
+        "export": {
+            enabled: true,
+            fileName: "DataList",
+            allowExportSelectedData: true
+        },
+        editing: {
+            mode: "popup",
+            allowDeleting: true,
+
+            useIcons: true
+        },
+        filterPanel: { visible: true },
+        summary: {
+            totalItems: [{
+                column: "KeyID",
+                summaryType: "count"
+            }]
+        },
+        columnMinWidth: 200,
+        columns:
+            [
+
+
+                {
+                    dataField: "TaskName",
+                    caption: "Tên bài đăng",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                    width: 200,
+                      cellTemplate: function(container, options) {
+                    container.html('<a href="/post/info?id='+options.data.SeoUrl+'">'+options.data.TaskName+'</a>');
+                }
+                },
+                {
+                    dataField: "CreatedBy",
+                    caption: "Người đăng",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                    minWidth: 120
+                },
+                {
+                    dataField: "DateCreate",
+                    caption: "Ngày bình luận",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                    
+                   format: "dd/MM/yyyy HH:mm"  
+                    ,
+                    minWidth: 150
+                },
+                {
+                    dataField: "HoTen",
+                    caption: "Họ tên",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                    minWidth: 150
+
+                },
+                {
+                    dataField: "TieuDe",
+                    caption: "Tiêu đề",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                },
+                {
+                    dataField: "DienThoai",
+                    caption: "Điện thoại",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                    minWidth: 120
+                },
+                {
+                    dataField: "MucDich",
+                    caption: "Mục đích",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                    minWidth: 120
+                },
+                {
+                    dataField: "DiaChi",
+                    caption: "Địa chỉ",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                }, ,
+                {
+                    dataField: "Email",
+                    caption: "Email",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                    minWidth: 150
+                }
+            ],
+
+
+        //delete
+        onRowRemoving: function (e) {
+            var id = e.data.ID;
+            $.ajax({
+                url: '/Comments/Delete',
+                type: 'POST',
+                dataType: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data == true) {
+                        DevExpress.ui.notify("This record was deleted successfully!", "success");
+                    }
+                    else
+                        if (data == false) {
+                            DevExpress.ui.notify("This record can't be delete!", "error");
+                            e.cancel = true;
+                        }
+                },
+                error: function (err) {
+                    DevExpress.ui.notify("This record can't be delete!", "error");
+                    e.cancel = true;
+                }
+            });
+
+        },
+
+        onCellPrepared: function onCellPrepared(e) {
+            if (e.rowType == "header") {
+                e.cellElement.css("text-align", "left");
+                e.cellElement.addClass('headerTree');
+                e.cellElement.css("vertical-align", "middle");
+            }
+
+            if (e.rowType == "data") {
+                e.cellElement.css("text-align", "left");
+
+
+                e.cellElement.css("vertical-align", "middle");
+            }
+        },
+    });
+
+    $(function () {
+        LoadData_Data();
+    });
+
+    function LoadData_Data() {
+        $("#loadPanel").dxLoadPanel({
+            closeOnOutsideClick: false,
+            message: "Xin chờ ...",
+            visible: true,
+            position: {
+                of: "#DataGrid",
+                at: "center",
+                my: "center"
+            },
+            shading: true
+        });
+
+        $.ajax({
+            url: '/Comments/GetData_Data',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+
+                $.each(data, function (i, item) {
+                    item.DateCreate = FromJsonToDate(item.DateCreate);
+                });
+                var datagrid = $("#DataGrid").dxDataGrid("instance");
+                datagrid.option("dataSource", data);
+                datagrid.columnOption('ParentID', 'lookup.dataSource', data);
+
+                $("#loadPanel").dxLoadPanel({
+                    closeOnOutsideClick: false,
+                    message: "Xin ch? ...",
+                    visible: false,
+                    position: {
+                        of: "#DataGrid",
+                        at: "center",
+                        my: "center"
+                    },
+                    shading: true
+                });
+
+            },
+            error: function (err) {
+            }
+        });
+    }
+
+
+
+</script>

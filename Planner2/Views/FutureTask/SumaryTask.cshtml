@@ -1,0 +1,566 @@
+﻿
+@{
+    ViewBag.Title = "SumaryTask";
+}
+<style>
+    .dx-datagrid .dx-header-filter-empty
+    {
+        color:white !important;
+    }
+</style>
+<h2>Thống kê công việc</h2>
+<div class="row">
+    <div class="col-12">
+        <div id="grvdstakcham" style="width:100%;"></div>
+        <div id="loadListTask"></div>
+    </div>
+</div>
+<div class="modal" id="myModal" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Danh sách công việc chậm</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                @*<div class="row" style="font-size:15px;">
+                    <div class="col-12 col-lg-4"><b>Code:</b> <span id="StaffId">1644</span></div>
+                    <div class="col-12 col-lg-4"><b>Name:</b> <span id="StaffName">VU VAN TUYEN</span></div>
+                    <div class="col-12 col-lg-4"><b>Dept:</b> <span id="Dept">ISM</span></div>
+                </div>*@
+                <div class="row" style="padding:5px;">
+                    <div id="grvdetailstakcham" style="width:100%;"></div>
+                    <div id="loadPanelgrvdetailstakcham"></div>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer" style="padding:5px; border:0;">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function FromJsonToDate(value) {
+        if (value != null) {
+            return new Date(parseInt(value.replace('/Date(', '')));
+        }
+        return;
+    }
+
+    var grvdstakcham = $("#grvdstakcham").dxDataGrid({
+        dataSource: [],
+        selection: { mode: "single" },
+        columnResizingMode: "widget",
+        showBorders: true,
+        paging: {
+            enabled: true
+        }, 
+        showColumnHeaders: true,
+        showColumnLines: true,
+        showRowLines: true,
+        pager: {
+            showPageSizeSelector: true,
+            allowedPageSizes: [30, 50, 100, 1000],
+            showInfo: true
+        },
+        paging: {
+            pageSize: 30
+        },
+        allowColumnResizing: true,
+        columnFixing: {
+            enabled: true
+        },
+        hoverStateEnabled: true,
+        headerFilter: {
+            visible: true
+        },
+        scrolling: {
+            mode: "standard",
+            scrollByContent: true,
+        },
+        export: {
+            enabled: true,
+            fileName: "Thong ke Planner",
+            allowExportSelectedData: true
+        },
+        filterRow: {
+            visible: true,
+            applyFilter: "auto"
+        },
+        columnsAutoWidth: true,
+        allowColumnReordering: true,
+        columns: [ 
+            {
+                dataField: "DeptName",
+                caption: "Dept",
+                minWidth: 60,
+                width: 60,
+                allowFiltering: true,
+                fixed:true
+            },
+            {
+                dataField: "StaffId",
+                caption: "Staff",
+                minWidth: 50,
+                width: 80, 
+                fixed: true
+            },
+            {
+                dataField: "StaffName", 
+                minWidth: 50,
+                width: 200
+            },
+            {
+                caption: "Công việc giao",
+                columns: [
+                    {
+                        dataField: "TotalAssignerTask",
+                        caption: "Tổng",
+                        minWidth: 10,
+                        width:70
+                    },
+                    {
+                        dataField: "AssignerTaskLate",
+                        caption: "Chậm",
+                        minWidth: 10,
+                        width: 70
+                    },
+                    {
+                        dataField: "AssignerLateDay",
+                        caption: "Số ngày chậm",
+                        minWidth: 100
+                    }
+                ]
+            },
+            {
+                caption: "Công việc thực hiện",
+                columns: [
+                    {
+                        dataField: "TotalMasterTask",
+                        caption: "Tổng",
+                        minWidth: 10,
+                        width: 70
+                    },
+                    {
+                        dataField: "MasterTaskLate",
+                        caption: "Chậm",
+                        minWidth: 10,
+                        width: 70
+                    },
+                    {
+                        dataField: "MasterLateDay",
+                        caption: "Số ngày chậm",
+                        minWidth: 100
+                    },
+                    {
+                        dataField: "MasterSumTimes",
+                        caption: "Đổi thời hạn",
+                        minWidth: 100
+                    }
+                ]
+            },
+            {
+                caption: "Công việc ủy quyền",
+                columns: [
+                    {
+                        dataField: "TotalAuthorizeTask",
+                        caption: "Tổng",
+                        minWidth: 10,
+                        width: 70
+                    },
+                    {
+                        dataField: "AuthorizeTaskLate",
+                        caption: "Chậm",
+                        minWidth: 10,
+                        width: 70
+                    },
+                    {
+                        dataField: "AuthorizeLateDay",
+                        caption: "Số ngày chậm",
+                        minWidth: 100
+                    }
+                ]
+            },
+            {
+                caption: "Công việc giám sát",
+                columns: [
+                    {
+                        dataField: "TotalCheckerTask",
+                        caption: "Tổng",
+                        minWidth: 10,
+                        width: 70
+                    },
+                    {
+                        dataField: "CheckerTaskLate",
+                        caption: "Chậm",
+                        minWidth: 10,
+                        width: 70
+                    },
+                    {
+                        dataField: "CheckerLateDay",
+                        caption: "Số ngày chậm",
+                        minWidth: 100
+                    }
+                ]
+            },
+            {
+                dataField: "TotalTask",
+                caption: "Tổng",
+                minWidth: 100,
+            },
+            {
+                dataField: "TotalTaskLate",
+                caption: "Tổng chậm",
+                minWidth: 100,
+            },
+            {
+                dataField: "TotalDayLate",
+                caption: "Tổng số ngày chậm",
+                minWidth: 100,
+            }
+        ],
+        //Set header and rowType for grid
+        onCellPrepared: function (e) {
+            if (e.rowType == "header") {
+                e.cellElement.addClass('headerTree');
+                e.cellElement.css("text-align", "center");
+            }
+        },
+        //Add new button on toolbar
+        onToolbarPreparing: function (e) {
+            var toolbarItems = e.toolbarOptions.items;
+            var dataGrid = e.component;
+            e.toolbarOptions.items.unshift({
+                location: "before",
+                widget: "dxButton",
+                options: {
+                    elementAttr: { id: 'btnGetData' },
+                    icon: "search",
+                    text: "Thống kê",
+                    onClick: function (e) {
+                        var From = $('#dpStartDate').dxDateBox("instance").option("value");
+                        var To = $('#dpDueDate').dxDateBox("instance").option("value");
+                        if (From == null) {
+                            DevExpress.ui.notify("Vui lòng chọn thống kê từ ngày nào ạ!", "error", 5000); 
+                            return;
+                        }
+                        if (To == null) {
+                            DevExpress.ui.notify("Vui lòng chọn thống kê đến ngày nào ạ!", "error", 5000);
+                            return;
+                        }
+                        Getdata(From.toJSON(), To.toJSON());
+                        
+                    }
+                }
+            });
+            e.toolbarOptions.items.unshift({
+                location: "before",
+                widget: "dxDateBox",
+                options: {
+                    elementAttr: { id: 'dpDueDate' },
+                    icon: "date",
+                    placeholder: "Từ ngày..."
+                }
+            });
+            e.toolbarOptions.items.unshift({
+                location: "before",
+                widget: "dxDateBox",
+                options: {
+                    elementAttr: { id: 'dpStartDate' },
+                    icon: "date",
+                    placeholder: "Đến ngày...",
+                }
+            });
+        },
+        summary: {
+            totalItems: [{
+                column: "StaffId",
+                summaryType: "count"
+            }]
+        },
+        onContentReady: function (e) {
+            e.element.find(".dx-datagrid-total-footer")
+                .css("border-top", 0)
+                .css("border-bottom", "1px solid #d3d3d3")
+                .insertBefore(e.element.find(".dx-datagrid-rowsview"))
+        },
+        onContextMenuPreparing: function (e) {
+             
+            if (e.row.rowType == "data") {
+                e.items = [ 
+                    {
+                        text: "Xem công việc chậm",
+                        icon: 'fa fa-exclamation-triangle',
+                        useIcons: true, 
+                        onItemClick: function () {
+                            var Staff = e.row.data.StaffId;
+                            GetdataDetails(Staff, 'Cham');
+                            $('#myModal').modal('show');
+                        }
+                    },
+                    {
+                        text: "Xem tất cả công việc",
+                        icon: 'fa fa-list',
+                        useIcons: true, 
+                        onItemClick: function () {
+                            var Staff = e.row.data.StaffId;
+                            GetdataDetails(Staff, '');
+                            $('#myModal').modal('show');
+                        }
+                    }
+                ]
+            }
+        }
+    });
+
+    var grvdetailtaskcham = $("#grvdetailstakcham").dxDataGrid({
+        dataSource: [],
+        selection: { mode: "single" },
+        columnResizingMode: "widget",
+        showBorders: true,
+        paging: {
+            enabled: true
+        },
+        filterRow: {
+            visible: true,
+            applyFilter: "auto"
+        },
+        showColumnHeaders: true,
+        showColumnLines: true,
+        showRowLines: true,
+        pager: {
+            showPageSizeSelector: true,
+            allowedPageSizes: [30, 50, 100],
+            showInfo: true
+        },
+        paging: {
+            pageSize: 30
+        },
+        allowColumnResizing: true,
+        columnFixing: {
+            enabled: true
+        },
+        hoverStateEnabled: true,
+        headerFilter: {
+            visible: true
+        }, scrolling: {
+            mode: "standard",
+            scrollByContent: true,
+        },
+        columnsAutoWidth: true,
+        allowColumnReordering: true,
+        columns: [
+            {
+                dataField: "Link",
+                minWidth: 50,
+                width: 50,
+                cssClass: "linkClass",
+                allowHeaderFiltering: false,
+                cellTemplate: function (container, options) {
+                    $('<a class="fa fa-link"></a>')
+                        .attr('href', options.value)
+                        .attr('target', '_blank')
+                        .appendTo(container);
+                }
+            },
+            {
+                dataField: "Id",
+                visible: false,
+            },
+            {
+                dataField: "Staff",
+                width:80,
+                minWidth:10
+            },
+            {
+                dataField: "Responsibility",
+                caption: "Trách nhiệm", 
+                minWidth: 100,
+                width: 100
+            },
+            {
+                dataField: "TaskName",
+                minWidth: 20, 
+                caption: "Tên công việc", 
+                allowFiltering: true,
+                width: 200
+            },
+            {
+                dataField: "StartDate",
+                caption: "Ngày bắt đầu", 
+                dataType: "datetime",
+                format: "dd/MM/yyyy",
+                allowEditing: false,
+                minWidth: 100,
+                width: 100
+            },
+            {
+                dataField: "DueDate",
+                caption: "Thời hạn", 
+                dataType: "datetime",
+                format: "dd/MM/yyyy",
+                allowEditing: false,
+                minWidth: 100,
+                width: 100
+            },
+            {
+                dataField: "DateFinish",
+                caption: "Ngày BCHT", 
+                dataType: "datetime",
+                format: "dd/MM/yyyy",
+                allowEditing: false,
+                minWidth: 100,
+                width: 100
+            },
+            {
+                dataField: "LateDay",
+                caption: "Số ngày chậm", 
+                minWidth: 90,
+                width: 90
+            }
+        ],
+        //Set header and rowType for grid
+        onCellPrepared: function onCellPrepared(e) {
+            if (e.rowType == "header") {
+                e.cellElement.addClass('headerTree');
+                e.cellElement.css("text-align", "center"); 
+            }
+        },
+        summary: {
+            totalItems: [{
+                column: "TaskName",
+                summaryType: "count"
+            }]
+        },
+
+    });
+
+    $(function () { 
+        Getdata(null, null);
+    })
+
+    function Getdata(From, To) {
+        $("#loadListTask").dxLoadPanel({
+            closeOnOutsideClick: false,
+            message: "Xin chờ chút ạ...",
+            visible: true,
+            position: { of: "#grvdstakcham", at: "center", my: "center" },
+            shading: true
+        });
+        $.ajax({
+            url: '/FutureTask/GetSumary',
+            data: { From: From,To:To },
+            type: "POST",
+            success: function (data) {
+                if (data.Status == 'OK') {
+                    var list = [];
+                    $.each(data.ListDetails, function (i, item) {
+                        var obj = {
+                            DeptName: item.DeptName,
+                            StaffId: item.StaffId,
+                            StaffName: item.StaffName,
+
+                            TotalAssignerTask: item.TotalAssignerTask,
+                            AssignerTaskLate: item.AssignerTaskLate,
+                            AssignerLateDay: item.AssignerLateDay,
+
+                            TotalMasterTask: item.TotalMasterTask,
+                            MasterTaskLate: item.MasterTaskLate,
+                            MasterLateDay: item.MasterLateDay,
+                            MasterSumTimes: item.MasterSumTimes,
+
+                            TotalCheckerTask: item.TotalCheckerTask,
+                            CheckerTaskLate: item.CheckerTaskLate,
+                            CheckerLateDay: item.CheckerLateDay,
+
+                            TotalAuthorizeTask: item.TotalAuthorizeTask,
+                            AuthorizeTaskLate: item.AuthorizeTaskLate,
+                            AuthorizeLateDay: item.AuthorizeLateDay,
+
+                            TotalTask: item.TotalTask,
+                            TotalTaskLate: item.TotalTaskLate,
+                            TotalDayLate: item.TotalDayLate
+                        }
+                        list.push(obj);
+                    })
+                    grvdstakcham.dxDataGrid({
+                        dataSource: list
+                    });
+                    //$('#soluongcham').html('(' + data.SoluongCham + ')');
+
+                    $("#loadListTask").dxLoadPanel({
+                        closeOnOutsideClick: false,
+                        message: "Xin chờ ...",
+                        visible: false,
+                        position: { of: "#grvdstakcham", at: "center", my: "center" },
+                        shading: true
+                    });
+                }
+                else {
+                    DevExpress.ui.notify(data.Error, "error", 5000);
+                }
+            },
+            error: function (data) {
+                DevExpress.ui.notify(data, "error", 5000);
+            }
+        });
+    }
+
+    function GetdataDetails(Staff, Late) {
+        $("#loadPanelgrvdetailstakcham").dxLoadPanel({
+            closeOnOutsideClick: false,
+            message: "Xin chờ chút ạ...",
+            visible: true,
+            position: { of: "#grvdetailstakcham", at: "center", my: "center" },
+            shading: true
+        });
+        $.ajax({
+            url: '/FutureTask/GetListTask',
+            data: { Staff: Staff, Late: Late },
+            type: "POST",
+            success: function (data) {
+                console.log(data);
+                    var listdt = [];
+                $.each(data, function (i, item) {
+                    var obj = {
+                        Link: item.Link,
+                        Staff: item.Staff,
+                        TaskName: item.TaskName,
+                        Responsibility: item.Responsibility,
+                        StartDate: FromJsonToDate(item.StartDate),
+                        DueDate: FromJsonToDate(item.DueDate),
+                        Status: item.Status,
+                        DateFinish: FromJsonToDate(item.DateFinish),
+                        LateDay: item.LateDay
+                    }
+                    listdt.push(obj);
+                });
+                console.log(listdt);
+                    grvdetailtaskcham.dxDataGrid({
+                        dataSource: listdt
+                    });
+                    //$('#soluongcham').html('(' + data.SoluongCham + ')');
+
+                    $("#loadPanelgrvdetailstakcham").dxLoadPanel({
+                        closeOnOutsideClick: false,
+                        message: "Xin chờ chút ạ...",
+                        visible: false,
+                        position: { of: "#grvdetailstakcham", at: "center", my: "center" },
+                        shading: true
+                    });
+                
+            },
+            error: function (data) {
+                DevExpress.ui.notify(data, "error", 5000);
+            }
+        });
+    }
+</script>
+

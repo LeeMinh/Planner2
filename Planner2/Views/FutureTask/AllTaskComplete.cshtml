@@ -1,0 +1,310 @@
+﻿
+@{
+    ViewBag.Title = "Danh sách công việc đã hoàn thành";
+    var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
+}
+@{
+    if (ViewBag.TaskID == 0)
+    {
+        Html.RenderAction("choxuly", "Tasks", new { TaskID = 0 });
+    }
+}
+
+
+<h2>Danh sách công việc đã hoàn thành</h2>
+<div class="row">
+    <div class="col-12" style="width:100%">
+        <div id="treeListTask"></div>
+        <div id="loadListTask"></div>
+    </div>
+</div>
+
+<script>
+       
+         function FromJsonToDate(value) {
+            if (value != null) {
+                return new Date(parseInt(value.replace('/Date(', '')));
+            }
+            return;
+        }
+
+
+        function foreachNodes(nodes, func) {
+            for (var i = 0; i < nodes.length; i++) {
+                func(nodes[i]);
+                foreachNodes(nodes[i].children, func);
+            }
+        }
+
+        var treeListTask = $("#treeListTask").dxTreeList({
+            dataSource: [],
+            keyExpr: "Id",
+            parentIdExpr: "ParentID",
+            allowColumnResizing: true,
+            showRowLines: true,
+            showBorders: true,
+            autoExpandAll: @(ViewBag.TaskID!=0 ? "true": "false") ,
+            columnAutoWidth: true,
+            showBorders: true,
+            scrolling: {
+                mode: "standard",
+                scrollByContent: true,
+            },
+            columnFixing: {
+                enabled: true
+            },
+            headerFilter: {
+                visible: true,
+            }, selection: {
+                mode: "single"
+            },
+            filterRow: { visible: true },
+            onNodesInitialized: function (e) {
+                foreachNodes(e.root.children, function (node) {
+                    if (node.visible && !node.hasChildren && node.children.length) {
+                        node.hasChildren = true;
+                        node.children.forEach(function (node) {
+                            node.visible = true;
+                        });
+                    }
+                });
+            },
+            columns: [
+
+                {
+                    dataField: "ParentID",
+                    visible: false,
+                    minWidth: 50
+                },
+                {
+                    dataField: "TaskName",
+                    minWidth: 100,
+                    width:300,
+                }, {
+                    dataField: "Id"
+                },{
+                    dataField: "Dept"
+                },
+
+                {
+                    dataField: "StartDate",
+                    caption:"Ngày bắt đầu",
+
+                    dataType: "date",
+                    format: "dd/MM/yyyy",
+                    minWidth: 100,
+                },
+                {
+                    dataField: "DueDate",
+                    caption:"Thời hạn",
+                    dataType: "date",
+                    format: "dd/MM/yyyy",
+                    minWidth: 100
+                },
+                {
+                    dataField: "Status",
+                    caption: "Tình trạng",
+                    minWidth: 120
+                },
+                {
+                    dataField: "Master",
+                    caption: "Người thực hiện",
+                    minWidth: 130,
+                },
+                {
+                    dataField: "TaskAssigner",
+                    caption:"Người giao việc",
+                    minWidth: 130,
+                 },
+                {
+                    dataField: "TaskChecker",
+                    caption:"Người giám sát",
+                    minWidth: 130,
+                 },
+                {
+                    dataField: "Authorized",
+                    caption:"Người ủy quyền",
+                    minWidth: 130,
+                 },
+                {
+                    dataField: "Days",
+                    caption: "Số ngày báo trước",
+                    minWidth: 130,
+                 },
+                {
+                    dataField: "Priority",
+                    caption: "Mức độ ưu tiên",
+                    minWidth: 150,
+                 },
+            ],
+            onCellPrepared: function onCellPrepared(e) {
+                if (e.rowType == "header") {
+                    e.cellElement.addClass('headerTree');
+                }
+            },
+            onContextMenuPreparing: function (e) {
+                if (e.row.rowType == "data") {
+                    var assigner_authorize = e.row.data.TaskAssigner + ';' + e.row.data.Authorized;
+                    var ckedit = false;
+                    if (assigner_authorize.includes('@nguoidung.UserName')) {
+                        ckedit = true;
+                    }
+                    var ckcancel = false;
+                    if (ckedit == true && e.row.data.Status != 'Hoàn thành' && e.row.data.Status != 'Đã hủy') {
+                        ckcancel = true;
+                    }
+                    e.items = [
+                        {
+                            text: "Xem chi tiết",
+                            icon: 'fa fa-info-circle',
+                            useIcons: true,
+                            onItemClick: function () {
+                                var IdTassk = e.row.data.Id;
+                                GoLink('/Tasks/Info?ID=' + IdTassk);
+                            }
+                        },  {
+                            text: "Xem chi tiết (New Tab)",
+                            icon: 'fa fa-info-circle',
+                            useIcons: true,
+                            onItemClick: function () {
+                                var IdTassk = e.row.data.Id;
+                                window.open('/Tasks/Info?ID=' + IdTassk, '_blank');
+
+                             }
+                        },
+                        {
+                            text: "Sửa công việc",
+                            icon: 'fa fa-pencil-square-o',
+                            useIcons: true,
+                            visible: ckedit,
+                            onItemClick: function () {
+                                var IdTassk = e.row.data.Id;
+                                GoLink('/Tasks/Create?TaskID=' + IdTassk );
+                            }
+                        },
+                        {
+                            text: "Hủy công việc",
+                            icon: 'fa fa-ban',
+                            useIcons: true,
+                            visible: ckcancel,
+                            onItemClick: function () {
+                                var Id = e.row.data.Id;
+                                var lydo = prompt('Vui lòng nhập lý do hủy công việc này ạ');
+                                if (lydo != '' && lydo != null) {
+                                    $.ajax({
+                                            url: '/FutureTask/CancelTaskById',
+                                            type: 'POST',
+                                            datatype: 'json',
+                                            data: { Id: Id,Lydo:lydo },
+                                            success: function (data) {
+                                                if (data == "OK") {
+                                                    e.row.data.Status = "Đã hủy";
+                                                    DevExpress.ui.notify("Hủy công việc thành công", "success", 5000);
+                                                }
+                                                else {
+                                                    DevExpress.ui.notify("Lỗi! Không tìm thấy công việc để hủy", "error", 5000);
+                                                }
+                                            },
+                                            error: function (data) {
+                                                                                            $('#treeListTask').html(data.responseText);
+                                            }
+
+                                        });
+                                }
+                                //var result = DevExpress.ui.dialog.confirm("Bạn chắc chắn sẽ hủy công việc này chứ?", "Xác nhận hủy công việc");
+                                //result.done(function (dialogResult) {
+                                //    console.log(dialogResult);
+                                //    if (dialogResult) {
+                                //
+                                //    }
+                                //});
+
+                            }
+                        },
+                        {
+                            text: "Tạo công việc nhỏ",
+                            icon: 'fa fa-plus-square-o',
+                            useIcons: true,
+                            onItemClick: function () {
+                                var IdTassk = e.row.data.Id;
+                                GoLink('/Tasks/SubCreate?ParentID=' + IdTassk);
+
+                                // window.location.href = '/Home/DetailsTsuika?IdTsuika=' + e.row.data.Id + '';
+                            }
+                        },
+
+                    ]
+                }
+
+            }
+        });
+
+        var listTask = [];
+         $(function () {
+             $("#loadListTask").dxLoadPanel({
+                 closeOnOutsideClick: false,
+                 message: "Xin chờ chút ạ ...",
+                 visible: true,
+                 position: { of: "#treeListTask", at: "center", my: "center" },
+                 shading: true
+             });
+             $.ajax({
+            url: '/FutureTask/GetListAllTaskCompleted',
+                 type: 'POST',
+                 datatype: 'json',
+                 data: {Id:'@ViewBag.TaskID'},
+                success: function (data) {
+                    console.log(data);
+                    listTask = [];
+                    $.each(data, function (i, item) {
+                        var obj = {
+                            Id: item.Id,
+                            Dept: item.Dept,
+                            ParentID: item.ParentID,
+                            TaskName: item.TaskName,
+                            StartDate: FromJsonToDate(item.StartDate),
+                            DueDate: FromJsonToDate(item.DueDate),
+                            TaskAssigner: item.TaskAssigner,
+                            TaskChecker: item.TaskChecker,
+                            Authorized: item.Authorized,
+                            Master: item.Master,
+                            Status: item.Status,
+                            Days: item.Days,
+                            Priority: item.Priority,
+                         };
+                        listTask.push(obj);
+                    });
+                    console.log(listTask);
+
+                    treeListTask = $("#treeListTask").dxTreeList('instance');
+                    treeListTask.option('dataSource', listTask);
+                    if (listTask.length==0 && '@ViewBag.TaskID'!=0) {
+                        $('#treeListTask').css('display', 'none');
+                        $('#title_head').css('display', 'none');
+                    }
+                    $("#loadListTask").dxLoadPanel({
+                        closeOnOutsideClick: false,
+                        message: "Xin chờ chút ạ ...",
+                        visible: false,
+                        position: {  of: "#treeListTask", at: "center", my: "center" },
+                        shading: true
+                    });
+                },
+                error: function (data) {
+                    $("#loadListTask").dxLoadPanel({
+                        closeOnOutsideClick: false,
+                        message: "Xin chờ chút ạ ...",
+                        visible: false,
+                        position: { of: "#treeListTask", at: "center", my: "center" },
+                        shading: true
+                    });
+                    alert(data);
+                }
+
+            });
+        })
+</script>
+
+
+
+ 

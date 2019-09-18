@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Planner2.Models.MainTask>
+<div class="widget-text project-hl">
+    <div class="widget-top"><h3 class="widget-title"><a href="../bat-dong-san/index.html" title="@ViewBag.ChuDe">@ViewBag.ChuDe</a></h3></div>
+    <div class="list-realty list-50 clearfix">
+        <ul>
+
+            @foreach (var item in Model)
+            {
+            <li>
+                @if (!string.IsNullOrEmpty(item.Youtube))
+                {
+                    item.Youtube = item.Youtube.Replace("youtube.com/watch", "youtube.com/embed");
+                    <iframe    src="@item.Youtube" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+                }
+                else
+                {
+                    <a href="/post/info?id=@item.SeoUrl" style="cursor:pointer">
+                        <img width="420" height="420" src="@item.Picture" alt="" />
+                    </a>
+                }
+
+                <a href="/post/info?id=@item.SeoUrl" style="cursor:pointer">
+                    <label style="    color: #d30003;
+                             font: bold 14px/19px tahoma;">@item.TaskName</label>
+                        </a>
+                    </li>
+
+                }
+
+
+        </ul>
+        <div class="clear clearfix more_link_ar">
+            <a href="/Post/index?ChuDe=@ViewBag.SeoUrl" title="Xem thêm">Xem thêm tin bất động sản</a>
+        </div>
+    </div>
+</div>

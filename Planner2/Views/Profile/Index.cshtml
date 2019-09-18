@@ -1,0 +1,163 @@
+﻿@{
+    var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
+    nguoidung.SoTien = nguoidung.SoTien ?? 0;
+    Planner2Entities db = new Planner2Entities();
+    var ST = String.Format(System.Globalization.CultureInfo.GetCultureInfo("vi-VN"), "{0:n0}", nguoidung.SoTien) + " VND";
+}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <i class="fa fa-user-circle-o fa-5x "></i>
+                        </div>
+
+                        <h3 class="profile-username text-center">@nguoidung.StaffName</h3>
+
+                        <p class="text-muted text-center">@nguoidung.Active </p>
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Tài khoản</b> <a class="float-right">@nguoidung.UserName</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Email</b> <a class="float-right">@nguoidung.Email</a>
+                            </li>
+                            <li class="list-group-item">
+                                <h3> <b>Tiền </b> <a class="float-right">@ST</a></h3>
+                            </li>
+                        </ul>
+
+                        <a  data-toggle="modal" data-target="#myModalThongTinCK" class="btn text-white btn-primary btn-block"><b>Nạp thêm</b></a>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+              
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Chủ đề của bạn</a></li>
+                            <li class="nav-item"><a class="nav-link  " href="#timeline" data-toggle="tab">Đổi mật khẩu</a></li>
+                            @*<li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>*@
+                        </ul>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="activity">
+
+                                @{
+                                    Html.RenderAction("DanhMuc");
+                                }
+
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="timeline">
+            
+                            <form id="DoiMK">
+
+                                <div class="form-group">
+                                    <label>Mật khẩu cũ</label>
+                                    <input type="password" name="PassCu" id="PassCu" value="" class="form-control" />
+                                </div> 
+                                <div class="form-group">
+                                    <label>Mật khẩu mới</label>
+                                    <input type="password" name="PassMoi"id="PassMoi" value="" class="form-control" />
+                                </div> 
+                                <div class="form-group">
+                                    <label>Nhập lại mật khẩu mới</label>
+                                    <input type="password" name="PassMoiV2"id="PassMoiV2" value="" class="form-control" />
+                                </div>
+                                <input type="submit" class="btn btn-primary" name="name" value="Đổi mật khẩu" />
+                            </form>
+                            
+                            </div>
+                            <!-- /.tab-pane -->
+
+                            <div class="tab-pane" id="settings">
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div><!-- /.card-body -->
+                </div>
+                <!-- /.nav-tabs-custom -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+
+
+ 
+<div id="myModalThongTinCK" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông tin chuyển khoản</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                @foreach (var item in db.Banks)
+                {
+                    <div style="border: 1px solid #a0a9b0; background: #f4f9ff; padding: 10px; width: auto; height: auto; overflow: auto;">
+                        <div style="margin-left: 20px; float: left; line-height: 20px;">
+                            <div style="font-weight: bold; font-size: 12px; font-family: Arial;"><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;">@item.BankName <br> </span> </span></div>
+                            <div><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;">Chủ tài khoản:&nbsp;<span style="font-size: 12px;">@item.ChuTaiKhoan</span> <span style="font-weight: bold;"> <br> </span> </span> </span></div>
+                            <div><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;">Chi nhánh : @item.ChiNhanh</span> </span></div>
+                            <div><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;">Số tài khoản : <strong>@item.SoTaiKhoan</strong> </span> </span></div>
+                        </div>
+                    </div>
+                    <br />
+                }
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $("#DoiMK").submit(function (e) {
+        var PassMoi = $('#PassMoi').val();
+        var PassMoiV2 = $('#PassMoiV2').val();
+        var PassCu = $('#PassCu').val();
+
+        if (PassMoi != PassMoiV2) {
+            alert('Mật khẩu nhập lại không khớp');
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/login/DoiMK",
+            data: {
+PassMoi:PassMoi,
+PassCu:PassCu,
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response == "") {
+                    alert('Changed password OK');
+                } else {
+                    alert(response);
+                }
+            }
+        });
+        e.preventDefault();
+
+    });
+</script>

@@ -1,0 +1,270 @@
+﻿@{
+    var GIAHAN = (List<Planner2.Models.V_LuiThoiHan>)ViewBag.GIAHAN;
+    var BCHT = (List<Planner2.Models.V_BCHT>)ViewBag.BCHT;
+    var ChoXacNhan = (List<Planner2.Models.V_MainTask>)ViewBag.ChoXacNhan;
+    var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
+
+}
+@using Planner2.Extentions;
+<style>
+    .panel-title {
+        text-transform: none;
+    }
+
+    #CHOXULY .panel, .panel-body {
+        padding: 0PX !important;
+    }
+
+    #CHOXULY .panel-title {
+        padding: 10PX 3PX 10PX 30px !important;
+    }
+
+    #baocaoMaster #CHOXULY .col-md-3 {
+        width: 100% !important;
+    }
+
+    #baocaoMaster #CHOXULY .panel-heading a {
+        LINE-HEIGHT: 2 !important;
+    }
+
+    #baocao #CHOXULY .col-md-3 {
+        width: 100% !important;
+    }
+
+    #baocao #CHOXULY .panel-heading a {
+        LINE-HEIGHT: 2 !important;
+    }
+
+    .GIAHAN {
+        color: #fff !important
+    }
+</style>
+
+<div id="CHOXULY">
+
+
+    @foreach (var x in GIAHAN)
+    {
+        <div class="card" style="width: 100%;">
+            <div class="card-body">
+                <div style="background-color:red;color:#fff;padding:10PX">
+                    Master <b style="text-decoration:underline">@x.Master</b> đã báo cáo không đảm bảo thời hạn công việc: @x.TaskName
+                </div>
+                <div>
+                    <p style="padding:5px" class="col-xs-12"><b>Nguyên nhân</b>: @x.NOIDUNG</p>
+                    <div class=" ">
+                        <div class="col-sm-12 col-md-12">
+                            <p style="padding:5px"><b>Thời hạn cũ</b>: @x.DATE.ToString_N()</p>
+                            <p style="padding:5px"><b>Thời hạn mới</b>:@x.NEWDATE.ToString_N()</p>
+                            @if (x.DATE_UPDATE.HasValue)
+                            {
+                                <p style="padding:5px"><b>Ngày báo cáo</b>: @x.DATE_UPDATE.ToString_N()</p>
+                            }
+                        </div>
+                        <div class="col-sm-12 col-md-12">
+                            <a class="btn btn-success GIAHAN" data-TT="1" data-id="@x.ID">Đồng ý</a>
+                            <a class="btn btn-danger GIAHAN" data-TT="0" data-id="@x.ID">Từ chối</a>
+                            @if (ViewBag.TaskID != x.TaskID)
+                            {
+                                <A href="/Tasks/Info?ID=@x.TaskID" class="btn   btn-info">Chi tiết</A>
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    @foreach (var x in BCHT)
+    {
+        <div class="card" style="width: 100%;">
+            <div class="card-body">
+                <div style="background-color:#0094ff;color:#fff;padding:10PX">
+                    Master <b style="text-decoration:underline">@x.Master</b>  đã báo cáo hoàn thành công việc: @x.TaskName
+                </div>
+                <div>
+                    <div >
+                        <div class="col-sm-12 col-md-12">
+                            <p style="padding:5px"><b>Bắt đầu</b>: @x.StartDate.ToString_N()</p>
+                            <p style="padding:5px"><b>Kết thúc</b>:@x.DueDate.ToString_N()</p>
+                            <p style="padding:5px"><b>Ngày báo cáo hoàn thành</b>: @x.DateFinish.ToString_N()</p>
+                        </div>
+                        <div class="col-sm-12 col-md-12">
+                            <a data-ID="@x.Id" data-TT="1" class="btn btn-info XNHT text-white">Đồng ý</a>
+                            <a data-ID="@x.Id" data-TT="0" class="btn   btn-danger XNHT text-white">Từ chối</a>
+                            @if (ViewBag.TaskID != x.Id)
+                            {
+                                <A href="/Tasks/Info?ID=@x.Id" class="btn   btn-info">Chi tiết</A>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    @foreach (var x in ChoXacNhan)
+    {
+        string VITRI = "";
+
+        if (nguoidung.UserName.ToUpper() == x.Master.ToUpper())
+        {
+            VITRI = "tham gia";
+        }
+        if (nguoidung.UserName.ToUpper() == x.TaskAssigner.ToUpper())
+        {
+            VITRI = "ủy quyền";
+        }
+        <div class="card" style="width: 100%;">
+            <div class="card-body">
+                <div style="background-color:lightseagreen;color:#fff;padding:10PX">
+                    <b style="text-decoration:underline">@x.CreatedBy</b> đã tạo công việc, đang chờ anh chị xác nhận @VITRI: @x.TaskName
+                </div>
+                <div>
+                    <div class=" ">
+                        <div class="col-sm-12 col-md-12">
+                            <p style="padding:5px"><b>Bắt đầu</b>: @x.StartDate.ToString_N()</p>
+                            <p style="padding:5px"><b>Kết thúc</b>:@x.DueDate.ToString_N()</p>
+                            <p style="padding:5px"><b>Ngày tạo công việc</b>: @x.Created.ToString_N()</p>
+                        </div>
+                        <div class="col-sm-12 col-md-12">
+                            <a data-ID="@x.Id" data-TT="1" class="btn btn-info XNTG text-white">Đồng ý @VITRI</a>
+                            <a data-ID="@x.Id" data-TT="0" class="btn   btn-danger XNTG text-white">Từ chối @VITRI</a>
+                            @if (ViewBag.TaskID != x.Id)
+                            {
+                                <A href="/Tasks/Info?ID=@x.Id" class="btn   btn-info">Chi tiết</A>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+
+</div>
+
+<script>
+    $(".GIAHAN").click(function (e) {
+        var id = $(this).attr("data-id");
+        var TT = $(this).attr("data-TT");
+        var dl = '';
+        if (TT == '1') {
+
+            dl = "OK";
+        } else {
+            dl = "NG";
+
+        }
+        var person = prompt("Nội dung phản hồi", dl);
+
+        if (person != null) {
+            if (person.trim() == "") {
+                alert("Nội dung phải hồi không được để trống");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/Tasks/XacNhanLuiThoiHan",
+                data: {
+                    ID: id,
+                    TT: TT,
+                    ND: person
+                },
+                dataType: "json",
+                success: function (response) {
+                    window.location.reload();
+               //     GoLink('/Tasks/info?ID=' + response);
+
+                }
+            });
+        }
+        e.preventDefault();
+
+    });
+
+
+    $(".XNHT").click(function (e) {
+        var TT = $(this).attr("data-TT");
+        if (TT == 1) {
+            nd = "Anh chị có chắc chắn muốn xác nhận đồng ý hoàn thành công việc,anh chị vui lòng nhập nội dung phản hồi";
+        }
+        else {
+
+            nd = "Anh chị có chắc chắn muốn xác nhận từ chối hoàn thành công việc,anh chị vui lòng nhập nội dung phản hồi";
+        }
+        var person = prompt(nd, "");
+
+        if (person != null) {
+
+            if (person.trim() == "") {
+                alert("Anh chị vui lòng nhập nội dung phản hồi");
+                return;
+            }
+
+            var TaskID = $(this).attr("data-ID");
+            var ip = this;
+            $.ajax({
+                type: "POST",
+                url: "/Tasks/HoanThanh",
+                data: {
+                    ID: TaskID,
+                    TT: TT,
+                    ND: person
+                },
+                dataType: "json",
+                success: function (response) {
+                    window.location.reload();
+                }
+            });
+
+        }
+        e.preventDefault();
+
+    });
+    $(".XNTG").click(function (e) {
+        var TT = $(this).attr("data-TT");
+
+
+        if (TT == 1) {
+            nd = "Anh chị có chắc chắn muốn xác nhận đồng ý tham gia công việc";
+        }
+        else {
+
+            nd = "Anh chị có chắc chắn muốn xác nhận từ chối tham gia công việc";
+        }
+        var r = prompt("Nội dung phản hồi", "");
+        if (r != true) {
+            if (r.trim() == "") {
+                alert("Anh chị vui lòng nhập nội dung phản hồi");
+                return;
+            }
+            var TaskID = $(this).attr("data-ID");
+            var ip = this;
+            $.ajax({
+                type: "POST",
+                url: "/Tasks/XacNhan",
+                data: {
+                    TaskID: TaskID,
+                    TT: TT,
+                    Noidung: r
+                },
+                dataType: "json",
+                success: function (response) {
+                    window.location.reload();
+                }
+            });
+
+
+        }
+        e.preventDefault();
+
+    });
+
+</script>

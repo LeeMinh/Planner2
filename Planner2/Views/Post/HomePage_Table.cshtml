@@ -1,0 +1,91 @@
+﻿@model  IEnumerable<Planner2.Models.MainTask>
+    @using  Planner2.Extentions
+    @{ 
+        int stt = 1;
+        Planner2Entities db = new Planner2Entities();
+    }
+<header class="entry-header">
+    <div class="bor-bot">
+        <div class="title">
+            <h1 class="entry-title">
+                @ViewBag.TitleChuDe
+            </h1>
+            <span class="icon-house"></span>
+        </div>
+    </div>
+</header><!-- .page-header -->
+<div class="list-realty">
+    <table class="table-hover">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Hình ảnh</th>
+                <th>Ngày đăng</th>
+                <th>Tiêu đề</th>
+                <th>Vị trí</th>
+                <th>Hướng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+               string KhuVuc_Huyen = db.ThanhPhoes.Where(v => v.MaQuanHuyen == item.KhuVuc_Huyen).Select(z => z.QuanHuyen).FirstOrDefault();
+                 string KhuVuc_TP = db.ThanhPhoes.Where(v => v.MaThanhPho == item.KhuVuc_TP).Select(z => z.TenThanhPho).FirstOrDefault();
+              <tr data-ID="@item.SeoUrl" class="CHITIET">
+                    <td>@(stt++)</td>
+                    <td>
+                        <a href=" ">
+                            <img width="160" height="120" src="@item.Picture" class="attachment-realty-thumbnail size-realty-thumbnail wp-post-image" alt="">
+                        </a>
+                    </td>
+                    <td>
+                     @item.NgayDang.ToString_N()
+                    </td>
+                    <td>
+                        <h4><a >@item.TaskName</a><span><img
+                                                           style="    display: inline-block;"   src="http://batdongsannhadat247.com/wp-content/themes/hrm/images/vip.gif" alt="anh hot" class="img-responsive"></span></h4>
+
+                        <div class="details">
+                            <div class="price">
+                                <label>Giá<span>:</span></label>
+                                @item.Gia @item.TyGia
+                            </div>
+                            <div class="area">
+                                <label>Diện tích<span>:</span></label>
+                               @item.DienTich m<sup>2</sup>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <a>@KhuVuc_Huyen</a> -
+                        <a>@KhuVuc_TP</a> 
+
+                    </td>
+                    <td>
+                      @item.Map_Huong
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+
+    <div class="clear clearfix more_link_ar">
+        <a href="/Post/index?ChuDe=@ViewBag.SeoUrl" title="Xem thêm">Xem thêm @ViewBag.TitleChuDe</a>
+    </div>
+</div>
+
+<script>
+    $(".CHITIET").click(function (e) {
+        var ID = $(this).attr("data-ID");
+        window.location.href = "/post/info?id=" + ID;
+        e.preventDefault();
+
+    });
+</script>
+<style>
+    tr{
+        cursor:pointer
+    }
+</style>

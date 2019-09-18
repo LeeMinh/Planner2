@@ -1,0 +1,153 @@
+﻿
+@{
+    ViewBag.Title =    Planner2.Common.SettingData.TT_DanhSachCV;
+    var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
+}
+
+
+<div class="row">
+    <div class="col-12" style="width:100%">
+        <div id="treeListTask"></div>
+        <div id="loadListTask"></div>
+    </div>
+</div>
+
+<script>
+                 function FromJsonToDate(value) {
+            if (value != null) {
+                return new Date(parseInt(value.replace('/Date(', '')));
+            }
+            return;
+        }
+     
+        var treeListTask = $("#treeListTask").dxDataGrid({
+            dataSource: [],
+            keyExpr: "Id",
+            parentIdExpr: "ParentID",
+            allowColumnResizing: true,
+            showRowLines: true,
+            showBorders: true,
+             columnAutoWidth: true,
+            showBorders: true,
+            scrolling: {
+                mode: "standard",
+                scrollByContent: true,
+            },
+            paging: {
+        enabled: true,
+        pageSize: 100
+    },  pager: {
+        showPageSizeSelector: true,
+        allowedPageSizes: [100, 200, 500, 1000],
+        showNavigationButtons: true
+    },
+             "export": {
+        enabled: true,
+        fileName: "DataList",
+        allowExportSelectedData: true
+            },
+              onContentReady: function (e) {
+                        e.element.find(".dx-datagrid-header-panel").find(".dx-toolbar-before").html('<div style="    font-size: 24px;color:#3c8dbc" class="textstyle_1"><B>@ViewBag.Title</B></div>');
+                                 },
+            headerFilter: {
+                visible: true,
+            }, selection: {
+                mode: "single"
+            },
+            filterRow: { visible: true },
+         
+            columns: [
+
+               {
+                    dataField: "Id"
+                }
+              ,  {
+                    dataField: "TaskName",
+                    caption:"Tiêu đề",
+                    minWidth: 100,
+                    width:400,
+                }, 
+                {
+                    dataField: "NgayDang",
+                    caption:"Ngày đăng",
+
+                    dataType: "date",
+                    format: "dd/MM/yyyy",
+                    minWidth: 100,
+                },
+                {
+                    dataField: "CreatedBy",
+                    caption: "Người đăng",
+                    minWidth: 100
+                }, {
+                    dataField: "Gia",
+                    caption: "Giá",
+                    minWidth: 100
+                },  {
+                    dataField: "TyGia",
+                    caption: "Tỷ giá",
+                    minWidth: 100
+                }, {
+                    dataField: "DienTich",
+                    caption: "Diện tích",
+                    minWidth: 100
+                },
+                {
+                    dataField: "Status",
+                    caption: "Tình trạng",
+                    minWidth: 120
+                },
+                {
+                    dataField: "Viewer",
+                    caption: "Lượt xem",
+                    minWidth: 100,
+                    width:100
+                } 
+            ],
+            onCellPrepared: function onCellPrepared(e) {
+                if (e.rowType == "header") {
+                    e.cellElement.addClass('headerTree');
+                }
+            },
+              onSelectionChanged: function (selectedItems) {
+                    var data = selectedItems.selectedRowsData[0];
+                    var IdTassk = data.Id;
+                                window.location.href=('/Tasks/Create?TaskID=' + IdTassk);
+                 } 
+        });
+
+     $(function () {
+               loadingPanel(true);
+             $.ajax({
+                 url: '/FutureTask/GetListAllTask',
+                 type: 'POST',
+                 datatype: 'json',
+                 success: function (data) {
+                      $.each(data, function (i, item) {
+                           item.NgayDang = FromJsonToDate(item.NgayDang);
+                        });
+                    treeListTask = $("#treeListTask").dxDataGrid('instance');
+                    treeListTask.option('dataSource', data);
+                    loadingPanel(false);
+
+                },
+                 error: function (data) {
+                     loadingPanel(false);
+                    alert(data);
+                }
+
+            });
+         })
+
+    function loadingPanel(status) {
+        $("#loadListTask").dxLoadPanel({
+                 closeOnOutsideClick: false,
+                 message: "Xin chờ chút ạ ...",
+                 visible: status,
+                 position: { of: "#treeListTask", at: "center", my: "center" },
+                 shading: true
+             });
+    }
+</script>
+
+

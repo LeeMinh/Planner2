@@ -1,0 +1,380 @@
+﻿@{
+
+    Planner2Entities db = new Planner2Entities();
+    var Categories = db.Categories.ToList();
+    var listBanner = db.SettingDatas.Where(z => z.Type == "BANNER" && !string.IsNullOrEmpty(z.Value)).ToList();
+}
+@helper menuItem(Category item, List<Category> data)
+{
+    var nextItem = data.Where(v => v.ParentID == item.CategoryRowID && item.CategoryRowID != v.CategoryRowID).OrderBy(z => z.STT).ToList();
+    <li class="menu-item @(nextItem.Count>0 ? "menu-item-has-children" :"") ">
+        <a href="/Post/index?ChuDe=@item.SeoUrl">@item.CategoryName</a>
+
+        @if (nextItem.Count > 0)
+        {
+            <ul class="sub-menu">
+                @foreach (var it in nextItem)
+                {
+                    <text>
+                        @menuItem(it, data)
+                    </text>
+
+                }
+            </ul>
+        }
+
+    </li>
+}
+<!DOCTYPE html>
+<html lang="vi">
+
+
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="pingback" href="@Planner2.Common.SettingData.Logo">
+    <link rel="shortcut icon" href="@Planner2.Common.SettingData.Logo" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <title>@Planner2.Common.SettingData.Title</title>
+
+    <meta name="description" content="@Planner2.Common.SettingData.SeoDescription" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="@Planner2.Common.SettingData.Title" />
+    <meta property="og:description" content="@Planner2.Common.SettingData.SeoDescription" />
+    <meta property="og:url" content="index.html" />
+    <meta property="og:site_name" content="@Planner2.Common.SettingData.TenCongTy" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:description" content="@Planner2.Common.SettingData.SeoDescription" />
+    <meta name="twitter:title" content="@Planner2.Common.SettingData.Title" />
+
+    <style type="text/css">
+
+        img.wp-smiley,
+        img.emoji {
+            display: inline !important;
+            border: none !important;
+            box-shadow: none !important;
+            height: 1em !important;
+            width: 1em !important;
+            margin: 0 .07em !important;
+            vertical-align: -0.1em !important;
+            background: none !important;
+            padding: 0 !important;
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel='stylesheet' id='wp-block-library-css' href='~/Content/wp-includes/css/dist/block-library/style.min3c21.css?ver=5.1.1' type='text/css' media='all' />
+    <link rel='stylesheet' id='fontawesome-css' href='~/Content/wp-content/themes/hrm/css/font-awesome.min3c21.css?ver=5.1.1' type='text/css' media='all' />
+    <link rel='stylesheet' id='hrm-style-css' href='~/Content/wp-content/themes/hrm/style3c21.css?ver=5.1.1' type='text/css' media='all' />
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    <script src="~/Scripts/hrm-custom.js"></script>
+
+    <style type="text/css" title="dynamic-css" class="options-output">
+        .site-header {
+            background-color: rgba(0,0,0,0);
+        }
+
+        #main-menu {
+            background-color: #d30003;
+        }
+
+        .paper-say {
+            width: 100%;
+        }
+
+        .marquee-with-options {
+            width: 100%;
+            overflow: hidden;
+            display: inline-flex;
+            height: 30px;
+            padding-top: 12px;
+            z-index: 0;
+            border: 0;
+        }
+
+        .paper img {
+            z-index: 10;
+            height: 39PX !important
+        }
+
+        ul#navigation li a {
+            color: #ffffff;
+        }
+
+        ul#navigation li:hover, ul#navigation li:focus, ul#navigation li.current-menu-item {
+            background-color: #262626;
+        }
+
+            ul#navigation li:hover a, ul#navigation li:focus a, ul#navigation li.active a {
+                color: #ffffff;
+            }
+
+        .advanced-search {
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center top;
+            background-image: url('~/Content/~/Content/thuenhahanoi.net/wp-content/uploads/2018/08/bg.png');
+        }
+    </style>
+
+</head>
+<body class="page-template page-template-taxonomy-realty page-template-template-realty-sell page-template-taxonomy-realtytemplate-realty-sell-php page page-id-90">
+    <div class="menu-responsive hidden-lg">
+        <div class="menu-close">
+            <i class="fa fa-bars"></i>
+            <span>Menu</span>
+            <i class="fa fa-times"></i>
+        </div>
+        <div class="menu-main-menu-container">
+            <ul id="menu-main-menu" class="menu">
+
+                <li id="menu-item-709" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-709"><a href="~/Content/index.html"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+                <li id="menu-item-577" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-577"><a href="~/Content/gioi-thieu/index.html">Giới thiệu</a></li>
+                <li id="menu-item-580" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-90 current_page_item menu-item-has-children menu-item-580">
+                    <a href="index.html" aria-current="page">Nhà đất cần bán</a>
+                    <ul class="sub-menu">
+                        <li id="menu-item-497" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-497"><a href="~/Content/dat-ban/ban-biet-thu/index.html">Bán biệt thự</a></li>
+                        <li id="menu-item-498" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-498"><a href="~/Content/dat-ban/ban-nha-mat-pho/index.html">Bán nhà mặt phố</a></li>
+                        <li id="menu-item-500" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-500"><a href="~/Content/dat-ban/ban-chung-cu/index.html">Bán chung cư</a></li>
+                        <li id="menu-item-501" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-501"><a href="~/Content/dat-ban/ban-dat/index.html">Bán đất</a></li>
+                        <li id="menu-item-502" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-502"><a href="~/Content/dat-ban/ban-dat-nen-du-an/index.html">Bán đất nền dự án</a></li>
+                        <li id="menu-item-503" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-503"><a href="~/Content/dat-ban/ban-kho-xuong/index.html">Bán kho xưởng</a></li>
+                        <li id="menu-item-504" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-504"><a href="~/Content/dat-ban/ban-nha-phan-lo-lien-ke/index.html">Bán nhà phân lô, liền kề</a></li>
+                        <li id="menu-item-505" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-505"><a href="~/Content/dat-ban/ban-mat-bang-san-van-phong/index.html">Bán mặt bằng, sàn văn phòng</a></li>
+                        <li id="menu-item-506" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-506"><a href="~/Content/dat-ban/ban-nha-tap-the/index.html">Bán nhà tập thể</a></li>
+                    </ul>
+                </li>
+                <li id="menu-item-579" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-579">
+                    <a href="~/Content/nha-dat-cho-thue/index.html">Nhà đất cho thuê</a>
+                    <ul class="sub-menu">
+                        <li id="menu-item-508" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-508"><a href="~/Content/dat-thue/cho-thue-cua-hang/index.html">Cho thuê cửa hàng</a></li>
+                        <li id="menu-item-509" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-509"><a href="~/Content/dat-thue/cho-thue-nha-mat-pho/index.html">Cho thuê nhà mặt phố</a></li>
+                        <li id="menu-item-519" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-519"><a href="~/Content/dat-thue/cho-thue-van-phong/index.html">Cho thuê văn phòng</a></li>
+                        <li id="menu-item-511" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-511"><a href="~/Content/dat-thue/cho-thue-chung-cu/index.html">Cho thuê chung cư</a></li>
+                        <li id="menu-item-517" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-517"><a href="~/Content/dat-thue/cho-thue-nha-rieng/index.html">Cho thuê nhà riêng</a></li>
+                        <li id="menu-item-510" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-510"><a href="~/Content/dat-thue/cho-thue-biet-thu/index.html">Cho thuê biệt thự</a></li>
+                        <li id="menu-item-514" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-514"><a href="~/Content/dat-thue/cho-thue-mat-bang-thuong-mai/index.html">Cho thuê mặt bằng thương mại</a></li>
+                        <li id="menu-item-513" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-513"><a href="~/Content/dat-thue/cho-thue-kho-xuong-dat-trong/index.html">Cho thuê kho xưởng, đất trống</a></li>
+                        <li id="menu-item-518" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-518"><a href="~/Content/dat-thue/cho-thue-phong-tro-nha-tro/index.html">Cho thuê phòng trọ, nhà trọ</a></li>
+                    </ul>
+                </li>
+                <li id="menu-item-583" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-583">
+                    <a href="~/Content/sang-nhuong/index.html">Sang nhượng</a>
+                    <ul class="sub-menu">
+                        <li id="menu-item-543" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-543"><a href="~/Content/sang-nhuong/nhuong-cua-hang/index.html">Nhượng cửa hàng</a></li>
+                        <li id="menu-item-547" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-547"><a href="~/Content/sang-nhuong/sang-nhuong-quan-cafe/index.html">Sang nhượng quán cafe</a></li>
+                        <li id="menu-item-544" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-544"><a href="~/Content/sang-nhuong/sang-nhuong-cua-hang-kiot/index.html">Sang nhượng cửa hàng &#8211; kiot</a></li>
+                        <li id="menu-item-545" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-545"><a href="~/Content/sang-nhuong/sang-nhuong-khach-san/index.html">Sang nhượng khách sạn</a></li>
+                        <li id="menu-item-546" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-546"><a href="~/Content/sang-nhuong/sang-nhuong-mat-bang/index.html">Sang nhượng mặt bằng</a></li>
+                        <li id="menu-item-549" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-549"><a href="~/Content/sang-nhuong/sang-nhuong-shop-thoi-trang/index.html">Sang nhượng shop thời trang</a></li>
+                        <li id="menu-item-548" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-548"><a href="~/Content/sang-nhuong/sang-nhuong-salon-toc/index.html">Sang nhượng salon tóc</a></li>
+                    </ul>
+                </li>
+                <li id="menu-item-558" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-558"><a href="~/Content/du-an/index.html">Dự án</a></li>
+                <li id="menu-item-557" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-557"><a href="~/Content/category/cam-nang/index.html">Cẩm nang</a></li>
+                <li id="menu-item-463" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-463"><a href="~/Content/category/tin-tuc/index.html">Tin tức</a></li>
+                <li id="menu-item-578" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-578"><a href="~/Content/lien-he/index.html">Liên hệ</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="page" class="site">
+        <header id="masthead" class="site-header" role="banner">
+            <div class="menu-icon hidden-lg hidden-md">
+                <div class="menu-open">
+                    <div class="pull-right">
+                        <div class="icon-click">
+                            <i class="fa fa-bars"></i>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- Menu-mobile	 -->
+
+            <div class="top-bar">
+                <div class="container">
+                    <div class="row">
+                        <div class="top-phone col-xs-4">
+                            <a href="tel:@Planner2.Common.SettingData.HotLine">
+                                <i class="fa fa-phone" aria-hidden="true"></i>
+                                <span>HOTLINE: @Planner2.Common.SettingData.HotLine</span>
+                            </a>
+                        </div><!-- div.top-phone -->
+                        <div class="login-logout col-xs-8">
+                            <ul>
+                                <li>
+                                    <a href="/Tasks/Create">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        Đăng tin Bán/Cho thuê
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/Login/Register">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                        Đăng ký
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/Profile/index">
+                                        <i class="fa fa-key" aria-hidden="true"></i>
+                                        Đăng nhập
+                                    </a>
+                                </li>
+                            </ul>
+                        </div><!-- div.login-logout -->
+                    </div>
+                </div>
+            </div><!-- div.top-bar -->
+            <div class="site-branding">
+                <div class="row">
+
+                    <div class="col-xs-12">
+                        <div class="hrm-banner">
+
+                            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                                <!-- Indicators -->
+
+
+                                <ol class="carousel-indicators">
+                                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                    @for (int i = 1; i < listBanner.Count; i++)
+                                    {
+                                        <li data-target="#myCarousel" data-slide-to="@i"></li>
+                                    }
+
+                                </ol>
+
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner">
+                                    @foreach (var item in listBanner)
+                                    {
+                                        var _class = (item == listBanner.FirstOrDefault() ? "active" : "");
+                                        <div class="item @_class">
+                                            <img src="@item.Value">
+                                        </div>
+                                    }
+                                </div>
+
+                                <!-- Left and right controls -->
+                                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+
+                        </div><!-- .hrm-banner -->
+                    </div>
+                </div><!-- .site-branding -->
+            </div>
+
+            <div id="main-menu">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="navbar-header visible-lg visible-md">
+                                <nav id="site-navigation" class="site-navigation">
+                                    <div class="menu-main-menu-container">
+                                        <ul id="navigation" class="menu">
+                                            <li class="menu-item "><a href="/Post"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+                                            @foreach (var item in db.Categories.Where(Z => Z.Menu == "Top").Where(v => v.ParentID == null || v.ParentID == 0).OrderBy(z => z.STT))
+                                            {
+                                                <text>
+                                                    @menuItem(item, Categories)
+                                                </text>
+                                            }
+
+                                            @*<li class="menu-item  "><a href="~/Content/du-an/index.html">Dự án</a></li>
+                                                <li class="menu-item  "><a href="~/Content/category/tin-tuc/index.html">Tin tức</a></li>*@
+                                            <li class="menu-item  "><a href="/Post/Contact">Liên hệ</a></li>
+                                        </ul>
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- .menu -->
+
+
+
+        </header><!-- #masthead -->
+        <div id="content" class="site-content sidebar-right">
+            <div class="container">
+
+                @{Html.RenderAction("breadcrums", "post", new { ChuDe = ViewBag.ChuDe });}
+
+
+                <div class="row">
+                    <div id="primary" class="content-area col-md-6 col-md-push-3">
+                        @RenderBody()
+                    </div>
+                    <aside class="secondary widget-area-left col-xs-12 col-sm-12 col-md-3 col-md-pull-6 col-sm-3 col-sm-pull-6" role="complementary">
+                        @{
+                            Html.RenderAction("Timkiem", "post");
+                        }
+                        @foreach (var item in db.Categories.Where(Z => Z.Menu == "Left"))
+                        {
+                            <div id="hrm-widget_tin_bds-widget-3" class="widget-odd widget-first widget-1 widget hrm-widget-tin-bds hrm-recent-realty feature">
+                                @{Html.RenderAction("TinChuDe", "post", new { ChuDe = item.SeoUrl });}
+                            </div>
+                        }
+                    </aside>
+                    <aside class="secondary widget-area-right col-md-3 col-sm-3" role="complementary">
+                        <div id="hrm-widget_tin_bds-widget-2" style="display:inline-grid!important" class="widget-odd widget-first widget-1 widget hrm-widget-tin-bds hrm-recent-realty feature">
+                            @{
+                                Html.RenderPartial("~/Views/Post/TinChuDe.cshtml",db.MainTasks.Where(v=>!string.IsNullOrEmpty(v.Youtube)).OrderByDescending(Z=>Z.NgayDang).Skip(0).Take(2).ToList());
+                            }
+                             @foreach (var item in db.Categories.Where(Z => Z.Menu == "Right"))
+                            {
+                                Html.RenderAction("TinChuDe", "post", new { ChuDe = item.SeoUrl });
+                            }
+                        </div>
+                    </aside><!-- #secondary -->
+                </div><!-- .row -->
+            </div><!-- .container -->
+        </div><!-- #content -->
+
+        <footer id="colophon" class="site-footer" role="contentinfo">
+            <div class="paper">
+                <div class="container">
+                    <img src="~/Content/wp-content/themes/hrm/images/dia_oc_thu_do.png" />
+                    <div class="paper-say">
+                        <marquee>
+                            <div class="marquee-with-options">
+                                <p><b>Dân trí:</b><a href="http://dantri.com.vn/thi-truong/nhon-nhip-thi-truong-mua-ban-va-cho-thue-nha-mat-pho-ha-noi-20160630171416368.htm">Nhộn nhịp thị trường mua bán và cho thuê nhà mặt phố Hà Nội</a></p><p><b>Tin tức 24h:</b><a href="http://www.24h.com.vn/tin-tai-chinh-nha-dat-bds/nhon-nhip-thi-truong-mua-ban-va-cho-thue-nha-mat-pho-ha-noi-c679a801770.html">Nhộn nhịp thị trường mua bán và cho thuê nhà mặt phố Hà Nội.</a></p>
+                            </div>
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-top">
+                <div class="container">
+                    <div class="row">
+                        <div id="footer-sidebar-1" class="footer-sidebar col-md-12">
+                            <div id="text-6" class="widget-odd widget-last widget-first widget-1 info_footer widget widget_text">
+                                <div class="textwidget">
+                                    <p><strong>@Planner2.Common.SettingData.TenCongTy</strong></p>
+                                    <p class="info_ct">Hot line: @Planner2.Common.SettingData.HotLine</p>
+                                    <p>Địa chỉ: @Planner2.Common.SettingData.DiaChiCongCty</p>
+                                    <p>Copyright © 2019. All rights reserved..</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- footer-top -->
+        </footer><!-- #colophon -->
+    </div><!-- #page -->
+    <div id="topcontrol" class="icon-up-open" title="Scroll To Top">
+        <i class="fa fa-angle-up"></i>
+    </div>
+
+</body>
+</html>

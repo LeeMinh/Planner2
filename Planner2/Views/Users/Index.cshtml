@@ -1,0 +1,333 @@
+﻿
+<div class="dx-viewport">
+    <div class="demo-container">
+        <div class="d-flex align-items-start justify-content-between">
+            <h2>
+                Users
+            </h2>
+        </div>
+        <div id="DataGrid"></div>
+        <div id="panelLoader"></div>
+
+        <div style="height:0px;overflow:hidden">
+            <input class="form-control" type="file" id="UploadFile_Staff" name="fileInput" onchange="return Onchange_ImportExcel_Staff()">
+        </div>
+    </div>
+</div>
+<style>
+    a:not([href]):not([tabindex]) {
+        color: #3c8dbc;
+    }
+</style>
+
+<script>
+
+
+    var DataGrid = $("#DataGrid").dxDataGrid({
+        dataSource: [],
+        showRowLines: true,
+        showBorders: true,
+        autoExpandAll: true,
+        paging: {
+            enabled: true,
+            pageSize: 100
+        },
+        filterRow: {
+            visible: true,
+            applyFilter: "auto"
+        },
+        columnChooser: {
+            enabled: true
+        },
+        scrolling: {
+            mode: "standard"
+        },
+        pager: {
+            showPageSizeSelector: true,
+            allowedPageSizes: [100, 200, 500, 1000],
+            showNavigationButtons: true
+        },
+        allowColumnResizing: true,
+        columnFixing: {
+            enabled: true
+        },
+        hoverStateEnabled: true,
+        headerFilter: {
+            visible: true
+        },
+        wordWrapEnabled: true,
+        searchPanel: {
+            visible: true,
+            width: 240,
+            placeholder: "Search..."
+        },
+         columnsAutoWidth: true,
+        allowColumnReordering: true,
+        rowAlternationEnabled: true,
+        "export": {
+            enabled: true,
+            fileName: "DataList",
+            allowExportSelectedData: true
+        },
+        editing: {
+            mode: "row",
+            allowUpdating: true,
+            allowDeleting: true,
+            allowAdding: true,
+            useIcons: true
+        },
+        filterPanel: { visible: true },
+        summary: {
+            totalItems: [{
+                column: "KeyID",
+                summaryType: "count"
+            }]
+        },
+        columns:
+            [
+
+              
+                {
+                    dataField: "StaffName",
+                    caption: "Họ tên",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                },
+                {
+                    dataField: "Email",
+                    width: 200,
+                    caption: "Email",
+                    editorOptions: {
+                        showClearButton: true
+                    },
+                },
+                {
+                    dataField: "UserName",
+                    caption: "Tài khoản",
+                 
+                },
+                {
+                    dataField: "Password",
+                    caption: "Mật khẩu",
+                      
+                    cellTemplate: function (container, options) {
+                        var ID = options.data.Id;
+                        container.html('<a data-ID="' + ID + '" class="ViewCT" onclick="ViewCT(' + ID + ')" >Reset</a>');
+
+                    }
+                },
+                {
+                    caption: "Tình trạng",
+                    dataField: "Active",
+                     editorOptions: {
+                        showClearButton: true
+                    },
+                    lookup: {
+                        dataSource: function (rowData) {
+                            var dataSourceConfiguration = {
+                                store: [
+                                    { "name": "Hoạt động" },
+                                    { "name": "Bị khóa" },
+
+                                ]
+                            };
+
+                            return dataSourceConfiguration;
+                        },
+
+                        valueExpr: "name",
+                        displayExpr: "name",
+                        searchMode: 'startswith'
+                    },
+                }, {
+                    dataField: "SoTien",
+                    caption: "Tiền (VND)",
+                    dataType: "number",
+                   format: "#,##0.## VND"  
+
+
+                }, {
+                    dataField: "SupperAdmin",
+                    caption: "Quyền", 
+
+                      lookup: {
+                        dataSource: function (rowData) {
+                            var dataSourceConfiguration = {
+                                store: [
+                                    { "name": "Quản trị","value":1 },
+                                    { "name": "Khách đăng tin","value":0 },
+
+                                ]
+                            };
+
+                            return dataSourceConfiguration;
+                        },
+
+                        valueExpr: "value",
+                        displayExpr: "name",
+                        searchMode: 'startswith'
+                    },
+                },
+
+            ],
+
+        //insert
+        onRowInserting: function (e) {
+            var obj = e.data;
+
+            $.ajax({
+                url: '/Users/AddNew',
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+                data: { obj },
+                success: function (data) {
+                    if (data.result == true) {
+                        DevExpress.ui.notify("This record was added successfully!", "success");
+                        e.data.Id = data.obj.Id;
+                        LoadData_Data();
+                    }
+                    else {
+                        DevExpress.ui.notify("This record can't be add!", "error");
+                        e.cancel = true;
+                    }
+                },
+                error: function (err) {
+                    DevExpress.ui.notify("This record can't be add!", "error");
+                    e.cancel = true;
+                }
+            });
+        },
+
+
+        //update
+        onRowUpdating: function (e) {
+
+            e.newData.Id = e.oldData.Id;
+            console.log(e.newData);
+           
+            $.ajax({
+                url: '/Users/Update_StaffOn',
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+                data: e.newData,
+                success: function (data) {
+                    if (data.result == true) {
+                        DevExpress.ui.notify("Dữ liệu này đã được chỉnh sửa thành công!", "success");
+                    }
+                    else {
+                        DevExpress.ui.notify("Dữ liệu này không thể được cập nhật!", "error");
+                    }
+                },
+                error: function (err) {
+                    DevExpress.ui.notify("Dữ liệu này không thể được cập nhật!", "error");
+                }
+            });
+        },
+        //delete
+        onRowRemoving: function (e) {
+            var id = e.data.Id;
+            $.ajax({
+                url: '/Users/Delete',
+                type: 'POST',
+                dataType: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data == true) {
+                        DevExpress.ui.notify("This record was deleted successfully!", "success");
+                    }
+                    else
+                        if (data == false) {
+                            DevExpress.ui.notify("This record can't be delete!", "error");
+                            e.cancel = true;
+                        }
+                },
+                error: function (err) {
+                    DevExpress.ui.notify("This record can't be delete!", "error");
+                    e.cancel = true;
+                }
+            });
+
+        },
+
+        onCellPrepared: function onCellPrepared(e) {
+            if (e.rowType == "header") {
+                e.cellElement.css("text-align", "left");
+                e.cellElement.addClass('headerTree');
+                e.cellElement.css("vertical-align", "middle");
+            }
+
+            if (e.rowType == "data") {
+                e.cellElement.css("text-align", "left");
+
+
+                e.cellElement.css("vertical-align", "middle");
+            }
+        },
+    });
+
+    $(function () {
+        LoadData_Data();
+    });
+
+    function LoadData_Data() {
+        $("#loadPanel").dxLoadPanel({
+            closeOnOutsideClick: false,
+            message: "Xin chờ ...",
+            visible: true,
+            position: {
+                of: "#DataGrid",
+                at: "center",
+                my: "center"
+            },
+            shading: true
+        });
+
+        $.ajax({
+            url: '/Users/GetData_Data',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var datagrid = $("#DataGrid").dxDataGrid("instance");
+                datagrid.option("dataSource", data);
+                datagrid.columnOption('ParentID', 'lookup.dataSource', data);
+
+                $("#loadPanel").dxLoadPanel({
+                    closeOnOutsideClick: false,
+                    message: "Xin ch? ...",
+                    visible: false,
+                    position: {
+                        of: "#DataGrid",
+                        at: "center",
+                        my: "center"
+                    },
+                    shading: true
+                });
+
+            },
+            error: function (err) {
+            }
+        });
+    }
+
+    function ViewCT(Id) {
+        var r = confirm("Bạn có chắc chắn muốn Reset mật khẩu của tài khoản này!");
+        if (r == true) {
+            $.ajax({
+                type: "POST",
+                url: "/Tasks/ResetPass",
+                data: {Id:Id},
+                dataType: "json",
+                success: function (response) {
+            alert("đã Reset, mật khẩu mặc định là ABC123456");
+
+                }
+            });
+        }
+
+    }
+
+
+</script>
