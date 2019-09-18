@@ -11,15 +11,7 @@
     cd =cd?? new List<int?>();
 }
 
-@{
-    if (Categories.Count() == 0)
-    {
-        <h1>"Oh, bạn chưa có quyền đăng bài vào bất kỳ chyên mục nào, hãy mua ngay nhé !"</h1>
-
-        <a href="/Profile/addDanhMuc" class="btn btn-outline-danger btn-lg text-danger"><i class="fa fa-shopping-bag"></i> Mua ngay</a>
-        return;
-    }
-}<style>
+ <style>
     .tooltip {
         position: relative;
         display: inline-block;
@@ -147,11 +139,11 @@
 
                 <div class="col-3">
                     <label>Diện tích (m2) (*)</label>
-                    <input type="number" name="DienTich" required class="form-control" value="@Model.DienTich" />
+                    <input type="number" name="DienTich"   step="0.01" required class="form-control" value="@Model.DienTich" />
                 </div>
                 <div class="col-3">
                     <label>Gía   (*)</label>
-                    <input type="number" name="Gia" required class="form-control" value="@Model.Gia" />
+                    <input type="number" name="Gia"  step="0.01" required class="form-control" value="@Model.Gia" />
                 </div>
                 <div class="col-3">
                     <label>Tỷ giá  (*) </label>

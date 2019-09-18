@@ -132,54 +132,14 @@
         </div>
         <div class="menu-main-menu-container">
             <ul id="menu-main-menu" class="menu">
+                @foreach (var item in db.Categories.Where(Z => Z.Menu == "Top").Where(v => v.ParentID == null || v.ParentID == 0).OrderBy(z => z.STT))
+                {
+                    <text>
+                        @menuItem(item, Categories)
+                    </text>
+                }
 
-                <li id="menu-item-709" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-709"><a href="~/Content/index.html"><i class="fa fa-home" aria-hidden="true"></i></a></li>
-                <li id="menu-item-577" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-577"><a href="~/Content/gioi-thieu/index.html">Giới thiệu</a></li>
-                <li id="menu-item-580" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-90 current_page_item menu-item-has-children menu-item-580">
-                    <a href="index.html" aria-current="page">Nhà đất cần bán</a>
-                    <ul class="sub-menu">
-                        <li id="menu-item-497" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-497"><a href="~/Content/dat-ban/ban-biet-thu/index.html">Bán biệt thự</a></li>
-                        <li id="menu-item-498" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-498"><a href="~/Content/dat-ban/ban-nha-mat-pho/index.html">Bán nhà mặt phố</a></li>
-                        <li id="menu-item-500" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-500"><a href="~/Content/dat-ban/ban-chung-cu/index.html">Bán chung cư</a></li>
-                        <li id="menu-item-501" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-501"><a href="~/Content/dat-ban/ban-dat/index.html">Bán đất</a></li>
-                        <li id="menu-item-502" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-502"><a href="~/Content/dat-ban/ban-dat-nen-du-an/index.html">Bán đất nền dự án</a></li>
-                        <li id="menu-item-503" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-503"><a href="~/Content/dat-ban/ban-kho-xuong/index.html">Bán kho xưởng</a></li>
-                        <li id="menu-item-504" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-504"><a href="~/Content/dat-ban/ban-nha-phan-lo-lien-ke/index.html">Bán nhà phân lô, liền kề</a></li>
-                        <li id="menu-item-505" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-505"><a href="~/Content/dat-ban/ban-mat-bang-san-van-phong/index.html">Bán mặt bằng, sàn văn phòng</a></li>
-                        <li id="menu-item-506" class="menu-item menu-item-type-taxonomy menu-item-object-realty-sell menu-item-506"><a href="~/Content/dat-ban/ban-nha-tap-the/index.html">Bán nhà tập thể</a></li>
                     </ul>
-                </li>
-                <li id="menu-item-579" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-579">
-                    <a href="~/Content/nha-dat-cho-thue/index.html">Nhà đất cho thuê</a>
-                    <ul class="sub-menu">
-                        <li id="menu-item-508" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-508"><a href="~/Content/dat-thue/cho-thue-cua-hang/index.html">Cho thuê cửa hàng</a></li>
-                        <li id="menu-item-509" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-509"><a href="~/Content/dat-thue/cho-thue-nha-mat-pho/index.html">Cho thuê nhà mặt phố</a></li>
-                        <li id="menu-item-519" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-519"><a href="~/Content/dat-thue/cho-thue-van-phong/index.html">Cho thuê văn phòng</a></li>
-                        <li id="menu-item-511" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-511"><a href="~/Content/dat-thue/cho-thue-chung-cu/index.html">Cho thuê chung cư</a></li>
-                        <li id="menu-item-517" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-517"><a href="~/Content/dat-thue/cho-thue-nha-rieng/index.html">Cho thuê nhà riêng</a></li>
-                        <li id="menu-item-510" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-510"><a href="~/Content/dat-thue/cho-thue-biet-thu/index.html">Cho thuê biệt thự</a></li>
-                        <li id="menu-item-514" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-514"><a href="~/Content/dat-thue/cho-thue-mat-bang-thuong-mai/index.html">Cho thuê mặt bằng thương mại</a></li>
-                        <li id="menu-item-513" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-513"><a href="~/Content/dat-thue/cho-thue-kho-xuong-dat-trong/index.html">Cho thuê kho xưởng, đất trống</a></li>
-                        <li id="menu-item-518" class="menu-item menu-item-type-taxonomy menu-item-object-realty-rent menu-item-518"><a href="~/Content/dat-thue/cho-thue-phong-tro-nha-tro/index.html">Cho thuê phòng trọ, nhà trọ</a></li>
-                    </ul>
-                </li>
-                <li id="menu-item-583" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-583">
-                    <a href="~/Content/sang-nhuong/index.html">Sang nhượng</a>
-                    <ul class="sub-menu">
-                        <li id="menu-item-543" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-543"><a href="~/Content/sang-nhuong/nhuong-cua-hang/index.html">Nhượng cửa hàng</a></li>
-                        <li id="menu-item-547" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-547"><a href="~/Content/sang-nhuong/sang-nhuong-quan-cafe/index.html">Sang nhượng quán cafe</a></li>
-                        <li id="menu-item-544" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-544"><a href="~/Content/sang-nhuong/sang-nhuong-cua-hang-kiot/index.html">Sang nhượng cửa hàng &#8211; kiot</a></li>
-                        <li id="menu-item-545" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-545"><a href="~/Content/sang-nhuong/sang-nhuong-khach-san/index.html">Sang nhượng khách sạn</a></li>
-                        <li id="menu-item-546" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-546"><a href="~/Content/sang-nhuong/sang-nhuong-mat-bang/index.html">Sang nhượng mặt bằng</a></li>
-                        <li id="menu-item-549" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-549"><a href="~/Content/sang-nhuong/sang-nhuong-shop-thoi-trang/index.html">Sang nhượng shop thời trang</a></li>
-                        <li id="menu-item-548" class="menu-item menu-item-type-taxonomy menu-item-object-realty-transfer menu-item-548"><a href="~/Content/sang-nhuong/sang-nhuong-salon-toc/index.html">Sang nhượng salon tóc</a></li>
-                    </ul>
-                </li>
-                <li id="menu-item-558" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-558"><a href="~/Content/du-an/index.html">Dự án</a></li>
-                <li id="menu-item-557" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-557"><a href="~/Content/category/cam-nang/index.html">Cẩm nang</a></li>
-                <li id="menu-item-463" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-463"><a href="~/Content/category/tin-tuc/index.html">Tin tức</a></li>
-                <li id="menu-item-578" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-578"><a href="~/Content/lien-he/index.html">Liên hệ</a></li>
-            </ul>
         </div>
     </div>
     <div id="page" class="site">
@@ -290,9 +250,7 @@
                                                 </text>
                                             }
 
-                                            @*<li class="menu-item  "><a href="~/Content/du-an/index.html">Dự án</a></li>
-                                                <li class="menu-item  "><a href="~/Content/category/tin-tuc/index.html">Tin tức</a></li>*@
-                                            <li class="menu-item  "><a href="/Post/Contact">Liên hệ</a></li>
+                                                   <li class="menu-item  "><a href="/Post/Contact">Liên hệ</a></li>
                                         </ul>
                                     </div>
                                 </nav>
@@ -329,7 +287,12 @@
                     <aside class="secondary widget-area-right col-md-3 col-sm-3" role="complementary">
                         <div id="hrm-widget_tin_bds-widget-2" style="display:inline-grid!important" class="widget-odd widget-first widget-1 widget hrm-widget-tin-bds hrm-recent-realty feature">
                             @{
-                                Html.RenderPartial("~/Views/Post/TinChuDe.cshtml",db.MainTasks.Where(v=>!string.IsNullOrEmpty(v.Youtube)).OrderByDescending(Z=>Z.NgayDang).Skip(0).Take(2).ToList());
+                                var video = db.MainTasks.Where(v => !string.IsNullOrEmpty(v.Youtube)).OrderByDescending(Z => Z.NgayDang).Skip(0).Take(2).ToList();
+                                if (video.Count>0)
+                                {
+                                Html.RenderPartial("~/Views/Post/TinChuDe.cshtml",video);
+
+                                }
                             }
                              @foreach (var item in db.Categories.Where(Z => Z.Menu == "Right"))
                             {

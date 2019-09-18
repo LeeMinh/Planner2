@@ -41,20 +41,20 @@
                     Ngày đăng: @Model.NgayDang.Value.ToString("dd/MM/yyyy")
                 </p>
 
-                <p><i class="fa fa-eye" aria-hidden="true"></i> Lượt xem @Model.Viewer</p>
+                <p><i class="fa fa-eye" aria-hidden="true"></i> Lượt xem @(Model.Viewer.HasValue?Model.Viewer.Value.ToString("#,###"):"")</p>
 
             </div><!-- .location-realty -->
             <div class="price-area">
                 <p>
                     <i class="fa fa-arrows" aria-hidden="true"></i>
                     Diện tích            <span class="value">
-                        @Model.DienTich m2
-                    </span>
+    @(Model.DienTich.HasValue ? Model.DienTich.Value.ToString("#,###")  +" m2": "Không xác định") @Model.TyGia
+ </span>
                 </p>
                 <p>
                     <i class="fa fa-usd" aria-hidden="true"></i>
                     Giá : <span class="value price">
-                        @Model.Gia @Model.TyGia
+                        @(Model.Gia.HasValue ?Model.Gia.Value.ToString("#,###"):"Không xác định") @Model.TyGia
                     </span>
                 </p>
                 <p>

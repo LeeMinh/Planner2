@@ -154,6 +154,10 @@ namespace Planner2.Controllers
             using (Models.Planner2Entities db = new Models.Planner2Entities())
             {
                 var data = db.MainTasks.Where(v => v.SeoUrl == ID).FirstOrDefault();
+                if (data==null)
+                {
+                    return Content("<h1>Không tìm thấy trang......</h1>"+MvcApplication.HomePage);
+                }
                 var cd = db.MainTask_ChuDe.Where(v => v.TaskID == data.Id).Select(z => z.CategoryRowID).ToList();
                 ViewBag.TinLienQuan = db.MainTasks.WhereChuDe(cd, db).OrderByDescending(z => z.NgayDang).Skip(0).Take(10).ToList();
                 ViewBag.TitleChuDe = db.Categories.Where(c => c.CategoryRowID == cd.FirstOrDefault()).Select(z => z.CategoryName).FirstOrDefault();
