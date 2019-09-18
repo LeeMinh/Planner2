@@ -10,9 +10,7 @@
 .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
     background-color: #dc3545;
 }
-  .dx-datagrid-table a {
-    color: #007bff !important;
-}
+ 
 .card-body {
     flex: 1 1 auto;
     padding: 5px;
