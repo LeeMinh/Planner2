@@ -21,7 +21,7 @@ namespace Planner2.Controllers
         {
             using (Planner2Entities rrc_db = new Planner2.Models.Planner2Entities())
             {
-                List<Models.SettingData> data = rrc_db.SettingDatas.Where(z => z.Type == "BANNER").ToList();
+                List<Models.SettingData> data = rrc_db.SettingDatas.Where(z => z.Type == "BANNER" || z.Type == "LOGO").ToList();
                 JsonResult jsonResult = Json(data, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = 2147483647;
                 return jsonResult;

@@ -1,9 +1,9 @@
 ﻿@model  IEnumerable<Planner2.Models.MainTask>
-    @using  Planner2.Extentions
-    @{ 
-        int stt = 1;
-        Planner2Entities db = new Planner2Entities();
-    }
+@using Planner2.Extentions
+@{
+    int stt = 1;
+    Planner2Entities db = new Planner2Entities();
+}
 <header class="entry-header">
     <div class="bor-bot">
         <div class="title">
@@ -15,7 +15,7 @@
     </div>
 </header><!-- .page-header -->
 <div class="list-realty">
-    <table class="table-hover">
+    <table class="table-hover" style="width:100%">
         <thead>
             <tr>
                 <th>STT</th>
@@ -27,11 +27,17 @@
             </tr>
         </thead>
         <tbody>
+            @if (Model.Count() == 0)
+            {
+                <tr>
+                    <TD colspan="6">Không có tin</TD>
+                </tr>
+            }
             @foreach (var item in Model)
             {
-               string KhuVuc_Huyen = db.ThanhPhoes.Where(v => v.MaQuanHuyen == item.KhuVuc_Huyen).Select(z => z.QuanHuyen).FirstOrDefault();
-                 string KhuVuc_TP = db.ThanhPhoes.Where(v => v.MaThanhPho == item.KhuVuc_TP).Select(z => z.TenThanhPho).FirstOrDefault();
-              <tr data-ID="@item.SeoUrl" class="CHITIET">
+                string KhuVuc_Huyen = db.ThanhPhoes.Where(v => v.MaQuanHuyen == item.KhuVuc_Huyen).Select(z => z.QuanHuyen).FirstOrDefault();
+                string KhuVuc_TP = db.ThanhPhoes.Where(v => v.MaThanhPho == item.KhuVuc_TP).Select(z => z.TenThanhPho).FirstOrDefault();
+                <tr data-ID="@item.SeoUrl" class="CHITIET">
                     <td>@(stt++)</td>
                     <td>
                         <a href=" ">
@@ -39,11 +45,14 @@
                         </a>
                     </td>
                     <td>
-                     @item.NgayDang.ToString_N()
+                        @item.NgayDang.ToString_N()
                     </td>
                     <td>
-                        <h4><a >@item.TaskName</a><span><img
-                                                           style="    display: inline-block;"   src="http://batdongsannhadat247.com/wp-content/themes/hrm/images/vip.gif" alt="anh hot" class="img-responsive"></span></h4>
+                        <h4>
+                            <a>@item.TaskName</a><span>
+                                <img style="    display: inline-block;" src="http://batdongsannhadat247.com/wp-content/themes/hrm/images/vip.gif" alt="anh hot" class="img-responsive">
+                            </span>
+                        </h4>
 
                         <div class="details">
                             <div class="price">
@@ -52,17 +61,17 @@
                             </div>
                             <div class="area">
                                 <label>Diện tích<span>:</span></label>
-                               @item.DienTich m<sup>2</sup>
+                                @item.DienTich m<sup>2</sup>
                             </div>
                         </div>
                     </td>
                     <td>
                         <a>@KhuVuc_Huyen</a> -
-                        <a>@KhuVuc_TP</a> 
+                        <a>@KhuVuc_TP</a>
 
                     </td>
                     <td>
-                      @item.Map_Huong
+                        @item.Map_Huong
                     </td>
                 </tr>
             }
@@ -85,7 +94,7 @@
     });
 </script>
 <style>
-    tr{
-        cursor:pointer
+    tr {
+        cursor: pointer
     }
 </style>

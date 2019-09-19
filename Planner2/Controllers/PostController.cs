@@ -46,10 +46,7 @@ namespace Planner2.Controllers
                 ViewBag.SeoUrl = cd.SeoUrl;
                 string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID} ORDER BY T1.NgayDang DESC";
                 var data = db.Database.SqlQuery<MainTask>(sql).ToList();
-                if (data.Count == 0)
-                {
-                    return Content("");
-                }
+               
                 return PartialView(data);
             }
 
@@ -72,10 +69,7 @@ namespace Planner2.Controllers
                 ViewBag.SeoUrl = cd.SeoUrl;
                 string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID} ORDER BY T1.NgayDang DESC";
                 var data = db.Database.SqlQuery<MainTask>(sql).ToList();
-                if (data.Count == 0)
-                {
-                    return Content("");
-                }
+                
                 return PartialView(data);
             }
 
@@ -98,10 +92,7 @@ namespace Planner2.Controllers
                 ViewBag.SeoUrl = cd.SeoUrl;
                 string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID} ORDER BY T1.NgayDang DESC";
                 var data = db.Database.SqlQuery<MainTask>(sql).ToList();
-                if (data.Count == 0)
-                {
-                    return Content("");
-                }
+                
                 return PartialView(data);
             }
 
@@ -312,7 +303,7 @@ namespace Planner2.Controllers
             ViewBag.TitleChuDe = "Bất động sản";
             using (Models.Planner2Entities db = new Models.Planner2Entities())
             {
-                IQueryable<MainTask> data = db.MainTasks.Where(v => v.Page == false && v.Status == Common.ConstTrangThai.CongKhai);
+                IQueryable<MainTask> data = db.MainTasks.Where(v =>  v.Status == Common.ConstTrangThai.CongKhai);
                 if (!string.IsNullOrEmpty(ChuDe))
                 {
                     var Categories = db.Categories.Where(v => v.SeoUrl == ChuDe).FirstOrDefault();
@@ -334,7 +325,7 @@ namespace Planner2.Controllers
                 ViewBag.acton = acton;
                 data = SortGrid(data, sort);
                 var dl = data.ToPagedList(pageNumber, pageSize);
-                if (dl.Count == 1)
+                if ( dl.Count == 1&& dl.FirstOrDefault().Page==true)
                 {
                     return PartialView("page", dl.FirstOrDefault());
 

@@ -135,12 +135,12 @@ namespace Planner2.Controllers
 
             }
         }
-        public ActionResult Page(int TaskID = 0)
+        public ActionResult Page()
         {
 
             using (Models.Planner2Entities db = new Planner2Entities())
             {
-                var data = db.MainTasks.Where(z => z.Id == TaskID).FirstOrDefault();
+                var data = db.MainTasks.Where(z => z.Page==true).FirstOrDefault();
                 return View(data);
             }
         }

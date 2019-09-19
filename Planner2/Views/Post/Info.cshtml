@@ -48,13 +48,13 @@
                 <p>
                     <i class="fa fa-arrows" aria-hidden="true"></i>
                     Diện tích            <span class="value">
-    @(Model.DienTich.HasValue ? Model.DienTich.Value.ToString("#,###")  +" m2": "Không xác định") @Model.TyGia
+    @(Model.DienTich.HasValue ? Model.DienTich.Value.ToString("#,###.####")  +" m2": "Không xác định")  
  </span>
                 </p>
                 <p>
                     <i class="fa fa-usd" aria-hidden="true"></i>
                     Giá : <span class="value price">
-                        @(Model.Gia.HasValue ?Model.Gia.Value.ToString("#,###"):"Không xác định") @Model.TyGia
+                        @(Model.Gia.HasValue ?Model.Gia.Value.ToString("#,###.####"):"Không xác định") @Model.TyGia
                     </span>
                 </p>
                 <p>

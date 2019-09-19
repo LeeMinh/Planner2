@@ -77,7 +77,7 @@ namespace Planner2.Controllers
             var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
             using (var db = new Planner2Entities())
             {
-                var data = db.MainTasks.ToList();//.Where(z => !string.IsNullOrEmpty(z.AttendPerson) && z.AttendPerson.ToUpper().Contains(nguoidung.UserName.ToUpper())).OrderByDescending(z=>z.NgayDang).ToList();
+                var data = db.MainTasks.Where(z=>z.Page==false).ToList();//.Where(z => !string.IsNullOrEmpty(z.AttendPerson) && z.AttendPerson.ToUpper().Contains(nguoidung.UserName.ToUpper())).OrderByDescending(z=>z.NgayDang).ToList();
 
                 JsonResult jsonResult = Json(data, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = 2147483647;
