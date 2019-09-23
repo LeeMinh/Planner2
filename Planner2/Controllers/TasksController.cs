@@ -249,7 +249,6 @@ namespace Planner2.Controllers
         {
             try
             {
-                item.Picture = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/No_image_3x4.svg/1280px-No_image_3x4.svg.png";
                 ChuDe = ChuDe ?? new int[] { };
                 ChuDeVIP = ChuDeVIP ?? new int[] { };
                 item.NgayDang = DateTime.Now;
@@ -358,6 +357,10 @@ namespace Planner2.Controllers
                     {
 
                         // thêm phòng ban vào đầu mã dữ liệu
+                        if (string.IsNullOrEmpty(item.Picture))
+                        {
+                            item.Picture = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/No_image_3x4.svg/1280px-No_image_3x4.svg.png";
+                        }
 
 
                         item.Created = DateTime.Now;
