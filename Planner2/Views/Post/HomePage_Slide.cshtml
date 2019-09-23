@@ -39,7 +39,7 @@
         {
             var _class = (item == Model.FirstOrDefault() ? "active" : "");
             <div class="item @_class">
-                <a href="/post/info?id=@item.SeoUrl">
+                <a href="/post/info/@item.SeoUrl">
                     <img class="lazy" data-src="@item.Picture">
                     <h2 class="taskname">@item.TaskName</h2>
                 </a>
