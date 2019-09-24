@@ -18,6 +18,33 @@ namespace Planner2.Controllers
     public class TasksController : BaseController
     {
 
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult UploadImage(HttpPostedFileBase upload, string CKEditorFuncNum, string CKEditor, string langCode)
+        {
+            string url; // url to return
+            string message; // message to display (optional)
+
+            // path of the image
+            string path = Server.MapPath("~/FileUpload");
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+
+            // here logic to upload image
+            string ImageName = Guid.NewGuid() + upload.FileName;
+            upload.SaveAs(System.IO.Path.Combine(path, ImageName));
+
+
+            url = Request.Url.GetLeftPart(UriPartial.Authority) + "/FileUpload/" + ImageName;
+
+            // passing message success/failure
+            message = "Image was saved correctly";
+
+            return Json(new { uploaded = true, url });
+        }
+
+
         public string ThongBao = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/Content/templatemail/ThongBao.html");
         public ActionResult Index()
         {
@@ -247,32 +274,7 @@ namespace Planner2.Controllers
             public string fileName { get; set; }
             public string url { get; set; }
         }
-        [HttpPost]
-        public ActionResult UploadImage(HttpPostedFileBase upload)
-        {
-
-
-
-            if (upload != null)
-            {
-                var InputFileName = Guid.NewGuid().ToString().Split('-').LastOrDefault()+Path.GetFileName(upload.FileName);
-                var ServerSavePath = Path.Combine(Server.MapPath("~/FileUpload/") + InputFileName);
-                //Save file to server folder  
-                upload.SaveAs(ServerSavePath);
-                ckeditorresponse fu = new ckeditorresponse()
-                {
-                    uploaded = 1,
-                    fileName = InputFileName,
-                    url = "/FileUpload/" + InputFileName,
-                };
-                return Json(fu, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Content("Failed to Upload !!!!!");
-            }
-        }
-        // submit tạo mới dữ liệu
+           // submit tạo mới dữ liệu
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Create(MainTask item, int[] ChuDe, int[] ChuDeVIP, string Type, HttpPostedFileBase Picture = null)

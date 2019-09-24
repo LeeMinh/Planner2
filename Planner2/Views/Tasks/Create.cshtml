@@ -405,16 +405,8 @@
     setTimeout(function () {
 
            CKEDITOR.replace('editor', {
-        extraPlugins: 'uploadimage,image2',
-        height: 300,
-        // Upload IMG Method
-        uploadUrl: '/Tasks/UploadImage',
-
-
-
-        image2_alignClasses: ['image-align-left', 'image-align-center', 'image-align-right'],
-        image2_disableResizer: false
-    });
+               filebrowserImageUploadUrl: '/Tasks/UploadImage'
+           });
     }, 100);
 
     $("#frmCreateBLOG").submit(function (e) {

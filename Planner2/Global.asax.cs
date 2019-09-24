@@ -67,6 +67,8 @@ namespace Planner2
             html = "ip: " + ip + "<br>" + html;
             html = "UserName: " + UserName + "<br>" + html;
             SendMail.SendEmail(new List<string> { "huychu.k14@gmail.com" }, "Lỗi "+Common.SettingData.TenCongTy, html);
+            var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext).Action("Homepage", "Post");
+            Response.Redirect(urlHelper, true);
         }
     }
 }
