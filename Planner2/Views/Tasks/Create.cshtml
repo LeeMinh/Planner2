@@ -8,10 +8,10 @@
     var CategoriesVIP = (List<Planner2.Models.Category>)ViewBag.CategoriesVIP;
     var TinhThanh = db.ThanhPhoes.GroupBy(z => z.MaThanhPho).Select(v => new { Name = v.FirstOrDefault().TenThanhPho, Key = v.FirstOrDefault().MaThanhPho }).ToList();
     var cd = db.MainTask_ChuDe.Where(v => v.TaskID == Model.Id).Select(z => z.CategoryRowID).ToList();
-    cd =cd?? new List<int?>();
+    cd = cd ?? new List<int?>();
 }
 
- <style>
+<style>
     .tooltip {
         position: relative;
         display: inline-block;
@@ -49,7 +49,7 @@
             visibility: visible;
             opacity: 1;
         }
- 
+
     .cke_top {
         Position: sticky;
         top: 0;
@@ -68,7 +68,7 @@
         padding-left: 0;
         LIST-STYLE: NONE;
     }
- 
+
     .form-group {
         margin-bottom: 10px
     }
@@ -113,19 +113,19 @@
                 </div>
                 @if (Model.Id != 0)
                 {
-            <div class="row col-12">
-                <label>
-                    Seo URL
-                </label>
-                <a class="btn btn-sm btn-outline-dark pull-right" onclick="CoppySeoLink()">Copy text</a>
+                    <div class="row col-12">
+                        <label>
+                            Seo URL
+                        </label>
+                        <a class="btn btn-sm btn-outline-dark pull-right" onclick="CoppySeoLink()">Copy text</a>
 
-                <div class="tooltip">
-                    <button onclick="CoppySeoLink()">
-                        <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
-                        Copy text
-                    </button>
-                </div>
-            </div>
+                        <div class="tooltip">
+                            <button onclick="CoppySeoLink()">
+                                <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+                                Copy text
+                            </button>
+                        </div>
+                    </div>
                     <input type="text" readonly class="form-control" id="SeoUrl" value="@ViewBag.SeoUrl" />
 
                 }
@@ -139,11 +139,11 @@
 
                 <div class="col-3">
                     <label>Diện tích (m2) (*)</label>
-                    <input type="number" name="DienTich"   step="0.01" required class="form-control" value="@Model.DienTich" />
+                    <input type="number" name="DienTich" step="0.01" required class="form-control" value="@Model.DienTich" />
                 </div>
                 <div class="col-3">
                     <label>Gía   (*)</label>
-                    <input type="number" name="Gia"  step="0.01" required class="form-control" value="@Model.Gia" />
+                    <input type="number" name="Gia" step="0.01" required class="form-control" value="@Model.Gia" />
                 </div>
                 <div class="col-3">
                     <label>Tỷ giá  (*) </label>
@@ -169,12 +169,12 @@
                             <a class="btn btn-sm btn-danger text-white" id="Xoaanhnow">Xóa ảnh</a>
                         </div>
                     }
-                </div>  
-                
+                </div>
+
                 <div class="col-12">
                     <label>Link video Youtube</label>
                     <input type="text" name="Youtube" id="Youtube" class="form-control" value="@Model.Youtube" />
-                    
+
                 </div>
 
             </div>
@@ -182,7 +182,7 @@
                 <div class="row-item col-12">
                     <div class="h2">
                         <span>
-                            Mô tả chi tiết 
+                            Mô tả chi tiết
                         </span>
                     </div>
                 </div>
@@ -264,11 +264,11 @@
                     <input type="text" name="Map_DuAn" class="form-control" value="@Model.Map_DuAn" />
                 </div>
 
-               
+
 
                 <div class="col-12">
                     <label>Mục đăng tin </label>
-                    <select id="ChuDe" name="ChuDe" multiple   class="form-control">
+                    <select id="ChuDe" name="ChuDe" multiple class="form-control">
                         @foreach (var item in Categories)
                         {
                             var x = cd.Where(z => z == item.CategoryRowID).Count();
@@ -299,21 +299,21 @@
             </div>
 
             @*<div class="row" style="margin-top:10px">
-            <label class="col-2">File đính kèm</label>
-            <input class="col-10" type="file" multiple name="FileDinhKem" id="FileDinhKem" value="" />
-        </div>
+                    <label class="col-2">File đính kèm</label>
+                    <input class="col-10" type="file" multiple name="FileDinhKem" id="FileDinhKem" value="" />
+                </div>
 
-        @if (FileUpload.Count > 0)
-        {
+                @if (FileUpload.Count > 0)
+                {
 
-            foreach (var item in FileUpload)
-            {
-                <p class="col-12">
-                    <a class="text-danger btn btn-sm btn-outline-danger XoaFile" data-ID="@item.ID"><i class="fa fa-trash"></i> Xóa</a>
-                    <a href="@item.UrlFile" target="_blank"><i class="fa fa-file-archive-o"></i> @item.FileName</a>
-                </p>
-            }
-        }*@
+                    foreach (var item in FileUpload)
+                    {
+                        <p class="col-12">
+                            <a class="text-danger btn btn-sm btn-outline-danger XoaFile" data-ID="@item.ID"><i class="fa fa-trash"></i> Xóa</a>
+                            <a href="@item.UrlFile" target="_blank"><i class="fa fa-file-archive-o"></i> @item.FileName</a>
+                        </p>
+                    }
+                }*@
         </div>
         <div class="col-2" style="background-color: #FFF!important;border:1PX solid #dee2e6; padding:10px">
             <label>
@@ -330,14 +330,14 @@
             <div class="row-item col-12" style="margin-top:100PX">
                 <div class="h2">
                     <span>
-                       Chuyên mục VIP
+                        Chuyên mục VIP
                     </span>
                 </div>
             </div>
             <ul>
                 @foreach (var item in CategoriesVIP)
                 {
-                    <li><label><input type="checkbox" @(cd.Contains(item.CategoryRowID)?"checked" : "")   name="ChuDeVIP" value="@item.CategoryRowID" />@item.CategoryName</label></li>
+                    <li><label><input type="checkbox" @(cd.Contains(item.CategoryRowID) ? "checked" : "") name="ChuDeVIP" value="@item.CategoryRowID" />@item.CategoryName</label></li>
                 }
             </ul>
         </div>
@@ -355,7 +355,7 @@
   copyText.select();
   copyText.setSelectionRange(0, 99999);
   document.execCommand("copy");
-  
+
   var tooltip = document.getElementById("myTooltip");
   tooltip.innerHTML = "Copied: " + copyText.value;
 }
@@ -403,7 +403,18 @@
         e.preventDefault();
     });
     setTimeout(function () {
-        CKEDITOR.replace('editor');
+
+           CKEDITOR.replace('editor', {
+        extraPlugins: 'uploadimage,image2',
+        height: 300,
+        // Upload IMG Method
+        uploadUrl: '/Tasks/UploadImage',
+
+
+
+        image2_alignClasses: ['image-align-left', 'image-align-center', 'image-align-right'],
+        image2_disableResizer: false
+    });
     }, 100);
 
     $("#frmCreateBLOG").submit(function (e) {

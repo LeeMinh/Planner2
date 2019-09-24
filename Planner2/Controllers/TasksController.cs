@@ -241,7 +241,37 @@ namespace Planner2.Controllers
 
             return FileUp;
         }
+        public class ckeditorresponse
+        {
+            public int uploaded { get; set; }
+            public string fileName { get; set; }
+            public string url { get; set; }
+        }
+        [HttpPost]
+        public ActionResult UploadImage(HttpPostedFileBase upload)
+        {
 
+
+
+            if (upload != null)
+            {
+                var InputFileName = Guid.NewGuid().ToString().Split('-').LastOrDefault()+Path.GetFileName(upload.FileName);
+                var ServerSavePath = Path.Combine(Server.MapPath("~/FileUpload/") + InputFileName);
+                //Save file to server folder  
+                upload.SaveAs(ServerSavePath);
+                ckeditorresponse fu = new ckeditorresponse()
+                {
+                    uploaded = 1,
+                    fileName = InputFileName,
+                    url = "/FileUpload/" + InputFileName,
+                };
+                return Json(fu, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Content("Failed to Upload !!!!!");
+            }
+        }
         // submit tạo mới dữ liệu
         [HttpPost]
         [ValidateInput(false)]
