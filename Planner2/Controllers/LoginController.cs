@@ -126,6 +126,8 @@ namespace Planner2.Controllers
                 item.Email = email;
                 item.UserName = username;
                 item.Password = pwd1;
+                item.Active = "Hoạt động";
+                item.SupperAdmin = 0;
                 db.Users.Add(item);
                 db.SaveChanges();
             }
