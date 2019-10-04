@@ -385,7 +385,7 @@ namespace Planner2.Controllers
 
                 ViewBag.SeoUrl = cd.SeoUrl;
                 ViewBag.ChuDe = cd.CategoryName;
-                var data = db.MainTasks.WhereChuDe(cd.CategoryRowID, db).OrderBy(z => z.NgayDang).Skip(0).Take(5).ToList();
+                var data = db.MainTasks.WhereChuDe(cd.CategoryRowID, db).OrderByDescending(z => z.NgayDang).Skip(0).Take(5).ToList();
                 return PartialView(data);
             }
         }

@@ -61,7 +61,7 @@
             width: 240,
             placeholder: "Search..."
         },
-         columnsAutoWidth: true,
+        columnsAutoWidth: true,
         allowColumnReordering: true,
         rowAlternationEnabled: true,
         "export": {
@@ -86,7 +86,7 @@
         columns:
             [
 
-              
+
                 {
                     dataField: "StaffName",
                     caption: "Họ tên",
@@ -105,12 +105,12 @@
                 {
                     dataField: "UserName",
                     caption: "Tài khoản",
-                 
+
                 },
                 {
                     dataField: "Password",
                     caption: "Mật khẩu",
-                      
+
                     cellTemplate: function (container, options) {
                         var ID = options.data.Id;
                         container.html('<a data-ID="' + ID + '" class="ViewCT" onclick="ViewCT(' + ID + ')" >Reset</a>');
@@ -120,7 +120,7 @@
                 {
                     caption: "Tình trạng",
                     dataField: "Active",
-                     editorOptions: {
+                    editorOptions: {
                         showClearButton: true
                     },
                     lookup: {
@@ -144,19 +144,17 @@
                     dataField: "SoTien",
                     caption: "Tiền (VND)",
                     dataType: "number",
-                   format: "#,##0.## VND"  
-
-
+                    format: "#,##0.## VND"
                 }, {
                     dataField: "SupperAdmin",
-                    caption: "Quyền", 
+                    caption: "Quyền",
 
-                      lookup: {
+                    lookup: {
                         dataSource: function (rowData) {
                             var dataSourceConfiguration = {
                                 store: [
-                                    { "name": "Quản trị","value":1 },
-                                    { "name": "Khách đăng tin","value":0 },
+                                    { "name": "Quản trị", "value": 1 },
+                                    { "name": "Khách đăng tin", "value": 0 },
 
                                 ]
                             };
@@ -170,6 +168,16 @@
                     },
                 },
 
+                {
+                    dataField: "",
+                    caption: "Nạp tiền",
+
+                    cellTemplate: function (container, options) {
+                        var ID = options.data.Id;
+                        container.html('<a data-ID="' + ID + '" class="  btn btn-sm btn-primary text-white" onclick="AddMoney(' + ID + ')" >Nạp tiền</a>');
+
+                    }
+                }
             ],
 
         //insert
@@ -206,7 +214,7 @@
 
             e.newData.Id = e.oldData.Id;
             console.log(e.newData);
-           
+
             $.ajax({
                 url: '/Users/Update_StaffOn',
                 type: 'POST',
@@ -311,17 +319,38 @@
             }
         });
     }
+    function AddMoney(Id) {
+        var person = prompt("Nhập số tiền muốn nạp (VND)", "");
 
+        if (person != null) {
+            $.ajax({
+                type: "POST",
+                url: "/Users/NAPTIEN",
+                data: {
+                    ID: Id,
+                    SOTIEN:person
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response == "") {
+                        window.location.reload();
+                    } else {
+                        alert(response);
+                    }
+                }
+            });
+        }
+    }
     function ViewCT(Id) {
         var r = confirm("Bạn có chắc chắn muốn Reset mật khẩu của tài khoản này!");
         if (r == true) {
             $.ajax({
                 type: "POST",
                 url: "/Tasks/ResetPass",
-                data: {Id:Id},
+                data: { Id: Id },
                 dataType: "json",
                 success: function (response) {
-            alert("đã Reset, mật khẩu mặc định là ABC123456");
+                    alert("đã Reset, mật khẩu mặc định là ABC123456");
 
                 }
             });

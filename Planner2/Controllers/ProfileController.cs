@@ -1,6 +1,7 @@
 ﻿using Planner2.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -17,6 +18,7 @@ namespace Planner2.Controllers
         {
             return View();
         }
+       
         [HttpPost]
         public ActionResult InfoDanhMuc(int ID)
         {

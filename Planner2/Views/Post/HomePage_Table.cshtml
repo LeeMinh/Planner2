@@ -88,7 +88,7 @@
 <script>
     $(".CHITIET").click(function (e) {
         var ID = $(this).attr("data-ID");
-        window.location.href = "/post/info/" + ID;
+        window.location.href = "/post/info/?id=" + ID;
         e.preventDefault();
 
     });

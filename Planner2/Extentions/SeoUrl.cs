@@ -33,7 +33,7 @@ namespace Planner2.Extentions
 
             string strFormD = text.Normalize(System.Text.NormalizationForm.FormD);
 
-            return regex.Replace(strFormD, String.Empty).Replace('\u0111', 'd').Replace('\u0110', 'D').ToLower();
+            return regex.Replace(strFormD, String.Empty).Replace('\u0111', 'd').Replace('\u0110', 'D').ToLower().Trim();
 
              //string str = RemoveAccent(phrase).ToLower();
             //// invalid chars           

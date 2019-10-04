@@ -44,8 +44,8 @@ namespace Planner2.Controllers
                 a.SoTien = obj.SoTien ?? a.SoTien;
                 a.Active = obj.Active ?? a.Active;
                 a.SupperAdmin = obj.SupperAdmin ?? a.SupperAdmin;
-                  rrc_db.SaveChanges();
-                 result = true;
+                rrc_db.SaveChanges();
+                result = true;
                 return Json(new { result = result, data = a }, JsonRequestBehavior.AllowGet);
             }
         }
@@ -56,7 +56,7 @@ namespace Planner2.Controllers
             using (Planner2Entities rrc_db = new Planner2Entities())
             {
                 bool? result = false;
-                
+
                 if (obj.Id == 0)
                 {
                     obj.Password = LoginController.EncryptPassword(obj.Password);
@@ -65,6 +65,22 @@ namespace Planner2.Controllers
                     result = true;
                 }
                 return Json(new { result = result, obj = obj }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public JsonResult NAPTIEN(int ID, int SOTIEN=0)
+        {
+            using (Planner2Entities rrc_db = new Planner2Entities())
+            {
+                if (SOTIEN == 0)
+                {
+                    return Json("Vui lòng nhập số tiền chính xác", JsonRequestBehavior.AllowGet);
+                }
+                var data = rrc_db.Users.Where(v => v.Id == ID).FirstOrDefault();
+                data.SoTien =data.SoTien??0;
+                data.SoTien += SOTIEN;
+                rrc_db.SaveChanges();
+                return Json("", JsonRequestBehavior.AllowGet);
             }
         }
 

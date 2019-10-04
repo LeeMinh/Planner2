@@ -12,6 +12,8 @@ using System.Web.Mvc;
 using Planner2.Extentions;
 using System.Web.UI;
 using Planner2.Common;
+using System.Drawing;
+using System.Web.Helpers;
 
 namespace Planner2.Controllers
 {
@@ -33,7 +35,10 @@ namespace Planner2.Controllers
 
             // here logic to upload image
             string ImageName = Guid.NewGuid() + upload.FileName;
-            upload.SaveAs(System.IO.Path.Combine(path, ImageName));
+            WebImage img = new WebImage(upload.InputStream);
+            if (img.Width > 2000)
+                img.Resize(2000, 2000);
+            img.Save(System.IO.Path.Combine(path, ImageName));
 
 
             url = Request.Url.GetLeftPart(UriPartial.Authority) + "/FileUpload/" + ImageName;
@@ -127,7 +132,7 @@ namespace Planner2.Controllers
                 var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
                 var listdm = db.User_Category.Where(z => z.UserName == nguoidung.UserName && z.NgayHetHan.Value >= DateTime.Now).Select(z => z.CategoryRowID).ToList();
                 var Categories = db.Categories.Where(v => v.Menu == "Top").ToList();
-                var CategoriesVIP = db.Categories.Where(v => v.Menu != "Top").Where(v => listdm.Contains(v.CategoryRowID) || nguoidung.SupperAdmin==1).ToList();
+                var CategoriesVIP = db.Categories.Where(v => v.Menu != "Top").Where(v => listdm.Contains(v.CategoryRowID) || nguoidung.SupperAdmin == 1).ToList();
 
                 ViewBag.Categories = Categories;
                 ViewBag.CategoriesVIP = CategoriesVIP;
@@ -167,7 +172,7 @@ namespace Planner2.Controllers
 
             using (Models.Planner2Entities db = new Planner2Entities())
             {
-                var data = db.MainTasks.Where(z => z.Page==true).FirstOrDefault();
+                var data = db.MainTasks.Where(z => z.Page == true).FirstOrDefault();
                 return View(data);
             }
         }
@@ -263,18 +268,17 @@ namespace Planner2.Controllers
                 FileUp.Add(newnane);
 
                 fname = Path.Combine(Server.MapPath("~/FileUpload/"), fname);
-                file.SaveAs(fname);
+                WebImage img = new WebImage(file.InputStream);
+                if (img.Width > 2000)
+                    img.Resize(2000, 2000);
+                img.Save(fname);
             }
 
             return FileUp;
         }
-        public class ckeditorresponse
-        {
-            public int uploaded { get; set; }
-            public string fileName { get; set; }
-            public string url { get; set; }
-        }
-           // submit tạo mới dữ liệu
+
+
+        // submit tạo mới dữ liệu
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Create(MainTask item, int[] ChuDe, int[] ChuDeVIP, string Type, HttpPostedFileBase Picture = null)
@@ -287,6 +291,7 @@ namespace Planner2.Controllers
                 var file = SubmitFile(new List<HttpPostedFileBase> { Picture });
                 if (file.Count > 0)
                 {
+
                     item.Picture = file.FirstOrDefault();
                 }
 
@@ -315,7 +320,7 @@ namespace Planner2.Controllers
                     foreach (var x in ChuDeVIP)
                     {
                         var listdm = db.User_Category.Where(z => z.UserName == nguoidung.UserName && z.NgayHetHan.Value >= DateTime.Now && x == z.CategoryRowID).Select(z => z.CategoryRowID).Count();
-                        if (listdm == 0 && nguoidung.SupperAdmin!=1)
+                        if (listdm == 0 && nguoidung.SupperAdmin != 1)
                         {
                             var dtr = "Bạn không có quyền đăng bài vào chuyên mục :" + db.Categories.Where(v => v.CategoryRowID == x).Select(z => z.CategoryName).FirstOrDefault();
                             return Json(new { TT = 1, Value = dtr }, JsonRequestBehavior.AllowGet);

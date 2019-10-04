@@ -8,13 +8,13 @@
 
         <div class="row">
             <div class="col-md-3">
-                <a href="/post/info/@item.SeoUrl">
+                <a href="/post/info/?id=@item.SeoUrl">
                     <img class="lazy" data-src="@item.Picture">
                 </a>
             </div>
             <div class="col-md-9">
                 <div class="info-realty">
-                    <h4><a href="/post/info/@item.SeoUrl">@item.TaskName</a></h4>
+                    <h4><a href="/post/info/?id=@item.SeoUrl">@item.TaskName</a></h4>
                     <p class="date">
                         <i class="fa fa-clock-o"></i>
                         Ngày đăng: @item.NgayDang.Value.ToString("dd/MM/yyyy")
@@ -42,7 +42,7 @@
                         <label>Vị trí<span>:</span></label>
                         <a href="">@db.ThanhPhoes.Where(v=>v.MaQuanHuyen==item.KhuVuc_Huyen).Select(v=>v.QuanHuyen).FirstOrDefault()</a> - <a>@db.ThanhPhoes.Where(v => v.MaThanhPho == item.KhuVuc_TP).Select(v => v.TenThanhPho).FirstOrDefault()</a>
                     </div>
-                    <a href="/post/info/@item.SeoUrl" class="view-more">Xem chi tiết</a>
+                    <a href="/post/info/?id=@item.SeoUrl" class="view-more">Xem chi tiết</a>
                 </div>
             </div>
         </div>
