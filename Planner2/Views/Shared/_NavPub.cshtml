@@ -320,21 +320,22 @@
             <div class="container">
 
                 @{Html.RenderAction("breadcrums", "post", new { ChuDe = ViewBag.ChuDe });}
+                 <div class="row">
+                    @if (!(ViewBag.LEFTHIDEN == true &&  Request.Browser.IsMobileDevice))
+                    {
 
-
-                <div class="row">
-
-                    <div class="  col-xs-12 col-sm-12 col-md-3  " role="complementary">
-                        @{
-                            Html.RenderAction("Timkiem", "post");
-                        }
-                        @foreach (var item in db.Categories.Where(Z => Z.Menu == "Left"))
-                        {
-                            <div id="hrm-widget_tin_bds-widget-3" class="widget-odd widget-first widget-1 widget hrm-widget-tin-bds hrm-recent-realty feature">
-                                @{Html.RenderAction("TinChuDe", "post", new { ChuDe = item.SeoUrl });}
-                            </div>
-                        }
-                    </div>
+                        <div class="  col-xs-12 col-sm-12 col-md-3  " role="complementary">
+                            @{
+                                Html.RenderAction("Timkiem", "post");
+                            }
+                            @foreach (var item in db.Categories.Where(Z => Z.Menu == "Left"))
+                            {
+                                <div id="hrm-widget_tin_bds-widget-3" class="widget-odd widget-first widget-1 widget hrm-widget-tin-bds hrm-recent-realty feature">
+                                    @{Html.RenderAction("TinChuDe", "post", new { ChuDe = item.SeoUrl });}
+                                </div>
+                            }
+                        </div>
+                    }
                     <div id="primary" class=" col-xs-12 col-sm-12  col-md-6">
                         @RenderBody()
                     </div>

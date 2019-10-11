@@ -144,6 +144,7 @@ namespace Planner2.Controllers
         {
             using (Models.Planner2Entities db = new Models.Planner2Entities())
             {
+                ViewBag.LEFTHIDEN = true;
                 var data = db.MainTasks.Where(v => v.SeoUrl == ID).FirstOrDefault();
                 if (data==null)
                 {

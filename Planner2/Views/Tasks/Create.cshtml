@@ -241,7 +241,7 @@
                         <option>Không xác định</option>
                         @foreach (var item in db.SettingDatas.Where(v => v.Type == "Loại BĐS"))
                         {
-                            <option value="@item.KeyID">@item.Value</option>
+                            <option  @(Model.Map_LoaiBatDongSan == item.KeyID ? "selected" : "")  value="@item.KeyID">@item.Value</option>
                         }
                     </select>
                 </div>
@@ -251,7 +251,7 @@
                         <option>Không xác định</option>
                         @foreach (var item in db.SettingDatas.Where(v => v.Type == "Hướng"))
                         {
-                            <option value="@item.KeyID">@item.Value</option>
+                            <option  @(Model.Map_Huong == item.KeyID ? "selected" : "")  value="@item.KeyID">@item.Value</option>
                         }
                     </select>
                 </div>
