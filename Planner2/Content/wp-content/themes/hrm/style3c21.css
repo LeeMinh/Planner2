@@ -839,7 +839,7 @@ ul.project-detail-box-ul li a:hover .icon-document {
   padding-right: 12px;
 }
 .site-branding {
-  padding:0px;overflow: hidden;
+  padding:0px 
 }
 .logo {
     margin: 0 auto;
@@ -4427,9 +4427,9 @@ img.logo-footer {
   .content-area.contact {
     width: 90%;
   }
-  .hrm-banner {
-    display: none;
-  }
+    .hrm-banner {
+        display: block!important;
+    }
   .hrm-show-post-home article.view-more-news {
     width: 100%;
   }
