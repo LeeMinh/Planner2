@@ -120,6 +120,58 @@
             background-position: center top;
             background-image: url('~/Content/~/Content/thuenhahanoi.net/wp-content/uploads/2018/08/bg.png');
         }
+        .top-bar {
+             background: #d30003!important;
+         }
+        .top-phone a, .menu-open, .login-logout ul li i {
+            color: #ffffff !important;
+        }
+        .login-logout ul li a {
+
+            color: #ffffff !important;
+
+        }
+
+        .float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #d30003;
+            color: #fff;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 0px 0px 10px 10px #999;
+        }
+
+        .my-float {
+            margin-top: 10px;
+            animation: swing 1s infinite ease-in-out;
+           
+        }
+
+          @@keyframes swing {
+                0%, 100% {
+                    transform: rotate(-20deg);
+                }
+
+                20% {
+                    transform: scale(.75);
+                }
+
+                50% {
+                    transform: rotate(20deg);
+                }
+
+                80% {
+                    transform: scale(.75);
+                }
+            }
+
+          
+
+
     </style>
 
 </head>
@@ -262,18 +314,17 @@
 
 
 
-        </header><!-- #masthead -->
-        <div id="content" class="site-content sidebar-right">
+        </header>
+
+        <div id="content" class="site-content ">
             <div class="container">
 
                 @{Html.RenderAction("breadcrums", "post", new { ChuDe = ViewBag.ChuDe });}
 
 
                 <div class="row">
-                    <div id="primary" class="content-area col-md-6 col-md-push-3">
-                        @RenderBody()
-                    </div>
-                    <aside class="secondary widget-area-left col-xs-12 col-sm-12 col-md-3 col-md-pull-6 col-sm-3 col-sm-pull-6" role="complementary">
+
+                    <div class="  col-xs-12 col-sm-12 col-md-3  " role="complementary">
                         @{
                             Html.RenderAction("Timkiem", "post");
                         }
@@ -283,8 +334,11 @@
                                 @{Html.RenderAction("TinChuDe", "post", new { ChuDe = item.SeoUrl });}
                             </div>
                         }
-                    </aside>
-                    <aside class="secondary widget-area-right col-md-3 col-sm-3" role="complementary">
+                    </div>
+                    <div id="primary" class=" col-xs-12 col-sm-12  col-md-6">
+                        @RenderBody()
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-3" role="complementary">
                         <div id="hrm-widget_tin_bds-widget-2" style="display:inline-grid!important" class="widget-odd widget-first widget-1 widget hrm-widget-tin-bds hrm-recent-realty feature">
                             @{
                                 var video = db.MainTasks.Where(v => !string.IsNullOrEmpty(v.Youtube)).OrderByDescending(Z => Z.NgayDang).Skip(0).Take(2).ToList();
@@ -299,7 +353,7 @@
                                 Html.RenderAction("TinChuDe", "post", new { ChuDe = item.SeoUrl });
                             }
                         </div>
-                    </aside><!-- #secondary -->
+                    </div><!-- #secondary -->
                 </div><!-- .row -->
             </div><!-- .container -->
         </div><!-- #content -->
@@ -338,12 +392,14 @@
     <div id="topcontrol" class="icon-up-open" title="Scroll To Top">
         <i class="fa fa-angle-up"></i>
     </div>
-
+    <a href="#" class="float">
+        <i class="fa fa-3x  fa-phone my-float"></i>
+    </a>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js"></script>
     <script>
         $(function () {
-          $('.lazy').Lazy();
+            $('.lazy').Lazy();
         });
     </script>
 </body>

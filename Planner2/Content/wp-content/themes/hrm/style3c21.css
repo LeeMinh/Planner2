@@ -4321,8 +4321,7 @@ img.logo-footer {
 @media (max-width: 991px) {
 	 .col-md-3 {
 	    float: left;
-	    width: 25%;
-	}
+ 	}
 
 	.col-md-9 {
 	    width: 75%;
