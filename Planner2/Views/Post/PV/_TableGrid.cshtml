@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Planner2.Models.MainTask>
-@{ 
+@{
     Planner2Entities db = new Planner2Entities();
-} 
+}
 @foreach (var item in Model)
 {
     <li>
@@ -19,29 +19,44 @@
                         <i class="fa fa-clock-o"></i>
                         Ngày đăng: @item.NgayDang.Value.ToString("dd/MM/yyyy")
                     </p>
-                  
+
 
                 </div>
                 <div class="details">
-                    <div class="price">
-                        <label>Giá<span>:</span></label>
-                        @item.Gia @item.TyGia
-                    </div>
-                    <div class="area">
-                        <label>Diện tích<span>:</span></label>
-                        @item.DienTich m2
-                        <span><img src="http://batdongsannhadat247.com/wp-content/themes/hrm/images/hot.gif" alt="anh hot" class="img-responsive"></span>
-                    </div>
-                    <div class="huong-dat">
+                    @if ((ViewBag.ChuDe + "") != "kien-truc---xay-dung")
+                    {
+                        if (item.Gia.HasValue)
+                        {
+                            <div class="price">
+                                <label>Giá<span>:</span></label>
+                                @item.Gia @item.TyGia
+                            </div>
+                        }
+                        if (item.Gia.HasValue)
+                        {
+                            <div class="area">
+                                <label>Diện tích<span>:</span></label>
+                                @item.DienTich m2
+                                <span><img src="http://batdongsannhadat247.com/wp-content/themes/hrm/images/hot.gif" alt="anh hot" class="img-responsive"></span>
+                            </div>
+                        }
+                        if (!string.IsNullOrEmpty(item.Map_Huong))
+                        {
+                            <div class="huong-dat">
 
-                        <label>Hướng<span>:</span></label>
-                        @item.Map_Huong
+                                <label>Hướng<span>:</span></label>
+                                @item.Map_Huong
 
-                    </div>
-                    <div class="location">
-                        <label>Vị trí<span>:</span></label>
-                        <a href="">@db.ThanhPhoes.Where(v=>v.MaQuanHuyen==item.KhuVuc_Huyen).Select(v=>v.QuanHuyen).FirstOrDefault()</a> - <a>@db.ThanhPhoes.Where(v => v.MaThanhPho == item.KhuVuc_TP).Select(v => v.TenThanhPho).FirstOrDefault()</a>
-                    </div>
+                            </div>
+                        }
+                        if (item.KhuVuc_TP.HasValue)
+                        {
+                            <div class="location">
+                                <label>Vị trí<span>:</span></label>
+                                <a href="">@db.ThanhPhoes.Where(v => v.MaQuanHuyen == item.KhuVuc_Huyen).Select(v => v.QuanHuyen).FirstOrDefault()</a> - <a>@db.ThanhPhoes.Where(v => v.MaThanhPho == item.KhuVuc_TP).Select(v => v.TenThanhPho).FirstOrDefault()</a>
+                            </div>
+                        }
+                    }
                     <a href="/post/info/?id=@item.SeoUrl" class="view-more">Xem chi tiết</a>
                 </div>
             </div>
