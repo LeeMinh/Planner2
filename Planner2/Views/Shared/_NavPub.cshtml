@@ -87,6 +87,12 @@
             width: 100%;
         }
 
+        @@media screen and (min-width: 768px) {
+            .carousel-indicators {
+                bottom: 25px!important;
+            }
+        }
+
         .marquee-with-options {
             width: 100%;
             overflow: hidden;
@@ -120,16 +126,17 @@
             background-position: center top;
             background-image: url('~/Content/~/Content/thuenhahanoi.net/wp-content/uploads/2018/08/bg.png');
         }
+
         .top-bar {
-             background: #d30003!important;
-         }
+            background: #d30003 !important;
+        }
+
         .top-phone a, .menu-open, .login-logout ul li i {
             color: #ffffff !important;
         }
+
         .login-logout ul li a {
-
             color: #ffffff !important;
-
         }
 
         .float {
@@ -148,30 +155,25 @@
         .my-float {
             margin-top: 10px;
             animation: swing 1s infinite ease-in-out;
-           
         }
 
-          @@keyframes swing {
-                0%, 100% {
-                    transform: rotate(-20deg);
-                }
-
-                20% {
-                    transform: scale(.75);
-                }
-
-                50% {
-                    transform: rotate(20deg);
-                }
-
-                80% {
-                    transform: scale(.75);
-                }
+        @@keyframes swing {
+            0%, 100% {
+                transform: rotate(-20deg);
             }
 
-          
+            20% {
+                transform: scale(.75);
+            }
 
+            50% {
+                transform: rotate(20deg);
+            }
 
+            80% {
+                transform: scale(.75);
+            }
+        }
     </style>
 
 </head>
@@ -320,8 +322,8 @@
             <div class="container">
 
                 @{Html.RenderAction("breadcrums", "post", new { ChuDe = ViewBag.ChuDe });}
-                 <div class="row">
-                    @if (!(ViewBag.LEFTHIDEN == true &&  Request.Browser.IsMobileDevice))
+                <div class="row">
+                    @if (!(ViewBag.LEFTHIDEN == true && Request.Browser.IsMobileDevice))
                     {
 
                         <div class="  col-xs-12 col-sm-12 col-md-3  " role="complementary">
@@ -393,7 +395,7 @@
     <div id="topcontrol" class="icon-up-open" title="Scroll To Top">
         <i class="fa fa-angle-up"></i>
     </div>
-    <a  href="tel:@Planner2.Common.SettingData.HotLine" class="float">
+    <a href="tel:@Planner2.Common.SettingData.HotLine" class="float">
         <i class="fa fa-3x  fa-phone my-float"></i>
     </a>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
