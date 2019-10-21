@@ -55,6 +55,7 @@ namespace Planner2.Controllers
         {
             return View();
         }
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult LoadKhuVuc_Huyen(int ID)
         {
@@ -65,6 +66,7 @@ namespace Planner2.Controllers
 
             }
         }
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult LoadKhuVuc_Xa(int ID)
         {

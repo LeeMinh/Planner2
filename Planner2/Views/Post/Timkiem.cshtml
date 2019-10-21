@@ -18,10 +18,10 @@
                 <div class="realty-filter clearfix">
                     <form action="/Post/Search" method="GET" id="frmTimKiem">
                         <div class="visible-fields fields">
-                            <input id="s" class="key-search" name="key"  type="text" placeholder="Nhập từ khóa, vd:j Căn hộ vinhomes" value="@ViewBag.key">
+                            <input id="s" class="key-search" name="key" type="text" placeholder="Nhập từ khóa, vd:j Căn hộ vinhomes" value="@ViewBag.key">
                             <ul class="option-select">
                                 <li>
-                                    <select id="Map_LoaiBatDongSan" name="Map_LoaiBatDongSan"  class="form-control">
+                                    <select id="Map_LoaiBatDongSan" name="Map_LoaiBatDongSan" class="form-control">
                                         <option value="">-- Chọn loại BĐS --</option>
                                         @foreach (var item in db.SettingDatas.Where(v => v.Type == "Loại BĐS"))
                                         {
@@ -30,7 +30,7 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <select id="KhuVuc_TP" name="KhuVuc_TP"  class="form-control">
+                                    <select id="KhuVuc_TP" name="KhuVuc_TP" class="form-control">
                                         <option value="">- Chọn Tỉnh / Thành phố -</option>
                                         @foreach (var item in TinhThanh)
                                         {
@@ -39,13 +39,13 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <select id="KhuVuc_Huyen"  name="KhuVuc_Huyen" class="form-control">
+                                    <select id="KhuVuc_Huyen" name="KhuVuc_Huyen" class="form-control">
                                         <option value="">- Chọn Quận / Huyện -</option>
                                     </select>
                                 </li>
                                 <li>
 
-                                    <select id="KhuVuc_Xa"  name="KhuVuc_Xa" class="form-control">
+                                    <select id="KhuVuc_Xa" name="KhuVuc_Xa" class="form-control">
                                         <option value="">- Chọn phường / xã -</option>
                                     </select>
                                 </li>
@@ -79,7 +79,7 @@
                             </ul>
                             <ul id="bs-advance" class="hidecc">
                                 <li>
-                                    <select id="Map_Huong" name="Map_Huong"  class="form-control">
+                                    <select id="Map_Huong" name="Map_Huong" class="form-control">
                                         <option value="">- Chọn hướng-</option>
                                         @foreach (var item in db.SettingDatas.Where(v => v.Type == "Hướng"))
                                         {
@@ -124,34 +124,32 @@
 <script>
     $('.secondary  select').select2();
 
-
-    $("#KhuVuc_TP").change(function (e) {
+    $(document).on("change", "#KhuVuc_TP", function () {
+        
         var ID = $(this).val();
-        try {
-              $.ajax({
-            type: "POST",
-            url: "/Tasks/LoadKhuVuc_Huyen",
-            data: {
-                ID: ID
-            },
-            dataType: "json",
-            success: function (response) {
-                var html = '<option value="">- Chọn Quận / Huyện -</option>';
-                for (var i = 0; i < response.length; i++) {
-                    html += "<option value='" + response[i].Key + "'>" + response[i].Name + " </option>";
+         try {
+            $.ajax({
+                type: "POST",
+                url: "/Tasks/LoadKhuVuc_Huyen",
+                data: {
+                    ID: ID
+                },
+                dataType: "json",
+                success: function (response) {
+                     var html = '<option value="">- Chọn Quận / Huyện -</option>';
+                    for (var i = 0; i < response.length; i++) {
+                        html += "<option value='" + response[i].Key + "'>" + response[i].Name + " </option>";
+                    }
+                    $('#KhuVuc_Huyen').html(html);
                 }
-                $('#KhuVuc_Huyen').html(html);
-            }
-        });
+            });
         } catch (ex) {
             console.log(ex);
         }
-
-        e.preventDefault();
     });
-    $("#KhuVuc_Huyen").change(function (e) {
+    $(document).on("change", "#KhuVuc_Huyen", function () {
         var ID = $(this).val();
-         $.ajax({
+        $.ajax({
             type: "POST",
             url: "/Tasks/LoadKhuVuc_Xa",
             data: {
@@ -167,6 +165,5 @@
             }
         });
 
-        e.preventDefault();
     });
 </script>
