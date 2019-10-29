@@ -9,19 +9,19 @@ jQuery(document).ready(function($){
        });
    });
 
-    setTimeout(function(){
-        var highestBox = 0;
-        $('#primary .list-realty li').each(function(){
-            if($(this).height() > highestBox) {
-                highestBox = $(this).height(); 
-            }
-        });  
-        $('#primary .list-realty li').height(highestBox);
+//    setTimeout(function(){
+//        var highestBox = 0;
+//        $('#primary .list-realty li').each(function(){
+//            if($(this).height() > highestBox) {
+//                highestBox = $(this).height(); 
+//            }
+//        });  
+//        $('#primary .list-realty li').height(highestBox);
 
-// select2 default
-// $("#quick-city-sell, .option-select #city").val('1566').trigger('change');
+//// select2 default
+//// $("#quick-city-sell, .option-select #city").val('1566').trigger('change');
 
-    }, 1000);
+//    }, 1000);
 /*---------------------------------------------------
 /*  Vertical menus toggles
 /* -------------------------------------------------*/

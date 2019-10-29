@@ -47,10 +47,10 @@
     $(document).ready(function () {
 
         setTimeout(function () {
-            $('[name=key]').val('@ViewBag.key');
+            $('[name=key]').val('@Html.Raw(ViewBag.key)');
              $('[name=Map_LoaiBatDongSan]').val('@Html.Raw(item.Map_LoaiBatDongSan)').change();
             $('[name=KhuVuc_TP]').val('@item.KhuVuc_TP').change();
-            $('[name=Map_DuAn]').val('@item.Map_DuAn').change();
+            $('[name=Map_DuAn]').val('@Html.Raw(item.Map_DuAn)').change();
             $('[name=Gia]').val('@item.Gia').change();
             $('[name=DienTich]').val('@ViewBag.DienTich').change();
             $('[name=Map_SoPhongNgu]').val('@item.Map_SoPhongNgu').change();

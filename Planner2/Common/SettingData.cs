@@ -17,6 +17,7 @@ namespace Planner2.Common
          public static string Search_CV { get; set; }
          public static string Setting { get; set; }
          public static string Logo { get; set; }
+         public static string Logo_ico { get; set; }
          public static string Categories { get; set; }
          public static string HotLine { get; set; }
          public static string TenCongTy { get; set; }

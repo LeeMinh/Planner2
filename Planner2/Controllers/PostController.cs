@@ -180,6 +180,7 @@ namespace Planner2.Controllers
         }
         public ActionResult Search(MainTask item, string key, string DienTich, int? page, string sort)
         {
+            ViewBag.LEFTHIDEN = true;
 
             IQueryable<MainTask> data;
             List<MainTask> Localdata;
