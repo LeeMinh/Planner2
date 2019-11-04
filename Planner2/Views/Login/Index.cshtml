@@ -25,18 +25,24 @@
                         <label for="user_pass">Mật khẩu</label>
                         <input type="password" name="user_pass" id="user_pass" class="input" value="@ViewBag.user_login" size="20" />
                     </p>
-                    <h3  style="color:red">@ViewBag.Error</h3>
+                    <h3 style="color:red">@ViewBag.Error</h3>
                     <p class="login-remember"><label><input name="rememberme" type="checkbox" id="rememberme" value="forever" /> Ghi nhớ</label></p>
                     <p class="login-submit">
                         <input type="submit" name="wp-submit" id="wp-submit" class="button button-primary" value="Đăng nhập" />
-                     </p>
+                    </p>
 
                 </form>
                 <div class="forgot">
                     <a href="/LOGIN/resetpassword">Quên mật khẩu ?</a>
                 </div>
+
             </div>
-            
+            <div class="col-md-12">
+
+                <section id="socialLoginForm">
+                    @Html.Partial("_ExternalLoginsListPartial", new IdentitySample.Models.ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                </section>
+            </div>
         </div>
 
     </div>
