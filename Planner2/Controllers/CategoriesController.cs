@@ -43,6 +43,7 @@ namespace Planner2.Controllers
                 a.Menu = obj.Menu ?? a.Menu;
                 a.CategoryName = obj.CategoryName ?? a.CategoryName;
                 a.STT = obj.STT ?? a.STT;
+                a.onePrice = obj.onePrice ?? a.onePrice;
                 a.Price7Day = obj.Price7Day ?? a.Price7Day;
                 a.Price15Day = obj.Price15Day ?? a.Price15Day;
                 a.Price30Day = obj.Price30Day ?? a.Price30Day;

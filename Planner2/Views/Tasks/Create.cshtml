@@ -5,10 +5,13 @@
     Model.NgayDang = Model.NgayDang ?? DateTime.Now;
     Planner2Entities db = new Planner2Entities();
     var Categories = (List<Planner2.Models.Category>)ViewBag.Categories;
+    var listdm = (List<int?>)ViewBag.listdm;
     var CategoriesVIP = (List<Planner2.Models.Category>)ViewBag.CategoriesVIP;
     var TinhThanh = db.ThanhPhoes.GroupBy(z => z.MaThanhPho).Select(v => new { Name = v.FirstOrDefault().TenThanhPho, Key = v.FirstOrDefault().MaThanhPho }).ToList();
     var cd = db.MainTask_ChuDe.Where(v => v.TaskID == Model.Id).Select(z => z.CategoryRowID).ToList();
     cd = cd ?? new List<int?>();
+        var ST = String.Format(System.Globalization.CultureInfo.GetCultureInfo("vi-VN"), "{0:n0}", nguoidung.SoTien) + " VND";
+
 }
 
 <style>
@@ -103,13 +106,14 @@
             <div class="col-12 form-group">
                 <div class="row-item">
                     <div class="h2">
-                        <span>Thông tin cơ bản</span>
+                        <span>Thông tin cơ bản </span>
+                        <small>   Số tiền bạn có : @ST</small>
                         @if (!string.IsNullOrEmpty(@Model.Status))
                         {
                             <i>Bài đăng đang ở chế độ : @Model.Status</i>
                         }
                     </div>
-
+                  </a>
                 </div>
                 @if (Model.Id != 0)
                 {
@@ -241,7 +245,7 @@
                         <option>Không xác định</option>
                         @foreach (var item in db.SettingDatas.Where(v => v.Type == "Loại BĐS"))
                         {
-                            <option  @(Model.Map_LoaiBatDongSan == item.KeyID ? "selected" : "")  value="@item.KeyID">@item.Value</option>
+                            <option @(Model.Map_LoaiBatDongSan == item.KeyID ? "selected" : "") value="@item.KeyID">@item.Value</option>
                         }
                     </select>
                 </div>
@@ -251,7 +255,7 @@
                         <option>Không xác định</option>
                         @foreach (var item in db.SettingDatas.Where(v => v.Type == "Hướng"))
                         {
-                            <option  @(Model.Map_Huong == item.KeyID ? "selected" : "")  value="@item.KeyID">@item.Value</option>
+                            <option @(Model.Map_Huong == item.KeyID ? "selected" : "") value="@item.KeyID">@item.Value</option>
                         }
                     </select>
                 </div>
@@ -337,7 +341,36 @@
             <ul>
                 @foreach (var item in CategoriesVIP)
                 {
-                    <li><label><input type="checkbox" @(cd.Contains(item.CategoryRowID) ? "checked" : "") name="ChuDeVIP" value="@item.CategoryRowID" />@item.CategoryName</label></li>
+                    <li>
+                        <label>
+                            <input type="checkbox" @(cd.Contains(item.CategoryRowID) ? "checked" : "") name="ChuDeVIP" value="@item.CategoryRowID" />@item.CategoryName
+                          <br />
+                          <b>
+                              @if (listdm.Contains(item.CategoryRowID) || nguoidung.SupperAdmin == 1)
+                              {
+                                  <span class="badge badge-success">Đã mua theo gói</span>
+                              }
+                              else
+                              {
+                                  if ((Model.CategoryList + "").Split(',').Contains(item.CategoryRowID.ToString()))
+                                  {
+                                     <span class="badge badge-primary">Đã mua theo bài đăng</span>
+
+                                  }else
+                                  if (item.onePrice.HasValue&&item.onePrice>0)
+                                  {
+                                      <span class="badge badge-danger"> @item.onePrice.Value.ToString("#,####") VND / 1 bài đăng</span>
+
+                                  }
+                                  else
+                                  {
+
+                                      <span>FREE</span>
+                                  }
+                              }
+                          </b>
+                        </label>
+                    </li>
                 }
             </ul>
         </div>

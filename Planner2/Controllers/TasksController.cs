@@ -134,8 +134,9 @@ namespace Planner2.Controllers
                 var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
                 var listdm = db.User_Category.Where(z => z.UserName == nguoidung.UserName && z.NgayHetHan.Value >= DateTime.Now).Select(z => z.CategoryRowID).ToList();
                 var Categories = db.Categories.Where(v => v.Menu == "Top").ToList();
-                var CategoriesVIP = db.Categories.Where(v => v.Menu != "Top").Where(v => listdm.Contains(v.CategoryRowID) || nguoidung.SupperAdmin == 1).ToList();
+                var CategoriesVIP = db.Categories.Where(v => v.Menu != "Top").ToList();
 
+                ViewBag.listdm = listdm;
                 ViewBag.Categories = Categories;
                 ViewBag.CategoriesVIP = CategoriesVIP;
                 #region create
@@ -318,18 +319,37 @@ namespace Planner2.Controllers
                 using (Models.Planner2Entities db = new Models.Planner2Entities())
                 {
 
-
+                    double SoTienPhaiThanhToan = 0;
                     foreach (var x in ChuDeVIP)
                     {
                         var listdm = db.User_Category.Where(z => z.UserName == nguoidung.UserName && z.NgayHetHan.Value >= DateTime.Now && x == z.CategoryRowID).Select(z => z.CategoryRowID).Count();
                         if (listdm == 0 && nguoidung.SupperAdmin != 1)
                         {
-                            var dtr = "Bạn không có quyền đăng bài vào chuyên mục :" + db.Categories.Where(v => v.CategoryRowID == x).Select(z => z.CategoryName).FirstOrDefault();
-                            return Json(new { TT = 1, Value = dtr }, JsonRequestBehavior.AllowGet);
+                            var CategoryList = db.MainTasks.Where(z => z.Id == item.Id).Select(z=>z.CategoryList).FirstOrDefault();
+
+                            CategoryList = CategoryList ?? "";
+                            var arrCategoryList = CategoryList.Split(',').Where(z=> !string.IsNullOrEmpty(z)).Select(z =>  int.Parse(z)).ToList() ;
+                            var cate = db.Categories.Where(v => v.CategoryRowID == x&& !arrCategoryList.Contains(x)).Select(z => z.onePrice).FirstOrDefault();
+                            cate = cate ?? 0;
+                            SoTienPhaiThanhToan += cate.Value;
+                          
                         }
+
+
                     }
+                     var nd = db.Users.Where(c => c.Id == nguoidung.Id).FirstOrDefault();
 
+                    nd.SoTien = nd.SoTien.Value - (int)SoTienPhaiThanhToan;
+                    if (nd.SoTien<0)
+                    {
+                        var dtr = "Bạn không đủ tiền để mua chuyên mục đăng bài" ;
+                        return Json(new { TT = 1, Value = dtr }, JsonRequestBehavior.AllowGet);
 
+                    }
+                    db.SaveChanges();
+                    Session[Planner2.Controllers.LoginAuth.NameSession] = nd;
+
+                  
                     if (db.MainTasks.Where(v => v.SeoUrl == item.SeoUrl && v.Id != item.Id).Count() > 0)
                     {
                         return Json(new { TT = 1, Value = "Tên tiêu đề đã tồn tại, không thể thêm được tiêu đề giống nhau" }, JsonRequestBehavior.AllowGet);
@@ -371,7 +391,7 @@ namespace Planner2.Controllers
                         {
                             task.Picture = item.Picture;
                         }
-
+                        task.CategoryList = task.CategoryList + "," + string.Join(",",ChuDeVIP);
                         // kiểm tra sự thay đổi
                         var Change = Models.CompareClass.ClassWithClassToTableHTML<MainTask>(TaskBK, task);
                         if (Change != null)
@@ -401,6 +421,7 @@ namespace Planner2.Controllers
                             item.Picture = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/No_image_3x4.svg/1280px-No_image_3x4.svg.png";
                         }
 
+                        item.CategoryList = string.Join(",", ChuDeVIP);
 
                         item.Created = DateTime.Now;
                         item.CreatedBy = nguoidung.UserName;

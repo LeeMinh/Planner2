@@ -26,6 +26,7 @@
           <Property Name="SeoUrl" Type="nvarchar" MaxLength="500" />
           <Property Name="Menu" Type="nvarchar" MaxLength="50" />
           <Property Name="STT" Type="int" />
+          <Property Name="onePrice" Type="float" />
           <Property Name="Price7Day" Type="float" />
           <Property Name="Price15Day" Type="float" />
           <Property Name="Price30Day" Type="float" />
@@ -103,6 +104,7 @@
           <Property Name="Page" Type="bit" />
           <Property Name="UuTien" Type="int" Nullable="false" />
           <Property Name="Youtube" Type="nvarchar" MaxLength="1550" />
+          <Property Name="CategoryList" Type="nvarchar" MaxLength="1500" />
         </EntityType>
         <EntityType Name="MainTask_ChuDe">
           <Key>
@@ -297,6 +299,7 @@
           <Property Name="Price1Year" Type="Double" />
           <Property Name="Price2Year" Type="Double" />
           <Property Name="Price5Year" Type="Double" />
+          <Property Name="onePrice" Type="Double" />
         </EntityType>
         <EntityType Name="CommentTask">
           <Key>
@@ -365,6 +368,7 @@
           <Property Name="Page" Type="Boolean" />
           <Property Name="UuTien" Type="Int32" Nullable="false" />
           <Property Name="Youtube" Type="String" MaxLength="1550" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryList" Type="String" MaxLength="1500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MainTask_ChuDe">
           <Key>
@@ -491,6 +495,7 @@
           <EntitySetMapping Name="Categories">
             <EntityTypeMapping TypeName="Planner2Model.Category">
               <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="onePrice" ColumnName="onePrice" />
                 <ScalarProperty Name="Price5Year" ColumnName="Price5Year" />
                 <ScalarProperty Name="Price2Year" ColumnName="Price2Year" />
                 <ScalarProperty Name="Price1Year" ColumnName="Price1Year" />
@@ -545,6 +550,7 @@
           <EntitySetMapping Name="MainTasks">
             <EntityTypeMapping TypeName="Planner2Model.MainTask">
               <MappingFragment StoreEntitySet="MainTask">
+                <ScalarProperty Name="CategoryList" ColumnName="CategoryList" />
                 <ScalarProperty Name="Youtube" ColumnName="Youtube" />
                 <ScalarProperty Name="UuTien" ColumnName="UuTien" />
                 <ScalarProperty Name="Page" ColumnName="Page" />

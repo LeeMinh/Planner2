@@ -30,5 +30,6 @@ namespace Planner2.Models
         public Nullable<double> Price1Year { get; set; }
         public Nullable<double> Price2Year { get; set; }
         public Nullable<double> Price5Year { get; set; }
+        public Nullable<double> onePrice { get; set; }
     }
 }
