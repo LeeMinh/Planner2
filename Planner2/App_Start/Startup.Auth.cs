@@ -55,12 +55,16 @@ namespace IdentitySample
             //   consumerSecret: "");
 
             app.UseFacebookAuthentication(
-               appId: "366120977289968",
-               appSecret: "●●●●●●●●");
-
+               appId: Planner2.Common.SettingData.UseFacebookAuthentication_appId,
+               appSecret: Planner2.Common.SettingData.UseFacebookAuthentication_appSecret
+               // "b63a5d0f44f3869e71ae56f59f5496d6");
+               //"366120977289968",
+               );
             app.UseGoogleAuthentication(
-                         clientId: "629719889719-cabt3q1t5gqimu7vr0hpt9qg9ri0nk8t.apps.googleusercontent.com",
-                         clientSecret: "DfkJuAubmi6HMwcVSUpI-58l");
+                         clientId: Planner2.Common.SettingData.UseGoogleAuthentication_clientId,
+                         clientSecret: Planner2.Common.SettingData.UseGoogleAuthentication_clientSecret);
+        //clientId: "629719889719-cabt3q1t5gqimu7vr0hpt9qg9ri0nk8t.apps.googleusercontent.com",
+                    //     clientSecret: "DfkJuAubmi6HMwcVSUpI-58l");
         }
     }
 }

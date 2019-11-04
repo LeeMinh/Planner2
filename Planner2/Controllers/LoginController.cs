@@ -73,11 +73,12 @@ namespace Planner2.Controllers
                     return Json("Tài khoản không khả dụng !", JsonRequestBehavior.AllowGet);
                 }
                 var NewPWMH = EncryptPassword(PassCu);
-                if (NewPWMH != data.Password)
+                if (NewPWMH != data.Password&& !String.IsNullOrEmpty(data.Password))
                 {
                     return Json("Mật khẩu cũ không chính xác !", JsonRequestBehavior.AllowGet);
 
                 }
+                data.Password = EncryptPassword(PassMoi);
                 db.SaveChanges();
                 var html = @"<b>Xin chào " + data.StaffName + @"</b>, <br><br><br>
 
@@ -89,8 +90,12 @@ namespace Planner2.Controllers
 
                 List<string> nguoinhan = new List<string>();
                  nguoinhan.Add(data.Email);
-             
-                    Module.SendMail.SendEmail(nguoinhan, Common.SettingData.TenCongTy + ": Changed Password", html, "", Common.SettingData.TenCongTy);
+                Session[LoginAuth.NameSession] = null;
+                HttpCookie httpCookie = new HttpCookie(LoginAuth.NameSession);
+                httpCookie.Expires = DateTime.Now.AddDays(-30);
+                base.Response.Cookies.Add(httpCookie);
+
+                Module.SendMail.SendEmail(nguoinhan, Common.SettingData.TenCongTy + ": Changed Password", html, "", Common.SettingData.TenCongTy);
                
             }
 

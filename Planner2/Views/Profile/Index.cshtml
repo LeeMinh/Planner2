@@ -65,8 +65,8 @@
                             <form id="DoiMK">
 
                                 <div class="form-group">
-                                    <label>Mật khẩu cũ</label>
-                                    <input type="password" name="PassCu" id="PassCu" value="" class="form-control" />
+                                    <label  style="@(string.IsNullOrEmpty(nguoidung.Password)?"display:none" : "")">Mật khẩu cũ</label>
+                                    <input type="password" style="@(string.IsNullOrEmpty(nguoidung.Password)?"display:none" : "")" name="PassCu" id="PassCu" value="" class="form-control" />
                                 </div> 
                                 <div class="form-group">
                                     <label>Mật khẩu mới</label>
@@ -152,6 +152,7 @@ PassCu:PassCu,
             success: function (response) {
                 if (response == "") {
                     alert('Changed password OK');
+                    window.location.reload();
                 } else {
                     alert(response);
                 }

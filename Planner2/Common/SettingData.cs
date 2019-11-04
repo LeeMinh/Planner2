@@ -29,6 +29,11 @@ namespace Planner2.Common
          public static string SendMail_Password { get; set; }
          public static string SendMail_Host { get; set; }
          public static string SendMail_Port { get; set; }
+         public static string UseFacebookAuthentication_appId { get; set; }
+         public static string UseFacebookAuthentication_appSecret { get; set; }
+   
+     public static string UseGoogleAuthentication_clientId { get; set; }
+         public static string UseGoogleAuthentication_clientSecret { get; set; }
    
    
    
