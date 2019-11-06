@@ -355,11 +355,15 @@ namespace IdentitySample.Controllers
 
             using ( Planner2Entities db = new Planner2Entities())
             {
-
+                if (string.IsNullOrEmpty(loginInfo.Email))
+                {
+                    loginInfo.Email = loginInfo.DefaultUserName;
+                }
                 var data = db.Users.Where(z => z.Email.ToUpper() == loginInfo.Email.ToUpper()  ).FirstOrDefault();
                 if (data==null)
                 {
                     Planner2.Models.User item = new Planner2.Models.User();
+                    
                     item.UserName = loginInfo.Email;
                     item.Email = loginInfo.Email;
                     item.StaffName = loginInfo.DefaultUserName;
