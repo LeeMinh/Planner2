@@ -23,7 +23,7 @@
 
                 </div>
                 <div class="details">
-                    @if ((ViewBag.ChuDe + "") != "kien-truc---xay-dung")
+                    @if ( item.TinMuaBan=="NHADAT")
                     {
                         if (item.Gia.HasValue)
                         {
@@ -56,6 +56,13 @@
                                 <a href="">@db.ThanhPhoes.Where(v => v.MaQuanHuyen == item.KhuVuc_Huyen).Select(v => v.QuanHuyen).FirstOrDefault()</a> - <a>@db.ThanhPhoes.Where(v => v.MaThanhPho == item.KhuVuc_TP).Select(v => v.TenThanhPho).FirstOrDefault()</a>
                             </div>
                         }
+                    }
+                    else
+                    {
+                        var nd = Planner2.Module.HtmlUtilities.ConvertToPlainText(item.Description);
+                <span>
+                    @Html.Raw(nd.Substring(0, 150)) ...
+                </span>
                     }
                     <a href="/post/info/?id=@item.SeoUrl" class="view-more">Xem chi tiết</a>
                 </div>

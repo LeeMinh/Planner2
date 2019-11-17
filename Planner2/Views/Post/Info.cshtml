@@ -41,133 +41,137 @@
                     Ngày đăng: @Model.NgayDang.Value.ToString("dd/MM/yyyy")
                 </p>
 
-                <p><i class="fa fa-eye" aria-hidden="true"></i> Lượt xem @(Model.Viewer.HasValue?Model.Viewer.Value.ToString("#,###"):"")</p>
+                <p><i class="fa fa-eye" aria-hidden="true"></i> Lượt xem @(Model.Viewer.HasValue ? Model.Viewer.Value.ToString("#,###") : "")</p>
 
             </div><!-- .location-realty -->
-            <div class="price-area">
-                <p>
-                    <i class="fa fa-arrows" aria-hidden="true"></i>
-                    Diện tích            <span class="value">
-    @(Model.DienTich.HasValue ? Model.DienTich.Value.ToString("#,###.####")  +" m2": "Không xác định")  
- </span>
-                </p>
-                <p>
-                    <i class="fa fa-usd" aria-hidden="true"></i>
-                    Giá : <span class="value price">
-                        @(Model.Gia.HasValue ?Model.Gia.Value.ToString("#,###.####"):"Không xác định") @Model.TyGia
-                    </span>
-                </p>
-                <p>
-                    <i class="fa fa-map-marker" aria-hidden="true"></i>
-                    <span class="location">Khu vực</span>
-                    <a href="/Post/Search?KhuVuc_Huyen=@Model.KhuVuc_Huyen" rel="tag">
-                        @KhuVuc_Huyen
+            @if (Model.TinMuaBan == "NHADAT")
+            {<div class="price-area">
+                    <p>
+                        <i class="fa fa-arrows" aria-hidden="true"></i>
+                        Diện tích            <span class="value">
+                            @(Model.DienTich.HasValue ? Model.DienTich.Value.ToString("#,###.####") + " m2" : "Không xác định")
+                        </span>
+                    </p>
+                    <p>
+                        <i class="fa fa-usd" aria-hidden="true"></i>
+                        Giá : <span class="value price">
+                            @(Model.Gia.HasValue ? Model.Gia.Value.ToString("#,###.####") : "Không xác định") @Model.TyGia
+                        </span>
+                    </p>
+                    <p>
+                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                        <span class="location">Khu vực</span>
+                        <a href="/Post/Search?KhuVuc_Huyen=@Model.KhuVuc_Huyen" rel="tag">
+                            @KhuVuc_Huyen
 
-                    </a>,
-                    <a href="/Post/Search?KhuVuc_TP=@Model.KhuVuc_TP" rel="tag">
-                        @KhuVuc_TP
-                    </a>
-                </p>
-            </div><!-- .price-area -->
+                        </a>,
+                        <a href="/Post/Search?KhuVuc_TP=@Model.KhuVuc_TP" rel="tag">
+                            @KhuVuc_TP
+                        </a>
+                    </p>
+                </div><!-- .price-area -->
 
 
-            <div class="realty-des"></div><!-- .realty-des -->
+            }
+
+            <div class="realty-des"></div>
             <div class="entry-content">
                 <div class="realty-infor">
-                    <h3 class="info-des">Thông tin mô tả</h3>
+                    <h3 class="info-des">Thông tin</h3>
 
                     <div>
                         @Html.Raw(Model.Description)
                     </div>
                 </div><!-- .realty-infor -->
-                <div class="realty-tabs">
+                <hr />
+                @if (Model.TinMuaBan == "NHADAT")
+                {
+                    <div class="realty-contact">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h3>Đặc điểm bất động sản</h3>
+                                <ul>
+                                    <li>
+                                        <span class="key">Địa chỉ</span>
+                                        <span class="value">
+                                            <a href="/Post/Search?KhuVuc_Huyen=@Model.KhuVuc_Huyen" rel="tag">
+                                                @KhuVuc_Huyen
+                                            </a>,
 
-                </div><!-- .realty-tabs -->
-                <div class="realty-contact">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <h3>Đặc điểm bất động sản</h3>
-                            <ul>
-                                <li>
-                                    <span class="key">Địa chỉ</span>
-                                    <span class="value">
-                                        <a href="/Post/Search?KhuVuc_Huyen=@Model.KhuVuc_Huyen" rel="tag">
-                                            @KhuVuc_Huyen
-                                        </a>,
+                                            <a href="/Post/Search?KhuVuc_TP=@Model.KhuVuc_TP" rel="tag">
 
-                                        <a href="/Post/Search?KhuVuc_TP=@Model.KhuVuc_TP" rel="tag">
-
-                                            @KhuVuc_TP
+                                                @KhuVuc_TP
 
 
-                                        </a>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="key">Loại bất động sản</span>
-                                    <span class="value">
-                                        <a  >@Model.Map_LoaiBatDongSan</a>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="key">Hướng</span>
-                                    <span class="value"><a  >@Model.Map_Huong</a></span>
-                                </li>
-                                <li>
-                                    <span class="key">Số phòng ngủ</span>
-                                    <span class="value">@Model.Map_SoPhongNgu</span>
-                                </li>
-                                <li>
-                                    <span class="key">Dự án</span>
-                                    <span class="value">
-                                        @Model.Map_DuAn
-                                    </span>
-                                </li>
-                            </ul>
+                                            </a>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="key">Loại bất động sản</span>
+                                        <span class="value">
+                                            <a>@Model.Map_LoaiBatDongSan</a>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="key">Hướng</span>
+                                        <span class="value"><a>@Model.Map_Huong</a></span>
+                                    </li>
+                                    <li>
+                                        <span class="key">Số phòng ngủ</span>
+                                        <span class="value">@Model.Map_SoPhongNgu</span>
+                                    </li>
+                                    <li>
+                                        <span class="key">Dự án</span>
+                                        <span class="value">
+                                            @Model.Map_DuAn
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6">
+                                <h3>Thông tin liên hệ</h3>
+                                <ul>
+                                    <li>
+                                        <span class="key">Tên liên lạc</span>
+                                        <span class="value">@Model.Map_TenLienLac</span>
+                                    </li>
+                                    <li>
+                                        <span class="key">Điện thoại</span>
+                                        <span class="value">
+                                            <a href="tel:@Model.Map_DienThoai">
+                                                @Model.Map_DienThoai
+                                            </a>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="key">Zalo</span>
+                                        <span class="value">
+                                            <a href="tel:@Model.Map_Zalo">
+                                                @Model.Map_Zalo
+                                            </a>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="key">Skype</span>
+                                        <span class="value">
+                                            <a href="skype:@Model.Map_Zalo">
+                                                @Model.Map_Zalo
+                                            </a>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="key">Email</span>
+                                        <span class="value">
+                                            <a href="mailto:@Model.Map_Email">
+                                                @Model.Map_Email
+                                            </a>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="col-sm-6">
-                            <h3>Thông tin liên hệ</h3>
-                            <ul>
-                                <li>
-                                    <span class="key">Tên liên lạc</span>
-                                    <span class="value">@Model.Map_TenLienLac</span>
-                                </li>
-                                <li>
-                                    <span class="key">Điện thoại</span>
-                                    <span class="value">
-                                        <a href="tel:@Model.Map_DienThoai">
-                                            @Model.Map_DienThoai
-                                        </a>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="key">Zalo</span>
-                                    <span class="value">
-                                        <a href="tel:@Model.Map_Zalo">
-                                            @Model.Map_Zalo
-                                        </a>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="key">Skype</span>
-                                    <span class="value">
-                                        <a href="skype:@Model.Map_Zalo">
-                                            @Model.Map_Zalo
-                                        </a>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="key">Email</span>
-                                    <span class="value">
-                                        <a href="mailto:@Model.Map_Email">
-                                            @Model.Map_Email
-                                        </a>
-                                    </span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!-- .realty-tabs -->
+                    </div><!-- .realty-tabs -->
+                }
                 <div class="hrm-social-share">
                     <span class="share-text">Chia sẻ bài viết này trên mạng xã hội</span>
                     <ul class="hrm-share">

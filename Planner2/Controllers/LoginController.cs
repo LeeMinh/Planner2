@@ -18,14 +18,17 @@ namespace Planner2.Controllers
         // GET: Login
         public ActionResult Index()
         {
+            ViewBag.LEFTHIDEN = true;
             return View();
         }
         public ActionResult Register()
         {
+            ViewBag.LEFTHIDEN = true;
             return View();
         }
         public ActionResult resetpassword()
         {
+            ViewBag.LEFTHIDEN = true;
             return View();
         }
         [HttpPost]

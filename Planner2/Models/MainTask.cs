@@ -48,5 +48,6 @@ namespace Planner2.Models
         public int UuTien { get; set; }
         public string Youtube { get; set; }
         public string CategoryList { get; set; }
+        public string TinMuaBan { get; set; }
     }
 }

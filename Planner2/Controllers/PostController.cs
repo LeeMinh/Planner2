@@ -169,12 +169,7 @@ namespace Planner2.Controllers
                     data.Viewer++;
                 }
                 db.SaveChanges();
-                if (data.Page == true)
-                {
-                    ViewBag.Page = 1;
-                    return View("page", data);
-                }
-
+              
                 return View(data);
             }
         }

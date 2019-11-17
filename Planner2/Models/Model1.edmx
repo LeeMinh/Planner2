@@ -105,6 +105,7 @@
           <Property Name="UuTien" Type="int" Nullable="false" />
           <Property Name="Youtube" Type="nvarchar" MaxLength="1550" />
           <Property Name="CategoryList" Type="nvarchar" MaxLength="1500" />
+          <Property Name="TinMuaBan" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="MainTask_ChuDe">
           <Key>
@@ -369,6 +370,7 @@
           <Property Name="UuTien" Type="Int32" Nullable="false" />
           <Property Name="Youtube" Type="String" MaxLength="1550" FixedLength="false" Unicode="true" />
           <Property Name="CategoryList" Type="String" MaxLength="1500" FixedLength="false" Unicode="true" />
+          <Property Name="TinMuaBan" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MainTask_ChuDe">
           <Key>
@@ -550,6 +552,7 @@
           <EntitySetMapping Name="MainTasks">
             <EntityTypeMapping TypeName="Planner2Model.MainTask">
               <MappingFragment StoreEntitySet="MainTask">
+                <ScalarProperty Name="TinMuaBan" ColumnName="TinMuaBan" />
                 <ScalarProperty Name="CategoryList" ColumnName="CategoryList" />
                 <ScalarProperty Name="Youtube" ColumnName="Youtube" />
                 <ScalarProperty Name="UuTien" ColumnName="UuTien" />

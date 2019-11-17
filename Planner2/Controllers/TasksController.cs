@@ -320,36 +320,36 @@ namespace Planner2.Controllers
                 {
 
                     double SoTienPhaiThanhToan = 0;
-                    foreach (var x in ChuDeVIP)
+                    var ThanhToan = ChuDeVIP.ToList();
+                    ThanhToan.AddRange(ChuDe.ToList());
+                    foreach (var x in ThanhToan)
                     {
                         var listdm = db.User_Category.Where(z => z.UserName == nguoidung.UserName && z.NgayHetHan.Value >= DateTime.Now && x == z.CategoryRowID).Select(z => z.CategoryRowID).Count();
                         if (listdm == 0 && nguoidung.SupperAdmin != 1)
                         {
-                            var CategoryList = db.MainTasks.Where(z => z.Id == item.Id).Select(z=>z.CategoryList).FirstOrDefault();
+                            var CategoryList = db.MainTasks.Where(z => z.Id == item.Id).Select(z => z.CategoryList).FirstOrDefault();
 
                             CategoryList = CategoryList ?? "";
-                            var arrCategoryList = CategoryList.Split(',').Where(z=> !string.IsNullOrEmpty(z)).Select(z =>  int.Parse(z)).ToList() ;
-                            var cate = db.Categories.Where(v => v.CategoryRowID == x&& !arrCategoryList.Contains(x)).Select(z => z.onePrice).FirstOrDefault();
+                            var arrCategoryList = CategoryList.Split(',').Where(z => !string.IsNullOrEmpty(z)).Select(z => int.Parse(z)).ToList();
+                            var cate = db.Categories.Where(v => v.CategoryRowID == x && !arrCategoryList.Contains(x)).Select(z => z.onePrice).FirstOrDefault();
                             cate = cate ?? 0;
                             SoTienPhaiThanhToan += cate.Value;
-                          
                         }
 
-
                     }
-                     var nd = db.Users.Where(c => c.Id == nguoidung.Id).FirstOrDefault();
+                    var nd = db.Users.Where(c => c.Id == nguoidung.Id).FirstOrDefault();
 
                     nd.SoTien = nd.SoTien.Value - (int)SoTienPhaiThanhToan;
-                    if (nd.SoTien<0)
+                    if (nd.SoTien < 0)
                     {
-                        var dtr = "Bạn không đủ tiền để mua chuyên mục đăng bài" ;
+                        var dtr = "Bạn không đủ tiền để mua chuyên mục đăng bài";
                         return Json(new { TT = 1, Value = dtr }, JsonRequestBehavior.AllowGet);
 
                     }
                     db.SaveChanges();
                     Session[Planner2.Controllers.LoginAuth.NameSession] = nd;
 
-                  
+
                     if (db.MainTasks.Where(v => v.SeoUrl == item.SeoUrl && v.Id != item.Id).Count() > 0)
                     {
                         return Json(new { TT = 1, Value = "Tên tiêu đề đã tồn tại, không thể thêm được tiêu đề giống nhau" }, JsonRequestBehavior.AllowGet);
@@ -364,13 +364,14 @@ namespace Planner2.Controllers
                         var TaskBK = Models.CompareClass.Clone<MainTask>(task);
 
 
+                        task.TinMuaBan = item.TinMuaBan;
                         task.TaskName = item.TaskName;
                         task.Description = item.Description;
                         task.KhuVuc_TP = item.KhuVuc_TP;
                         task.KhuVuc_Xa = item.KhuVuc_Xa;
                         task.KhuVuc_Huyen = item.KhuVuc_Huyen;
                         task.NgayDang = item.NgayDang;
-                         task.Gia = item.Gia;
+                        task.Gia = item.Gia;
                         task.SeoUrl = item.SeoUrl;
                         task.TyGia = item.TyGia;
                         task.Map_LoaiBatDongSan = item.Map_LoaiBatDongSan;
@@ -391,7 +392,7 @@ namespace Planner2.Controllers
                         {
                             task.Picture = item.Picture;
                         }
-                        task.CategoryList = task.CategoryList + "," + string.Join(",",ChuDeVIP);
+                        task.CategoryList = task.CategoryList + "," + string.Join(",", ChuDeVIP);
                         // kiểm tra sự thay đổi
                         var Change = Models.CompareClass.ClassWithClassToTableHTML<MainTask>(TaskBK, task);
                         if (Change != null)

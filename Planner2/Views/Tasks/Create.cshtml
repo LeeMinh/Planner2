@@ -10,7 +10,7 @@
     var TinhThanh = db.ThanhPhoes.GroupBy(z => z.MaThanhPho).Select(v => new { Name = v.FirstOrDefault().TenThanhPho, Key = v.FirstOrDefault().MaThanhPho }).ToList();
     var cd = db.MainTask_ChuDe.Where(v => v.TaskID == Model.Id).Select(z => z.CategoryRowID).ToList();
     cd = cd ?? new List<int?>();
-        var ST = String.Format(System.Globalization.CultureInfo.GetCultureInfo("vi-VN"), "{0:n0}", nguoidung.SoTien) + " VND";
+    var ST = String.Format(System.Globalization.CultureInfo.GetCultureInfo("vi-VN"), "{0:n0}", nguoidung.SoTien) + " VND";
 
 }
 
@@ -113,7 +113,7 @@
                             <i>Bài đăng đang ở chế độ : @Model.Status</i>
                         }
                     </div>
-                  </a>
+                    </a>
                 </div>
                 @if (Model.Id != 0)
                 {
@@ -174,13 +174,55 @@
                         </div>
                     }
                 </div>
+                <div class="col-3">
+                    <label>Loại đăng tin</label>
 
-                <div class="col-12">
+                    <select name="TinMuaBan" class="form-control">
+                        <option @(Model.TinMuaBan == "NHADAT" ? "selected" : "") value="NHADAT">Mua bán nhà nhất</option>
+                        <option @(Model.TinMuaBan == "TINTUC" ? "selected" : "") value="TINTUC">Tin Tức</option>
+                    </select>
+                </div>
+                <div class="col-9">
                     <label>Link video Youtube</label>
                     <input type="text" name="Youtube" id="Youtube" class="form-control" value="@Model.Youtube" />
 
                 </div>
+                <div class="col-12">
+                    <label>Mục đăng tin </label>
+                    <select id="ChuDe" name="ChuDe" multiple class="form-control">
+                        @foreach (var item in Categories)
+                        {
+                            var x = cd.Where(z => z == item.CategoryRowID).Count();
+                        <option @(x != 0 ? "selected" : "") value="@item.CategoryRowID">
+                            @item.CategoryName
 
+                            @if (listdm.Contains(item.CategoryRowID) || nguoidung.SupperAdmin == 1)
+                            {
+                                <text>(Đã mua theo gói)</text>
+                            }
+                            else
+                            {
+                                if ((Model.CategoryList + "").Split(',').Contains(item.CategoryRowID.ToString()))
+                                {
+                                    <text>(Đã mua theo bài đăng)</text>
+
+                                }
+                                else
+                                if (item.onePrice.HasValue && item.onePrice > 0)
+                                {
+                                    <text>@item.onePrice.Value.ToString("#,####") VND / 1 bài đăng</text>
+
+                                }
+                                else
+                                {
+
+                                    <text>(FREE)</text>
+                                }
+                            }
+                        </option>
+                        }
+                    </select>
+                </div>
             </div>
             <div style="border:1PX solid #dee2e6">
                 <div class="row-item col-12">
@@ -196,7 +238,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" id="thongtinchitiet">
                 <div class="row-item col-12">
                     <div class="h2">
                         <span>
@@ -270,16 +312,7 @@
 
 
 
-                <div class="col-12">
-                    <label>Mục đăng tin </label>
-                    <select id="ChuDe" name="ChuDe" multiple class="form-control">
-                        @foreach (var item in Categories)
-                        {
-                            var x = cd.Where(z => z == item.CategoryRowID).Count();
-                            <option @(x != 0 ? "selected" : "") value="@item.CategoryRowID">@item.CategoryName</option>
-                        }
-                    </select>
-                </div>
+
                 <div class="col-12">
                     <label>Tên liên lạc  </label>
                     <input type="text" name="Map_TenLienLac" class="form-control" value="@Model.Map_TenLienLac" />
@@ -344,31 +377,32 @@
                     <li>
                         <label>
                             <input type="checkbox" @(cd.Contains(item.CategoryRowID) ? "checked" : "") name="ChuDeVIP" value="@item.CategoryRowID" />@item.CategoryName
-                          <br />
-                          <b>
-                              @if (listdm.Contains(item.CategoryRowID) || nguoidung.SupperAdmin == 1)
-                              {
-                                  <span class="badge badge-success">Đã mua theo gói</span>
-                              }
-                              else
-                              {
-                                  if ((Model.CategoryList + "").Split(',').Contains(item.CategoryRowID.ToString()))
-                                  {
-                                     <span class="badge badge-primary">Đã mua theo bài đăng</span>
+                            <br />
+                            <b>
+                                @if (listdm.Contains(item.CategoryRowID) || nguoidung.SupperAdmin == 1)
+                                {
+                                    <span class="badge badge-success">Đã mua theo gói</span>
+                                }
+                                else
+                                {
+                                    if ((Model.CategoryList + "").Split(',').Contains(item.CategoryRowID.ToString()))
+                                    {
+                                        <span class="badge badge-primary">Đã mua theo bài đăng</span>
 
-                                  }else
-                                  if (item.onePrice.HasValue&&item.onePrice>0)
-                                  {
-                                      <span class="badge badge-danger"> @item.onePrice.Value.ToString("#,####") VND / 1 bài đăng</span>
+                                    }
+                                    else
+                                    if (item.onePrice.HasValue && item.onePrice > 0)
+                                    {
+                                        <span class="badge badge-danger"> @item.onePrice.Value.ToString("#,####") VND / 1 bài đăng</span>
 
-                                  }
-                                  else
-                                  {
+                                    }
+                                    else
+                                    {
 
-                                      <span>FREE</span>
-                                  }
-                              }
-                          </b>
+                                        <span>FREE</span>
+                                    }
+                                }
+                            </b>
                         </label>
                     </li>
                 }
@@ -380,8 +414,21 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
 <script>
+    $(document).ready(function () {
+          $("[name=TinMuaBan]").change();
+    });
+    $("[name=TinMuaBan]").change(function (e) {
 
+        var val = $(this).val();
+        if (val == "TINTUC") {
+            $('#thongtinchitiet').hide();
+        } else {
+            $('#thongtinchitiet').show();
 
+        }
+        e.preventDefault();
+
+    });
     function CoppySeoLink() {
   /* Get the text field */
     var copyText = document.getElementById("SeoUrl");
