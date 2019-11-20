@@ -35,11 +35,11 @@ namespace Planner2.Models
         public virtual DbSet<MainTask_ChuDe> MainTask_ChuDe { get; set; }
         public virtual DbSet<Notify> Notifies { get; set; }
         public virtual DbSet<NotifyUser> NotifyUsers { get; set; }
-        public virtual DbSet<SettingData> SettingDatas { get; set; }
         public virtual DbSet<ThanhPho> ThanhPhoes { get; set; }
         public virtual DbSet<UploadFile> UploadFiles { get; set; }
         public virtual DbSet<User_Category> User_Category { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<SettingData> SettingDatas { get; set; }
     
         [DbFunction("Planner2Entities", "SplitString")]
         public virtual IQueryable<string> SplitString(string list, string delim)

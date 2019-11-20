@@ -30,6 +30,7 @@ namespace Planner2.Controllers
    
 
         [HttpPost]
+        [ValidateInput(false)]
         public JsonResult Update_StaffOn(SettingData obj)
         {
             using (Planner2Entities rrc_db = new Planner2Entities())

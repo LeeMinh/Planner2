@@ -61,7 +61,7 @@
                     {
                         var nd = Planner2.Module.HtmlUtilities.ConvertToPlainText(item.Description);
                 <span>
-                    @Html.Raw(nd.Substring(0, 150)) ...
+                    @Html.Raw(nd.Substring(0, nd.Length<150 ? nd.Length : 150)) ...
                 </span>
                     }
                     <a href="/post/info/?id=@item.SeoUrl" class="view-more">Xem chi tiết</a>

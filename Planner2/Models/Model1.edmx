@@ -143,7 +143,7 @@
             <PropertyRef Name="KeyID" />
           </Key>
           <Property Name="KeyID" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="Value" Type="nvarchar" MaxLength="500" />
+          <Property Name="Value" Type="nvarchar(max)" />
           <Property Name="Type" Type="nvarchar" MaxLength="50" />
           <Property Name="Value10" Type="nvarchar" MaxLength="500" />
           <Property Name="Value9" Type="nvarchar" MaxLength="500" />
@@ -264,11 +264,11 @@
           <EntitySet Name="MainTask_ChuDe" EntityType="Planner2Model.MainTask_ChuDe" />
           <EntitySet Name="Notifies" EntityType="Planner2Model.Notify" />
           <EntitySet Name="NotifyUsers" EntityType="Planner2Model.NotifyUser" />
-          <EntitySet Name="SettingDatas" EntityType="Planner2Model.SettingData" />
           <EntitySet Name="ThanhPhoes" EntityType="Planner2Model.ThanhPho" />
           <EntitySet Name="UploadFiles" EntityType="Planner2Model.UploadFile" />
           <EntitySet Name="User_Category" EntityType="Planner2Model.User_Category" />
           <EntitySet Name="Users" EntityType="Planner2Model.User" />
+          <EntitySet Name="SettingDatas" EntityType="Planner2Model.SettingData" />
           </EntityContainer>
         <EntityType Name="Bank">
           <Key>
@@ -403,24 +403,6 @@
           <Property Name="ReadNotify" Type="Boolean" Nullable="false" />
           <Property Name="Time_Read" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="SettingData">
-          <Key>
-            <PropertyRef Name="KeyID" />
-          </Key>
-          <Property Name="KeyID" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Value" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Value10" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Value9" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Value8" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Value7" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Value6" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Value5" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Value4" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Value3" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Value2" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Value1" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="ThanhPho">
           <Key>
             <PropertyRef Name="MaThanhPho" />
@@ -475,6 +457,24 @@
           <Property Name="Password" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SoTien" Type="Int32" />
+        </EntityType>
+        <EntityType Name="SettingData">
+          <Key>
+            <PropertyRef Name="KeyID" />
+          </Key>
+          <Property Name="KeyID" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Value10" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value9" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value8" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value7" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value6" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value5" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value4" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value3" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value2" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Value1" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -624,25 +624,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SettingDatas">
-            <EntityTypeMapping TypeName="Planner2Model.SettingData">
-              <MappingFragment StoreEntitySet="SettingData">
-                <ScalarProperty Name="Value1" ColumnName="Value1" />
-                <ScalarProperty Name="Value2" ColumnName="Value2" />
-                <ScalarProperty Name="Value3" ColumnName="Value3" />
-                <ScalarProperty Name="Value4" ColumnName="Value4" />
-                <ScalarProperty Name="Value5" ColumnName="Value5" />
-                <ScalarProperty Name="Value6" ColumnName="Value6" />
-                <ScalarProperty Name="Value7" ColumnName="Value7" />
-                <ScalarProperty Name="Value8" ColumnName="Value8" />
-                <ScalarProperty Name="Value9" ColumnName="Value9" />
-                <ScalarProperty Name="Value10" ColumnName="Value10" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="KeyID" ColumnName="KeyID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ThanhPhoes">
             <EntityTypeMapping TypeName="Planner2Model.ThanhPho">
               <MappingFragment StoreEntitySet="ThanhPho">
@@ -697,6 +678,25 @@
                 <ScalarProperty Name="StaffName" ColumnName="StaffName" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SettingDatas">
+            <EntityTypeMapping TypeName="Planner2Model.SettingData">
+              <MappingFragment StoreEntitySet="SettingData">
+                <ScalarProperty Name="Value1" ColumnName="Value1" />
+                <ScalarProperty Name="Value2" ColumnName="Value2" />
+                <ScalarProperty Name="Value3" ColumnName="Value3" />
+                <ScalarProperty Name="Value4" ColumnName="Value4" />
+                <ScalarProperty Name="Value5" ColumnName="Value5" />
+                <ScalarProperty Name="Value6" ColumnName="Value6" />
+                <ScalarProperty Name="Value7" ColumnName="Value7" />
+                <ScalarProperty Name="Value8" ColumnName="Value8" />
+                <ScalarProperty Name="Value9" ColumnName="Value9" />
+                <ScalarProperty Name="Value10" ColumnName="Value10" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="KeyID" ColumnName="KeyID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
