@@ -303,6 +303,7 @@
     <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\CommentsController.cs" />
+    <Compile Include="Controllers\CustomPagesController.cs" />
     <Compile Include="Controllers\FutureTaskController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -337,6 +338,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CompareClass.cs" />
+    <Compile Include="Models\CustomPage.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Custom_Group_Members.cs" />
     <Compile Include="Models\DetailLateTask.cs" />
     <Compile Include="Models\DetailsSumaryTask.cs" />
@@ -1623,6 +1627,8 @@
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\CustomPages\Index.cshtml" />
+    <Content Include="Views\CustomPages\IndexText.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

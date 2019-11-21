@@ -1,17 +1,19 @@
-﻿@model Planner2.Models.MainTask
- 
+﻿@model   Planner2.Models.CustomPage
+ @{ 
+         Layout = "~/Views/Shared/_NavPub.cshtml";
+ }
 <main id="main" class="site-main" role="main">
 
 
     <article id="post-6" class="post-6 page type-page status-publish hentry">
         <header class="entry-header">
             <h1 class="entry-title">
-                @ViewBag.TitleChuDe
+                @Model.TitlePage
             </h1>
         </header><!-- .entry-header -->
 
         <div class="entry-content">
-            @Html.Raw(Model.Description)
+            @Html.Raw(Model.ContentPage)
         </div><!-- .entry-content -->
 
         <footer class="entry-footer">

@@ -22,12 +22,13 @@ namespace Planner2
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            ReloadSetting();
             using (Models.Planner2Entities db = new Models.Planner2Entities())
             {
                 Application["Users"] = db.Users.Where(z=>z.Email!=null).ToList();
-                
+                    Common.SettingData.HeaderHTML = db.CustomPages.Where(v=>v.NamePage== "HEADER").Select(z=>z.ContentPage).FirstOrDefault();
+
             }
-            ReloadSetting();
         }
       public static void ReloadSetting()
         {

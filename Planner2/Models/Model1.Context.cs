@@ -40,6 +40,7 @@ namespace Planner2.Models
         public virtual DbSet<User_Category> User_Category { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<SettingData> SettingDatas { get; set; }
+        public virtual DbSet<CustomPage> CustomPages { get; set; }
     
         [DbFunction("Planner2Entities", "SplitString")]
         public virtual IQueryable<string> SplitString(string list, string delim)

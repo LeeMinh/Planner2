@@ -24,6 +24,15 @@ namespace Planner2.Controllers
         {
             return PartialView();
         }
+        public ActionResult Page(string NamePage, string TT = "")
+        {
+            ViewBag.TT = TT;
+            using (Models.Planner2Entities db = new Planner2Entities())
+            {
+                var data = db.CustomPages.Where(z => z.NamePage == NamePage).FirstOrDefault();
+                return View(data);
+            }
+        }
         public ActionResult HomePage()
         {
             return View("HomePage");
