@@ -329,13 +329,12 @@ namespace Planner2.Controllers
             {
                 switch (column.ColumnType)
                 {
-                    case "System.Int64":
-                    case "System.Int32":
-                    case "System.Boolean":
+                    case "float":
+                    case "int":
+                    case "bit":
                         strColumnUpdate = strColumnUpdate + column.ColumnName + "=" + column.ColumnValue + ",";
                         break;
-                    case "System.String":
-                    case "System.DateTime":
+                     default :
                         strColumnUpdate = strColumnUpdate + column.ColumnName + "=N'" + column.ColumnValue + "',";
                         break;
                 }
