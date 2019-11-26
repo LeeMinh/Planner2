@@ -19,6 +19,8 @@
         <EntityTypeShape EntityType="Planner2Model.User" Width="1.5" PointX="10.75" PointY="0.75" />
         <EntityTypeShape EntityType="Planner2Model.SettingData" Width="1.5" PointX="5.375" PointY="8.75" />
         <EntityTypeShape EntityType="Planner2Model.CustomPage" Width="1.5" PointX="11.375" PointY="5.75" />
+        <EntityTypeShape EntityType="Planner2Model.DataViewer" Width="1.5" PointX="7.375" PointY="11.75" />
+        <EntityTypeShape EntityType="Planner2Model.UserSupport" Width="1.5" PointX="11.375" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

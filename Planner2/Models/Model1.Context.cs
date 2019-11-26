@@ -41,6 +41,8 @@ namespace Planner2.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<SettingData> SettingDatas { get; set; }
         public virtual DbSet<CustomPage> CustomPages { get; set; }
+        public virtual DbSet<DataViewer> DataViewers { get; set; }
+        public virtual DbSet<UserSupport> UserSupports { get; set; }
     
         [DbFunction("Planner2Entities", "SplitString")]
         public virtual IQueryable<string> SplitString(string list, string delim)

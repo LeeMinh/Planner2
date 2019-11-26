@@ -13,6 +13,18 @@
           <Property Name="ContentPage" Type="nvarchar(max)" />
           <Property Name="TitlePage" Type="nvarchar" MaxLength="500" />
         </EntityType>
+        <EntityType Name="UserSupport">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="GioiTinh" Type="nvarchar" MaxLength="500" />
+          <Property Name="DiaChi" Type="nvarchar" MaxLength="500" />
+          <Property Name="SoDienThoai" Type="nvarchar" MaxLength="500" />
+          <Property Name="KhuVuc" Type="nvarchar" MaxLength="500" />
+          <Property Name="Email" Type="nvarchar" MaxLength="500" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
         <EntityType Name="Bank">
           <Key>
             <PropertyRef Name="ID" />
@@ -63,6 +75,19 @@
           <Property Name="Type" Type="int" />
           <Property Name="ParentID" Type="int" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="DataViewer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="QueryData" Type="nvarchar" MaxLength="2550" />
+          <Property Name="Show" Type="int" Nullable="false" />
+          <Property Name="TYPE" Type="nvarchar" MaxLength="50" />
+          <Property Name="Editor" Type="int" Nullable="false" />
+          <Property Name="TableEdit" Type="nvarchar" MaxLength="500" />
+          <Property Name="UserView" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="History">
           <Key>
@@ -232,9 +257,11 @@
         </Function>
         <EntityContainer Name="Planner2ModelStoreContainer">
           <EntitySet Name="CustomPage" EntityType="Self.CustomPage" Schema="cho10227_admin" store:Type="Tables" />
+          <EntitySet Name="UserSupport" EntityType="Self.UserSupport" Schema="cho10227_admin" store:Type="Tables" />
           <EntitySet Name="Bank" EntityType="Self.Bank" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CommentTask" EntityType="Self.CommentTask" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DataViewer" EntityType="Self.DataViewer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="History" EntityType="Self.History" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MainTask" EntityType="Self.MainTask" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MainTask_ChuDe" EntityType="Self.MainTask_ChuDe" Schema="dbo" store:Type="Tables" />
@@ -279,6 +306,8 @@
           <EntitySet Name="Users" EntityType="Planner2Model.User" />
           <EntitySet Name="SettingDatas" EntityType="Planner2Model.SettingData" />
           <EntitySet Name="CustomPages" EntityType="Planner2Model.CustomPage" />
+          <EntitySet Name="DataViewers" EntityType="Planner2Model.DataViewer" />
+          <EntitySet Name="UserSupports" EntityType="Planner2Model.UserSupport" />
           </EntityContainer>
         <EntityType Name="Bank">
           <Key>
@@ -493,6 +522,31 @@
           <Property Name="NamePage" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ContentPage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TitlePage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="DataViewer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="QueryData" Type="String" MaxLength="2550" FixedLength="false" Unicode="true" />
+          <Property Name="Show" Type="Int32" Nullable="false" />
+          <Property Name="TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Editor" Type="Int32" Nullable="false" />
+          <Property Name="TableEdit" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="UserView" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="UserSupport">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="GioiTinh" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DiaChi" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SoDienThoai" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="KhuVuc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -724,6 +778,33 @@
                 <ScalarProperty Name="TitlePage" ColumnName="TitlePage" />
                 <ScalarProperty Name="ContentPage" ColumnName="ContentPage" />
                 <ScalarProperty Name="NamePage" ColumnName="NamePage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DataViewers">
+            <EntityTypeMapping TypeName="Planner2Model.DataViewer">
+              <MappingFragment StoreEntitySet="DataViewer">
+                <ScalarProperty Name="UserView" ColumnName="UserView" />
+                <ScalarProperty Name="TableEdit" ColumnName="TableEdit" />
+                <ScalarProperty Name="Editor" ColumnName="Editor" />
+                <ScalarProperty Name="TYPE" ColumnName="TYPE" />
+                <ScalarProperty Name="Show" ColumnName="Show" />
+                <ScalarProperty Name="QueryData" ColumnName="QueryData" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserSupports">
+            <EntityTypeMapping TypeName="Planner2Model.UserSupport">
+              <MappingFragment StoreEntitySet="UserSupport">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="KhuVuc" ColumnName="KhuVuc" />
+                <ScalarProperty Name="SoDienThoai" ColumnName="SoDienThoai" />
+                <ScalarProperty Name="DiaChi" ColumnName="DiaChi" />
+                <ScalarProperty Name="GioiTinh" ColumnName="GioiTinh" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

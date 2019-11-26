@@ -1,0 +1,83 @@
+﻿
+<div id="grid">
+
+
+</div>
+
+<script>
+        function FromJsonToDate(value) {
+            if (value != null) {
+                return new Date(parseInt(value.replace('/Date(', '')));
+            }
+            return;
+        }
+        var x = $("#grid").dxDataGrid();
+        $.ajax({
+            type: "POST",
+            url: "/TableEdittor/ListTable",
+            dataType: "json",
+
+            success: function (response) {
+
+                x = $("#grid").dxDataGrid({
+                    dataSource: response,
+                    selection: { mode: "single" },
+                    columnHidingEnabled: true,
+                    columnResizingMode: "widget",
+                    grouping: {
+                        contextMenuEnabled: true,
+                        expandMode: "rowClick"
+                    },
+                    showBorders: true,
+                    paging: { enabled: true },
+                    filterRow: { visible: true, applyFilter: "auto" },
+                    showColumnHeaders: true,
+                    showColumnLines: true,
+                    showRowLines: true,
+                    pager: {
+                        showPageSizeSelector: true,
+                        allowedPageSizes: [100, 200, 500, 1000],
+                        showInfo: true
+                    },
+                    paging: { pageSize: 50 },
+                    allowColumnResizing: true,
+                    columnFixing: { enabled: true },
+                    hoverStateEnabled: true,
+                    headerFilter: { visible: true },
+                    columnsAutoWidth: true,
+                    allowColumnReordering: true,
+                    onCellPrepared: function (e) {
+                        if (e.rowType == "header") {
+                            e.cellElement.addClass('headerTree');
+                        }
+                    },
+                    scrolling: {
+                        scrollByContent: true
+                    },
+
+                    onSelectionChanged: function (selectedItems) {
+                        var data = selectedItems.selectedRowsData[0];
+                         var ID = data.ID;
+                        window.location.href = '/TableEdittor/Viewer?ID=' + ID ;
+
+                    },
+                    onContentReady: function (e) {
+
+                        e.element.find(".dx-datagrid-header-panel").find(".dx-toolbar-before").html('<div style="    font-size: 24px;color:red" class="textstyle_1"><B>@ViewBag.title</B></div>');
+
+                    },
+
+                    "export": {
+                        enabled: true,
+                        fileName: "EXPORT DATA",
+                        allowExportSelectedData: true
+                    }
+                });
+
+
+            }
+        });
+
+
+
+</script>

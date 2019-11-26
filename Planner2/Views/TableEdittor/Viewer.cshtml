@@ -1,0 +1,121 @@
+﻿<div id="grid"></div>
+
+<script>
+    var primaryKeyName=   "@ViewBag.primaryKeyName";
+        var ordersStore = new DevExpress.data.CustomStore({
+            key: primaryKeyName,
+            load: function () {
+                var item = sendRequest('@ViewBag.ListUrl');
+                 return   item;
+            },
+            insert: function (values) {
+                return sendRequest('@ViewBag.AddUrl', "POST", {
+                    values:  values
+                });
+            },
+            update: function (key, values) {
+                return sendRequest('@ViewBag.UpdateUrl', "POST", {
+                    key: key,
+                    values:values
+                });
+            },
+            remove: function (key) {
+                return sendRequest('@ViewBag.DeleteUrl', "POST", {
+                    key: key
+                });
+            }
+        });
+
+        var dataGrid = $("#grid").dxDataGrid({
+            dataSource: ordersStore,
+            repaintChangesOnly: true,
+            showBorders: true,
+            selection: { mode: "single" },
+            columnMinWidth: 100,
+            columnHidingEnabled: true,
+            columnResizingMode: "widget",
+            editing: {
+                refreshMode: "reshape",
+                mode: "popup",
+                allowAdding: true,
+                allowUpdating: true,
+                allowDeleting: true
+            },
+              scrolling: {
+                mode: "standard",
+                scrollByContent: true,
+            },
+
+            columns: @Html.Raw(ViewBag.FieldData),
+
+            summary: {
+                totalItems: [{
+                    column: primaryKeyName,
+                    summaryType: "count"
+                } ]
+            }
+            ,
+              allowColumnResizing: true,
+                    columnFixing: { enabled: true },
+                    hoverStateEnabled: true,
+                       showColumnHeaders: true,
+            showColumnLines: true,
+                    filterRow: { visible: true, applyFilter: "auto" },
+            headerFilter: { visible: true },
+                    columnsAutoWidth: true,
+            allowColumnReordering: true,
+                       pager: {
+                        showPageSizeSelector: true,
+                        allowedPageSizes: [100, 200, 500, 1000],
+                        showInfo: true
+                    },
+                    paging: { pageSize: 50 },
+            onCellPrepared: function (e) {
+                        if (e.rowType == "header") {
+                            e.cellElement.addClass('headerTree');
+                        }
+                    },
+            loadPanel: {
+            enabled: true
+        },
+            columnResizingMode: "widget",
+
+
+            onContentReady: function(e) {
+            e.component.option("loadPanel.enabled", false);
+            e.element.find(".dx-datagrid-header-panel").find(".dx-toolbar-before").html('<div style="font-size: 24px;color:red" class="textstyle_1"><B>@ViewBag.title</B></div>');
+            },
+            "export": {
+                        enabled: true,
+                        fileName: "EXPORT DATA",
+                        allowExportSelectedData: true
+                    }
+
+        }).dxDataGrid("instance");
+
+
+        function sendRequest(url, method, data) {
+            var d = $.Deferred();
+
+            method = method || "GET";
+
+
+            $.ajax(url, {
+                method: method || "GET",
+                data: data,
+                cache: false,
+                xhrFields: { withCredentials: true }
+            }).done(function (result) {
+
+            d.resolve(method === "GET" ?JSON.parse(result): "");
+
+            }).fail(function (xhr) {
+                console.log(xhr);
+                d.reject("Lỗi, vui lòng kiểm tra lại");
+            });
+
+            return d.promise();
+        }
+
+
+</script>

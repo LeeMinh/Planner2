@@ -106,6 +106,11 @@ namespace Planner2.Controllers
     [LoginAuth]
     public class BaseController : Controller
     {
-
+        public JsonResult JsonMax(object data)
+        {
+            JsonResult jsonResult = Json(data, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = 2147483647;
+            return jsonResult;
+        }
     }
 }

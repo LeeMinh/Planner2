@@ -121,6 +121,19 @@
                     </div>
                     <br />
                 }
+                <h5>Hỗ trợ</h5>
+                  @foreach (var item in db.UserSupports)
+                {
+                    <div style="border: 1px solid #a0a9b0; background: #f4f9ff; padding: 10px; width: auto; height: auto; overflow: auto;">
+                        <div style="margin-left: 20px; float: left; line-height: 20px;">
+                            <div style="font-weight: bold; font-size: 12px; font-family: Arial;"><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;">Nhân viên :@item.Name <br> </span> </span></div>
+                            <div><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;">Khu vực:&nbsp;<span style="font-size: 12px;">@item.KhuVuc</span> <span style="font-weight: bold;"> <br> </span> </span> </span></div>
+                            <div><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;">Số điện thoại : @item.SoDienThoai</span> </span></div>
+                            <div><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;">Email    : <strong>@item.Email</strong> </span> </span></div>
+                        </div>
+                    </div>
+                    <br />
+                }
 
             </div>
             <div class="modal-footer">
