@@ -117,119 +117,140 @@
                                     </p>
                                 </a>
                             </li>
-                            @if (nguoidung.SupperAdmin == 1)
+                            @if (nguoidung.SupperAdmin != 1)
                             {
-
-
                                 <li class="nav-item">
-                                    <a href="/FutureTask/all" class="nav-link">
-                                        <i class="nav-icon fa fa-cog "></i>
+                                    <a href="/Banks/Viewer" class="nav-link">
+                                        <i class="nav-icon fa fa-bank" style="color:#c9f4fa"></i>
                                         <p>
-                                            Tất cả bài đăng
+                                           Thông tin chuyển khoản   
 
+                                        </p>
+                                    </a>
+                                </li> 
+                                <li class="nav-item">
+                                    <a href="/Banks/SupportViewer" class="nav-link">
+                                        <i class="nav-icon fa fa-support" style="color:#c9f4fa"></i>
+                                        <p>
+                                         Hỗ trợ
 
                                         </p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="/Settings/index" class="nav-link">
-                                        <i class="nav-icon fa fa-cog "></i>
-                                        <p>
-                                            @Planner2.Common.SettingData.Setting
-
-
-                                        </p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="/Categories/index" class="nav-link">
-                                        <i class="nav-icon fa fa-cog "></i>
-                                        <p>
-                                            @Planner2.Common.SettingData.Categories
-
-
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/Banner/index" class="nav-link">
-                                        <i class="nav-icon fa fa-tags "></i>
-                                        <p>
-                                            Banner,Logo
-
-
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/Users/index" class="nav-link">
-                                        <i class="nav-icon fa fa-users "></i>
-                                        <p>
-                                            Users
-
-
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/User_Category/index" class="nav-link">
-                                        <i class="nav-icon fa fa-user-secret "></i>
-                                        <p>
-                                            Phân quyền
-
-
-
-                                        </p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="/banks/index" class="nav-link">
-                                        <i class="nav-icon fa fa-dollar "></i>
-                                        <p>
-                                            Ngân hàng
-
-
-
-                                        </p>
-                                    </a>
-                                </li>
-
-
-                                <li class="nav-item">
-                                    <a href="/CustomPages/Index?NamePage=GIOITHIEU" class="nav-link">
-                                        <i class="nav-icon fa fa-info-circle "></i>
-                                        <p>
-                                            Giới thiệu
-
-
-                                        </p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="/CustomPages/IndexText?NamePage=HEADER" class="nav-link">
-                                        <i class="nav-icon fa fa-pagelines "></i>
-                                        <p>
-                                            Header
-
-
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/TableEdittor/Index" class="nav-link">
-                                        <i class="nav-icon fa fa-cogs "></i>
-                                        <p>
-                                            TableEdittor
-
-                                        </p>
-                                    </a>
-                                </li>
-
                             }
-                        </ul>
+                                @if (nguoidung.SupperAdmin == 1)
+                                {
+
+
+                                    <li class="nav-item">
+                                        <a href="/FutureTask/all" class="nav-link">
+                                            <i class="nav-icon fa fa-cog "></i>
+                                            <p>
+                                                Tất cả bài đăng
+
+
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/Settings/index" class="nav-link">
+                                            <i class="nav-icon fa fa-cog "></i>
+                                            <p>
+                                                @Planner2.Common.SettingData.Setting
+
+
+                                            </p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="/Categories/index" class="nav-link">
+                                            <i class="nav-icon fa fa-cog "></i>
+                                            <p>
+                                                @Planner2.Common.SettingData.Categories
+
+
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/Banner/index" class="nav-link">
+                                            <i class="nav-icon fa fa-tags "></i>
+                                            <p>
+                                                Banner,Logo
+
+
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/Users/index" class="nav-link">
+                                            <i class="nav-icon fa fa-users "></i>
+                                            <p>
+                                                Users
+
+
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/User_Category/index" class="nav-link">
+                                            <i class="nav-icon fa fa-user-secret "></i>
+                                            <p>
+                                                Phân quyền
+
+
+
+                                            </p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="/banks/index" class="nav-link">
+                                            <i class="nav-icon fa fa-dollar "></i>
+                                            <p>
+                                                Ngân hàng
+
+
+
+                                            </p>
+                                        </a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a href="/CustomPages/Index?NamePage=GIOITHIEU" class="nav-link">
+                                            <i class="nav-icon fa fa-info-circle "></i>
+                                            <p>
+                                                Giới thiệu
+
+
+                                            </p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="/CustomPages/IndexText?NamePage=HEADER" class="nav-link">
+                                            <i class="nav-icon fa fa-pagelines "></i>
+                                            <p>
+                                                Header
+
+
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/TableEdittor/Index" class="nav-link">
+                                            <i class="nav-icon fa fa-cogs "></i>
+                                            <p>
+                                                Chỉnh sửa dữ liệu
+
+                                            </p>
+                                        </a>
+                                    </li>
+
+                                }
+                            </ul>
                     </nav>
                     <!-- /.sidebar-menu -->
                 </div>

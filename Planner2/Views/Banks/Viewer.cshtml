@@ -1,0 +1,21 @@
+﻿@{ 
+        Planner2Entities db = new Planner2Entities();
+
+}
+    <div class="modal-body">
+        <h2>Thông tin chuyển khoản</h2>
+        @foreach (var item in db.Banks)
+        {
+            <div style="border: 1px solid #a0a9b0; background: #f4f9ff; padding: 10px; width: auto; height: auto; overflow: auto;">
+                <div style="margin-left: 20px; float: left; line-height: 20px;">
+                    <div style="font-weight: bold; font-size: 12px; font-family: Arial;"><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;">@item.BankName <br> </span> </span></div>
+                    <div><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;">Chủ tài khoản:&nbsp;<span style="font-size: 12px;">@item.ChuTaiKhoan</span> <span style="font-weight: bold;"> <br> </span> </span> </span></div>
+                    <div><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;">Chi nhánh : @item.ChiNhanh</span> </span></div>
+                    <div><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;">Số tài khoản : <strong>@item.SoTaiKhoan</strong> </span> </span></div>
+                </div>
+            </div>
+            <br />
+        }
+
+
+    </div>

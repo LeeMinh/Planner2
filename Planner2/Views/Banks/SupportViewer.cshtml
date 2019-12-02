@@ -1,0 +1,28 @@
+﻿@{
+    Planner2Entities db = new Planner2Entities();
+
+}
+<style>
+    .labelInfo{
+        width:100px;
+        display:inline-grid
+    }
+</style>
+    <div class="modal-body">
+        <h2>Nhân viên hỗ trợ</h2>
+        @foreach (var item in db.UserSupports)
+        {
+            <div style="border: 1px solid #a0a9b0; background: #f4f9ff; padding: 10px; width: auto; height: auto; overflow: auto;">
+                <div style="margin-left: 20px; float: left; line-height: 20px;">
+                    <div style="font-weight: bold; font-size: 12px; font-family: Arial;"><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;"><span class="labelInfo">Nhân viên :</span> @item.Name <br> </span> </span></div>
+                    <div><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;"><span class="labelInfo" >Khu vực:</span>&nbsp;<span style="font-size: 12px;">@item.KhuVuc</span> <span style="font-weight: bold;"> <br> </span> </span> </span></div>
+                    <div><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;"><span class="labelInfo" >Giới tính :</span> @item.GioiTinh</span> </span></div>
+                    <div><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;"><span class="labelInfo" >Số điện thoại : </span> <a href="tel:@item.SoDienThoai">@item.SoDienThoai</a></span> </span></div>
+                    <div><span style="font-size: 12px;"> <span style="font-family: arial,helvetica,sans-serif;"><span class="labelInfo" >Email    :</span> <strong><a href="mailto:@item.Email">@item.Email</a></strong> </span> </span></div>
+                </div>
+            </div>
+            <br />
+        }
+
+
+    </div>

@@ -19,7 +19,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort>44377</IISExpressSSLPort>
+    <IISExpressSSLPort>44335</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -1639,6 +1639,8 @@
     <Content Include="Views\CustomPages\IndexText.cshtml" />
     <Content Include="Views\TableEdittor\Index.cshtml" />
     <Content Include="Views\TableEdittor\Viewer.cshtml" />
+    <Content Include="Views\Banks\Viewer.cshtml" />
+    <Content Include="Views\Banks\SupportViewer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

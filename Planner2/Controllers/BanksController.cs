@@ -14,6 +14,14 @@ namespace Planner2.Controllers
         {
             return View();
         }
+           public ActionResult Viewer()
+        {
+            return View();
+        }  
+        public ActionResult SupportViewer()
+        {
+            return View();
+        }
 
         [HttpGet]
         public JsonResult GetData_Data()
