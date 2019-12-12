@@ -35,6 +35,8 @@ namespace Planner2.Common
      public static string UseGoogleAuthentication_clientId { get; set; }
          public static string UseGoogleAuthentication_clientSecret { get; set; }
          public static string HeaderHTML { get; set; }
+         public static string BANNER_LEFT { get; set; }
+         public static string BANNER_RIGHT { get; set; }
    
    
    

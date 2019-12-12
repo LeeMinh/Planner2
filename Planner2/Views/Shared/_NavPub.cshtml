@@ -63,6 +63,16 @@
             background: none !important;
             padding: 0 !important;
         }
+
+        #myCarousel > img {
+            width: 100% !important
+        }
+
+        @@media (max-width: 991px) {
+            .BANNER_QUANGCAO {
+                display:none
+            }
+        }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link rel='stylesheet' id='wp-block-library-css' href='~/Content/wp-includes/css/dist/block-library/style.min3c21.css?ver=5.1.1' type='text/css' media='all' />
@@ -89,7 +99,7 @@
 
         @@media screen and (min-width: 768px) {
             .carousel-indicators {
-                bottom:  50px!important;
+                bottom: 50px !important;
             }
         }
 
@@ -320,16 +330,58 @@
 
 
         </header>
-
-        <div id="content" class="site-content ">
-            <div class="container">
-
-                @{Html.RenderAction("breadcrums", "post", new { ChuDe = ViewBag.ChuDe });}
-                <div class="row">
-                    @if (!(ViewBag.LEFTHIDEN == true && Request.Browser.IsMobileDevice))
+        <div class="row">
+            @if (!(ViewBag.LEFTHIDEN == true && Request.Browser.IsMobileDevice))
+            {
+                <div class="col-md-1 BANNER_QUANGCAO" style="text-align:right">
+                    <img src="@Planner2.Common.SettingData.BANNER_LEFT" />
+                </div>
+           
+                <div class="col-md-2">
+                    @{
+                        Html.RenderAction("Timkiem", "post");
+                    }
+                    @foreach (var item in db.Categories.Where(Z => Z.Menu == "Left"))
                     {
+                        <div id="hrm-widget_tin_bds-widget-3" class="widget-odd widget-first widget-1 widget hrm-widget-tin-bds hrm-recent-realty feature">
+                            @{Html.RenderAction("TinChuDe", "post", new { ChuDe = item.SeoUrl });}
+                        </div>
+                    }
+                </div>
+               }
+                <div class="col-md-6">
+                    @RenderBody()
+
+                </div>
+                <div class="col-md-2">
+                    @{
+                        var video = db.MainTasks.Where(v => !string.IsNullOrEmpty(v.Youtube)).OrderByDescending(Z => Z.NgayDang).Skip(0).Take(2).ToList();
+                        if (video.Count > 0)
+                        {
+                            Html.RenderPartial("~/Views/Post/TinChuDe.cshtml", video);
+
+                        }
+                    }
+                    @foreach (var item in db.Categories.Where(Z => Z.Menu == "Right"))
+                    {
+                        Html.RenderAction("TinChuDe", "post", new { ChuDe = item.SeoUrl });
+                    }
+                </div>
+
+                <div class="col-md-1 BANNER_QUANGCAO" style="text-align:left">
+                    <img src="@Planner2.Common.SettingData.BANNER_RIGHT" />
+                </div>
+            </div>
+        @*<div id="content" class="site-content ">
+                <div class="container">
+
+                    @{Html.RenderAction("breadcrums", "post", new { ChuDe = ViewBag.ChuDe });}
+                    <div class="row">
+                        @if (!(ViewBag.LEFTHIDEN == true && Request.Browser.IsMobileDevice))
+                        {
 
                         <div class="  col-xs-12 col-sm-12 col-md-3  " role="complementary">
+                            <img src="@Planner2.Common.SettingData.BANNER_LEFT" />
                             @{
                                 Html.RenderAction("Timkiem", "post");
                             }
@@ -340,29 +392,31 @@
                                 </div>
                             }
                         </div>
-                    }
-                    <div id="primary" class=" col-xs-12 col-sm-12  col-md-6">
-                        @RenderBody()
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-3" role="complementary">
-                        <div id="hrm-widget_tin_bds-widget-2" style="display:inline-grid!important" class="widget-odd widget-first widget-1 widget hrm-widget-tin-bds hrm-recent-realty feature">
-                            @{
-                                var video = db.MainTasks.Where(v => !string.IsNullOrEmpty(v.Youtube)).OrderByDescending(Z => Z.NgayDang).Skip(0).Take(2).ToList();
-                                if (video.Count > 0)
-                                {
-                                    Html.RenderPartial("~/Views/Post/TinChuDe.cshtml", video);
-
-                                }
-                            }
-                            @foreach (var item in db.Categories.Where(Z => Z.Menu == "Right"))
-                            {
-                                Html.RenderAction("TinChuDe", "post", new { ChuDe = item.SeoUrl });
-                            }
+                        }
+                        <div id="primary" class=" col-xs-12 col-sm-12  col-md-6">
+                            @RenderBody()
                         </div>
-                    </div><!-- #secondary -->
-                </div><!-- .row -->
-            </div><!-- .container -->
-        </div><!-- #content -->
+                        <div class="col-xs-12 col-sm-12 col-md-3" role="complementary">
+                            <div id="hrm-widget_tin_bds-widget-2" style="display:inline-grid!important" class="widget-odd widget-first widget-1 widget hrm-widget-tin-bds hrm-recent-realty feature">
+                                @{
+                                    var video = db.MainTasks.Where(v => !string.IsNullOrEmpty(v.Youtube)).OrderByDescending(Z => Z.NgayDang).Skip(0).Take(2).ToList();
+                                    if (video.Count > 0)
+                                    {
+                                        Html.RenderPartial("~/Views/Post/TinChuDe.cshtml", video);
+
+                                    }
+                                }
+                                @foreach (var item in db.Categories.Where(Z => Z.Menu == "Right"))
+                                {
+                                    Html.RenderAction("TinChuDe", "post", new { ChuDe = item.SeoUrl });
+                                }
+                            </div>
+                            <img src="@Planner2.Common.SettingData.BANNER_RIGHT" />
+
+                        </div>
+                    </div>
+                </div>
+            </div>*@
 
         <footer id="colophon" class="site-footer" role="contentinfo">
             <div class="paper">
