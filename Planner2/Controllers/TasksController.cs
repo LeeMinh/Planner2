@@ -132,12 +132,10 @@ namespace Planner2.Controllers
                 ViewBag.FileUpload = db.UploadFiles.Where(v => v.TaskID == TaskID && v.TableName == "MainTask").ToList();
 
                 var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
-                var listdm = db.User_Category.Where(z => z.UserName == nguoidung.UserName && z.NgayHetHan.Value >= DateTime.Now).Select(z => z.CategoryRowID).ToList();
-                var Categories = db.Categories.Where(v => v.Menu == "Top").ToList();
+                 var Categories = db.Categories.Where(v => v.Menu == "Top").ToList();
                 var CategoriesVIP = db.Categories.Where(v => v.Menu != "Top").ToList();
 
-                ViewBag.listdm = listdm;
-                ViewBag.Categories = Categories;
+                 ViewBag.Categories = Categories;
                 ViewBag.CategoriesVIP = CategoriesVIP;
                 #region create
                 if (TaskID == 0)
@@ -280,7 +278,28 @@ namespace Planner2.Controllers
             return FileUp;
         }
 
+        double  PhaiThanhToan(List<int> ThanhToan,int ID,double Day =0)
+        {
+ 
+            double SoTienPhaiThanhToan = 0;
+            using (Models.Planner2Entities db = new Planner2Entities())
+            {
+                foreach (var x in ThanhToan)
+                {
+                     
+                        var CategoryList = db.MainTasks.Where(z => z.Id == ID).Select(z => z.CategoryList).FirstOrDefault();
 
+                        CategoryList = CategoryList ?? "";
+                        var arrCategoryList = CategoryList.Split(',').Where(z => !string.IsNullOrEmpty(z)).Select(z => int.Parse(z)).ToList();
+
+                        var cate = db.Categories.Where(v => v.CategoryRowID == x && !arrCategoryList.Contains(x)).Select(z => z.onePrice).FirstOrDefault();
+                        cate = cate ?? 0;
+                        SoTienPhaiThanhToan += cate.Value*Day;
+                  
+                }
+            }
+            return SoTienPhaiThanhToan;
+        }
         // submit tạo mới dữ liệu
         [HttpPost]
         [ValidateInput(false)]
@@ -291,6 +310,11 @@ namespace Planner2.Controllers
                 ChuDe = ChuDe ?? new int[] { };
                 ChuDeVIP = ChuDeVIP ?? new int[] { };
                 item.NgayDang = DateTime.Now;
+                if (item.StartDate >item.FinishDate)
+                {
+                    return Json(new { TT = 1, Value = "Ngày kết thúc không được nhỏ hơn ngày bắt đầu" }, JsonRequestBehavior.AllowGet);
+
+                }
                 var file = SubmitFile(new List<HttpPostedFileBase> { Picture });
                 if (file.Count > 0)
                 {
@@ -318,25 +342,12 @@ namespace Planner2.Controllers
                 string noidungmail = "";
                 using (Models.Planner2Entities db = new Models.Planner2Entities())
                 {
+                    var ChudeDang = ChuDe.ToList();
+                    ChudeDang.AddRange(ChuDeVIP.ToList());
 
-                    double SoTienPhaiThanhToan = 0;
-                    var ThanhToan = ChuDeVIP.ToList();
-                    ThanhToan.AddRange(ChuDe.ToList());
-                    foreach (var x in ThanhToan)
-                    {
-                        var listdm = db.User_Category.Where(z => z.UserName == nguoidung.UserName && z.NgayHetHan.Value >= DateTime.Now && x == z.CategoryRowID).Select(z => z.CategoryRowID).Count();
-                        if (listdm == 0 && nguoidung.SupperAdmin != 1)
-                        {
-                            var CategoryList = db.MainTasks.Where(z => z.Id == item.Id).Select(z => z.CategoryList).FirstOrDefault();
-
-                            CategoryList = CategoryList ?? "";
-                            var arrCategoryList = CategoryList.Split(',').Where(z => !string.IsNullOrEmpty(z)).Select(z => int.Parse(z)).ToList();
-                            var cate = db.Categories.Where(v => v.CategoryRowID == x && !arrCategoryList.Contains(x)).Select(z => z.onePrice).FirstOrDefault();
-                            cate = cate ?? 0;
-                            SoTienPhaiThanhToan += cate.Value;
-                        }
-
-                    }
+                    var day = (item.FinishDate - item.StartDate).Value.TotalDays;
+                    double SoTienPhaiThanhToan = PhaiThanhToan(ChudeDang,item.Id, day);
+                     
                     var nd = db.Users.Where(c => c.Id == nguoidung.Id).FirstOrDefault();
                     nd.SoTien = nd.SoTien ?? 0;
                     nd.SoTien = nd.SoTien.Value - (int)SoTienPhaiThanhToan;
@@ -372,6 +383,8 @@ namespace Planner2.Controllers
                         task.KhuVuc_Huyen = item.KhuVuc_Huyen;
                         task.NgayDang = item.NgayDang;
                         task.Gia = item.Gia;
+                        task.StartDate = item.StartDate;
+                        task.FinishDate = item.FinishDate;
                         task.SeoUrl = item.SeoUrl;
                         task.TyGia = item.TyGia;
                         task.Map_LoaiBatDongSan = item.Map_LoaiBatDongSan;

@@ -5,15 +5,14 @@
     Model.NgayDang = Model.NgayDang ?? DateTime.Now;
     Planner2Entities db = new Planner2Entities();
     var Categories = (List<Planner2.Models.Category>)ViewBag.Categories;
-    var listdm = (List<int?>)ViewBag.listdm;
-    var CategoriesVIP = (List<Planner2.Models.Category>)ViewBag.CategoriesVIP;
+     var CategoriesVIP = (List<Planner2.Models.Category>)ViewBag.CategoriesVIP;
     var TinhThanh = db.ThanhPhoes.GroupBy(z => z.MaThanhPho).Select(v => new { Name = v.FirstOrDefault().TenThanhPho, Key = v.FirstOrDefault().MaThanhPho }).ToList();
     var cd = db.MainTask_ChuDe.Where(v => v.TaskID == Model.Id).Select(z => z.CategoryRowID).ToList();
     cd = cd ?? new List<int?>();
     var ST = String.Format(System.Globalization.CultureInfo.GetCultureInfo("vi-VN"), "{0:n0}", nguoidung.SoTien) + " VND";
 
 }
-
+@using Planner2.Extentions
 <style>
     .tooltip {
         position: relative;
@@ -142,11 +141,19 @@
 
 
                 <div class="col-3">
+                    <label>Ngày bắt đầu đăng (*)</label>
+                    <input type="date" name="StartDate"   required class="form-control" value="@Model.StartDate.ToString_N("yyyy-MM-dd")" />
+                </div>  
+                <div class="col-3">
+                    <label>Ngày kết thúc đăng (*)</label>
+                    <input type="date" name="FinishDate"  required class="form-control" value="@Model.FinishDate.ToString_N("yyyy-MM-dd")" />
+                </div>
+                <div class="col-3">
                     <label>Diện tích (m2) (*)</label>
                     <input type="number" name="DienTich" step="0.001" required class="form-control" value="@Model.DienTich" />
                 </div>
                 <div class="col-3">
-                    <label>Gía   (*)</label>
+                    <label>Giá   (*)</label>
                     <input type="number" name="Gia" step="0.001" required class="form-control" value="@Model.Gia" />
                 </div>
                 <div class="col-3">
@@ -193,24 +200,18 @@
                         @foreach (var item in Categories)
                         {
                             var x = cd.Where(z => z == item.CategoryRowID).Count();
-                        <option @(x != 0 ? "selected" : "") value="@item.CategoryRowID">
-                            @item.CategoryName
+                            <option @(x != 0 ? "selected" : "") value="@item.CategoryRowID">
+                                @item.CategoryName
 
-                            @if (listdm.Contains(item.CategoryRowID) || nguoidung.SupperAdmin == 1)
-                            {
-                                <text>(Đã mua theo gói)</text>
-                            }
-                            else
-                            {
-                                if ((Model.CategoryList + "").Split(',').Contains(item.CategoryRowID.ToString()))
+                                @if ((Model.CategoryList + "").Split(',').Contains(item.CategoryRowID.ToString()))
                                 {
                                     <text>(Đã mua theo bài đăng)</text>
 
                                 }
                                 else
-                                if (item.onePrice.HasValue && item.onePrice > 0)
+                                    if (item.onePrice.HasValue && item.onePrice > 0)
                                 {
-                                    <text>@item.onePrice.Value.ToString("#,####") VND / 1 bài đăng</text>
+                                    <text>@item.onePrice.Value.ToString("#,####") VND / 1 ngày đăng</text>
 
                                 }
                                 else
@@ -218,8 +219,8 @@
 
                                     <text>(FREE)</text>
                                 }
-                            }
-                        </option>
+
+                            </option>
                         }
                     </select>
                 </div>
@@ -379,12 +380,7 @@
                             <input type="checkbox" @(cd.Contains(item.CategoryRowID) ? "checked" : "") name="ChuDeVIP" value="@item.CategoryRowID" />@item.CategoryName
                             <br />
                             <b>
-                                @if (listdm.Contains(item.CategoryRowID) || nguoidung.SupperAdmin == 1)
-                                {
-                                    <span class="badge badge-success">Đã mua theo gói</span>
-                                }
-                                else
-                                {
+                                @{
                                     if ((Model.CategoryList + "").Split(',').Contains(item.CategoryRowID.ToString()))
                                     {
                                         <span class="badge badge-primary">Đã mua theo bài đăng</span>
@@ -393,14 +389,14 @@
                                     else
                                     if (item.onePrice.HasValue && item.onePrice > 0)
                                     {
-                                        <span class="badge badge-danger"> @item.onePrice.Value.ToString("#,####") VND / 1 bài đăng</span>
+                                        <span class="badge badge-danger"> @item.onePrice.Value.ToString("#,####") VND / 1 ngày đăng</span>
 
                                     }
                                     else
                                     {
 
-                                        <span>FREE</span>
-                                    }
+                                <span class="badge badge-success">FREE</span>
+                                     }
                                 }
                             </b>
                         </label>

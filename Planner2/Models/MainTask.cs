@@ -49,5 +49,7 @@ namespace Planner2.Models
         public string Youtube { get; set; }
         public string CategoryList { get; set; }
         public string TinMuaBan { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> FinishDate { get; set; }
     }
 }
