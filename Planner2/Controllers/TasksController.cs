@@ -338,7 +338,7 @@ namespace Planner2.Controllers
 
                     }
                     var nd = db.Users.Where(c => c.Id == nguoidung.Id).FirstOrDefault();
-
+                    nd.SoTien = nd.SoTien ?? 0;
                     nd.SoTien = nd.SoTien.Value - (int)SoTienPhaiThanhToan;
                     if (nd.SoTien < 0)
                     {
