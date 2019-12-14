@@ -355,7 +355,8 @@
                 </div>
                 <div class="col-md-2">
                     @{
-                        var video = db.MainTasks.Where(v => !string.IsNullOrEmpty(v.Youtube)).OrderByDescending(Z => Z.NgayDang).Skip(0).Take(2).ToList();
+                       var date = DateTime.Now.Date;
+                        var video = db.MainTasks.Where(v => v.FinishDate >= date && v.StartDate <= date).Where(v => !string.IsNullOrEmpty(v.Youtube)).OrderByDescending(Z => Z.NgayDang).Skip(0).Take(2).ToList();
                         if (video.Count > 0)
                         {
                             Html.RenderPartial("~/Views/Post/TinChuDe.cshtml", video);

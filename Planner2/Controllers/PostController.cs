@@ -13,6 +13,7 @@ namespace Planner2.Controllers
     public class PostController : Controller
     {
         // GET: Post
+       
         public ActionResult Index(int page = 1, string sort = "df", string ChuDe = "")
         {
             ViewBag.ChuDe = ChuDe;
@@ -53,7 +54,7 @@ namespace Planner2.Controllers
                 }
                 ViewBag.TitleChuDe = cd.CategoryName;
                 ViewBag.SeoUrl = cd.SeoUrl;
-                string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID} ORDER BY T1.NgayDang DESC";
+                string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID} where t1.StartDate <=CONVERT(DATE,getdate()) AND t1.FinishDate >=CONVERT(DATE,getdate()) ORDER BY T1.NgayDang DESC";
                 var data = db.Database.SqlQuery<MainTask>(sql).ToList();
                
                 return PartialView(data);
@@ -76,7 +77,7 @@ namespace Planner2.Controllers
                 }
                 ViewBag.TitleChuDe = cd.CategoryName;
                 ViewBag.SeoUrl = cd.SeoUrl;
-                string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID} ORDER BY T1.NgayDang DESC";
+                string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID} WHERE  t1.StartDate <=CONVERT(DATE,getdate()) AND t1.FinishDate >=CONVERT(DATE,getdate()) ORDER BY T1.NgayDang DESC";
                 var data = db.Database.SqlQuery<MainTask>(sql).ToList();
                 
                 return PartialView(data);
@@ -99,7 +100,8 @@ namespace Planner2.Controllers
                 }
                 ViewBag.TitleChuDe = cd.CategoryName;
                 ViewBag.SeoUrl = cd.SeoUrl;
-                string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID} ORDER BY T1.NgayDang DESC";
+                string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID}" +
+                    $"where t1.StartDate <=CONVERT(DATE,getdate()) AND t1.FinishDate >=CONVERT(DATE,getdate()) ORDER BY T1.NgayDang DESC";
                 var data = db.Database.SqlQuery<MainTask>(sql).ToList();
                 
                 return PartialView(data);
@@ -197,8 +199,11 @@ namespace Planner2.Controllers
                     Localdata = (List<MainTask>)Session["dataSearch"];
                     goto End;
                 }
+                var date = DateTime.Now.Date;
 
-                data = db.MainTasks.Where(v => v.Page == false && v.Status == Common.ConstTrangThai.CongKhai);
+                data = db.MainTasks
+                    .Where(v => v.FinishDate >= date && v.StartDate <=date).
+                    Where(v => v.Page == false && v.Status == Common.ConstTrangThai.CongKhai);
                 if (!string.IsNullOrEmpty(key))
                     data = data.Where(z => z.TaskName != null && z.TaskName.ToUpper().Contains(key.ToUpper()));
 
@@ -303,13 +308,17 @@ namespace Planner2.Controllers
 
             return data;
         }
+    
+    
         public ActionResult Grid(String ChuDe, int page = 1, string sort = "", string acton = "")
         {
+            var date = DateTime.Now.Date;
 
             ViewBag.TitleChuDe = "Bất động sản";
             using (Models.Planner2Entities db = new Models.Planner2Entities())
             {
-                IQueryable<MainTask> data = db.MainTasks.Where(v =>  v.Status == Common.ConstTrangThai.CongKhai);
+                IQueryable<MainTask> data = db.MainTasks
+                    .Where(v => v.FinishDate >= date && v.StartDate <=date).Where(v =>  v.Status == Common.ConstTrangThai.CongKhai);
                 if (!string.IsNullOrEmpty(ChuDe))
                 {
                     var Categories = db.Categories.Where(v => v.SeoUrl == ChuDe).FirstOrDefault();
@@ -348,11 +357,14 @@ namespace Planner2.Controllers
                 item.DateCreate = DateTime.Now;
                 db.CommentTasks.Add(item);
                 db.SaveChanges();
+                var date = DateTime.Now.Date;
 
-                var task = db.MainTasks.Where(v => v.Id == item.TaskID).FirstOrDefault();
+                var task = db.MainTasks
+                    .Where(v => v.FinishDate >= date && v.StartDate <=date).Where(v => v.Id == item.TaskID).FirstOrDefault();
                 if (task != null)
                 {
-                    var seourl = db.MainTasks.Where(v => v.Id == item.TaskID).Select(v => v.SeoUrl).FirstOrDefault();
+                    var seourl = db.MainTasks
+                    .Where(v => v.FinishDate >= date && v.StartDate <=date).Where(v => v.Id == item.TaskID).Select(v => v.SeoUrl).FirstOrDefault();
                     var HOST = "http://" + Request.Url.Authority + "/post/info?id=" + seourl;
 
 
@@ -391,7 +403,9 @@ namespace Planner2.Controllers
 
                 ViewBag.SeoUrl = cd.SeoUrl;
                 ViewBag.ChuDe = cd.CategoryName;
-                var data = db.MainTasks.WhereChuDe(cd.CategoryRowID, db).OrderByDescending(z => z.NgayDang).Skip(0).Take(5).ToList();
+                var date = DateTime.Now.Date;
+                var data = db.MainTasks
+                    .Where(v => v.FinishDate >= date && v.StartDate <= date).WhereChuDe(cd.CategoryRowID, db).OrderByDescending(z => z.NgayDang).Skip(0).Take(5).ToList();
                 return PartialView(data);
             }
         }

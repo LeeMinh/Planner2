@@ -132,10 +132,10 @@ namespace Planner2.Controllers
                 ViewBag.FileUpload = db.UploadFiles.Where(v => v.TaskID == TaskID && v.TableName == "MainTask").ToList();
 
                 var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
-                 var Categories = db.Categories.Where(v => v.Menu == "Top").ToList();
+                var Categories = db.Categories.Where(v => v.Menu == "Top").ToList();
                 var CategoriesVIP = db.Categories.Where(v => v.Menu != "Top").ToList();
 
-                 ViewBag.Categories = Categories;
+                ViewBag.Categories = Categories;
                 ViewBag.CategoriesVIP = CategoriesVIP;
                 #region create
                 if (TaskID == 0)
@@ -277,25 +277,62 @@ namespace Planner2.Controllers
 
             return FileUp;
         }
-
-        double  PhaiThanhToan(List<int> ThanhToan,int ID,double Day =0)
+        [HttpPost]
+        public ActionResult GetPhaiThanhToan(List<int> ThanhToan, MainTask item)
         {
- 
+            var st = PhaiThanhToan(ThanhToan, item);
+            return Json(st.ToString("#,####"), JsonRequestBehavior.AllowGet);
+        }
+        double PhaiThanhToan(List<int> ThanhToan, MainTask item)
+        {
+            if (!(item.FinishDate.HasValue && item.StartDate.HasValue) || ThanhToan==null)
+            {
+                return 0;
+            }
             double SoTienPhaiThanhToan = 0;
+            var Day = (item.FinishDate - item.StartDate).Value.TotalDays;
+
             using (Models.Planner2Entities db = new Planner2Entities())
             {
                 foreach (var x in ThanhToan)
                 {
-                     
-                        var CategoryList = db.MainTasks.Where(z => z.Id == ID).Select(z => z.CategoryList).FirstOrDefault();
+                    var task = db.MainTasks.Where(z => z.Id == item.Id).FirstOrDefault();
+                    task = task ?? new MainTask();
 
-                        CategoryList = CategoryList ?? "";
-                        var arrCategoryList = CategoryList.Split(',').Where(z => !string.IsNullOrEmpty(z)).Select(z => int.Parse(z)).ToList();
+                    var CategoryList = task.CategoryList;
 
-                        var cate = db.Categories.Where(v => v.CategoryRowID == x && !arrCategoryList.Contains(x)).Select(z => z.onePrice).FirstOrDefault();
-                        cate = cate ?? 0;
-                        SoTienPhaiThanhToan += cate.Value*Day;
-                  
+                    CategoryList = CategoryList ?? "";
+                    var arrCategoryList = CategoryList.Split(',').Where(z => !string.IsNullOrEmpty(z)).Select(z => int.Parse(z)).ToList();
+
+                    var cate = db.Categories.Where(v => v.CategoryRowID == x).FirstOrDefault();
+                    if (cate != null)
+                    {
+                        // nếu đã mua trước đó
+                        if (arrCategoryList.Contains(x))
+                        {
+                            Day = 0;
+                            if (task.FinishDate < item.FinishDate)
+                            {
+                                Day += (item.FinishDate - task.FinishDate).Value.TotalDays;
+
+                            }
+                            if (task.StartDate > item.StartDate)
+                            {
+                                Day += (task.StartDate - item.StartDate).Value.TotalDays;
+
+                            }
+                        }
+
+                        // nếu chưa mua bao giờ thì tính nguyên tiền theo số ngày
+
+                    }
+                    else
+                    {
+                        cate = new Category();
+                    }
+                    cate.onePrice = cate.onePrice ?? 0;
+                    SoTienPhaiThanhToan += cate.onePrice.Value * Day;
+
                 }
             }
             return SoTienPhaiThanhToan;
@@ -310,7 +347,7 @@ namespace Planner2.Controllers
                 ChuDe = ChuDe ?? new int[] { };
                 ChuDeVIP = ChuDeVIP ?? new int[] { };
                 item.NgayDang = DateTime.Now;
-                if (item.StartDate >item.FinishDate)
+                if (item.StartDate > item.FinishDate)
                 {
                     return Json(new { TT = 1, Value = "Ngày kết thúc không được nhỏ hơn ngày bắt đầu" }, JsonRequestBehavior.AllowGet);
 
@@ -345,9 +382,8 @@ namespace Planner2.Controllers
                     var ChudeDang = ChuDe.ToList();
                     ChudeDang.AddRange(ChuDeVIP.ToList());
 
-                    var day = (item.FinishDate - item.StartDate).Value.TotalDays;
-                    double SoTienPhaiThanhToan = PhaiThanhToan(ChudeDang,item.Id, day);
-                     
+                    double SoTienPhaiThanhToan = PhaiThanhToan(ChudeDang, item);
+
                     var nd = db.Users.Where(c => c.Id == nguoidung.Id).FirstOrDefault();
                     nd.SoTien = nd.SoTien ?? 0;
                     nd.SoTien = nd.SoTien.Value - (int)SoTienPhaiThanhToan;

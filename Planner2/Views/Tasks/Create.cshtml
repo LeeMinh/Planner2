@@ -5,7 +5,7 @@
     Model.NgayDang = Model.NgayDang ?? DateTime.Now;
     Planner2Entities db = new Planner2Entities();
     var Categories = (List<Planner2.Models.Category>)ViewBag.Categories;
-     var CategoriesVIP = (List<Planner2.Models.Category>)ViewBag.CategoriesVIP;
+    var CategoriesVIP = (List<Planner2.Models.Category>)ViewBag.CategoriesVIP;
     var TinhThanh = db.ThanhPhoes.GroupBy(z => z.MaThanhPho).Select(v => new { Name = v.FirstOrDefault().TenThanhPho, Key = v.FirstOrDefault().MaThanhPho }).ToList();
     var cd = db.MainTask_ChuDe.Where(v => v.TaskID == Model.Id).Select(z => z.CategoryRowID).ToList();
     cd = cd ?? new List<int?>();
@@ -106,7 +106,8 @@
                 <div class="row-item">
                     <div class="h2">
                         <span>Thông tin cơ bản </span>
-                        <small>   Số tiền bạn có : @ST</small>
+                        @*<small>   Số tiền bạn có : @ST</small>*@
+                        <small>   Số tiền phải trả: <b id="SOTIENPHAITHANHTOAN">0</b> VND</small>
                         @if (!string.IsNullOrEmpty(@Model.Status))
                         {
                             <i>Bài đăng đang ở chế độ : @Model.Status</i>
@@ -142,11 +143,11 @@
 
                 <div class="col-3">
                     <label>Ngày bắt đầu đăng (*)</label>
-                    <input type="date" name="StartDate"   required class="form-control" value="@Model.StartDate.ToString_N("yyyy-MM-dd")" />
-                </div>  
+                    <input type="date" name="StartDate" required class="form-control" value="@Model.StartDate.ToString_N("yyyy-MM-dd")" />
+                </div>
                 <div class="col-3">
                     <label>Ngày kết thúc đăng (*)</label>
-                    <input type="date" name="FinishDate"  required class="form-control" value="@Model.FinishDate.ToString_N("yyyy-MM-dd")" />
+                    <input type="date" name="FinishDate" required class="form-control" value="@Model.FinishDate.ToString_N("yyyy-MM-dd")" />
                 </div>
                 <div class="col-3">
                     <label>Diện tích (m2) (*)</label>
@@ -395,8 +396,8 @@
                                     else
                                     {
 
-                                <span class="badge badge-success">FREE</span>
-                                     }
+                                        <span class="badge badge-success">FREE</span>
+                                    }
                                 }
                             </b>
                         </label>
@@ -543,8 +544,53 @@
         e.preventDefault();
 
     });
+    $("[name=ChuDeVIP]").click(function (e) {
+        GetPhaiThanhToan();
 
+    });
+    $("[name=ChuDe]").change(function (e) {
+        GetPhaiThanhToan();
+    
+    });
+     $("[name=FinishDate]").change(function (e) {
+        GetPhaiThanhToan();
+    
+     });
+     $("[name=StartDate]").change(function (e) {
+        GetPhaiThanhToan();
+    
+    });
+    function GetPhaiThanhToan() {
+        var FinishDate = $('[name=FinishDate]').val();
+        var StartDate = $('[name=StartDate]').val();
+        var ChuDeVIP = [];
 
+        $('[name=ChuDeVIP]:checked').each(function () {
+            ChuDeVIP.push($(this).val());
+        }).get();
+
+        var ChuDe = $('[name=ChuDe]').val();
+
+        for (var i = 0; i < ChuDe.length; i++) {
+            ChuDeVIP.push(ChuDe[i]);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/TASKS/GetPhaiThanhToan",
+            data: {
+                Id: '@Model.Id',
+                StartDate:StartDate,
+                FinishDate: FinishDate,
+                ThanhToan: ChuDeVIP
+
+            },
+            dataType: "json",
+            success: function (response) {
+                $('#SOTIENPHAITHANHTOAN').html(response);
+            }
+        });
+    }
     $("#Xoaanhnow").click(function (e) {
 
         var r = confirm("Anh chị có chắc chắn muốn xóa ảnh, thao tác này sẽ xóa ảnh ngay lập tức!");
