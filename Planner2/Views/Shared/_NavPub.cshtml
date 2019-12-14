@@ -72,6 +72,9 @@
             .BANNER_QUANGCAO {
                 display:none
             }
+        } 
+        .col-md-2{
+            display:inline-block
         }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -333,10 +336,14 @@
         <div class="row">
             @if (!(ViewBag.LEFTHIDEN == true && Request.Browser.IsMobileDevice))
             {
-                <div class="col-md-1 BANNER_QUANGCAO" style="text-align:right">
-                    <img src="@Planner2.Common.SettingData.BANNER_LEFT" />
-                </div>
-           
+               if (!String.IsNullOrEmpty(Planner2.Common.SettingData.BANNER_LEFT))
+                {
+                    <div class="col-md-1 BANNER_QUANGCAO" style="text-align:right">
+                        <img src="@Planner2.Common.SettingData.BANNER_LEFT" />
+                    </div>
+                }
+
+
                 <div class="col-md-2">
                     @{
                         Html.RenderAction("Timkiem", "post");
@@ -348,30 +355,32 @@
                         </div>
                     }
                 </div>
-               }
-                <div class="col-md-6">
-                    @RenderBody()
+            }
+            <div class="col-md-6">
+                @RenderBody()
 
-                </div>
-                <div class="col-md-2">
-                    @{
-                       var date = DateTime.Now.Date;
-                        var video = db.MainTasks.Where(v => v.FinishDate >= date && v.StartDate <= date).Where(v => !string.IsNullOrEmpty(v.Youtube)).OrderByDescending(Z => Z.NgayDang).Skip(0).Take(2).ToList();
-                        if (video.Count > 0)
-                        {
-                            Html.RenderPartial("~/Views/Post/TinChuDe.cshtml", video);
-
-                        }
-                    }
-                    @foreach (var item in db.Categories.Where(Z => Z.Menu == "Right"))
+            </div>
+            <div class="col-md-2">
+                @{
+                    var date = DateTime.Now.Date;
+                    var video = db.MainTasks.Where(v => v.FinishDate >= date && v.StartDate <= date).Where(v => !string.IsNullOrEmpty(v.Youtube)).OrderByDescending(Z => Z.NgayDang).Skip(0).Take(2).ToList();
+                    if (video.Count > 0)
                     {
-                        Html.RenderAction("TinChuDe", "post", new { ChuDe = item.SeoUrl });
-                    }
-                </div>
+                        Html.RenderPartial("~/Views/Post/TinChuDe.cshtml", video);
 
+                    }
+                }
+                @foreach (var item in db.Categories.Where(Z => Z.Menu == "Right"))
+                {
+                    Html.RenderAction("TinChuDe", "post", new { ChuDe = item.SeoUrl });
+                }
+            </div>
+            @if (!String.IsNullOrEmpty(Planner2.Common.SettingData.BANNER_RIGHT))
+            {
                 <div class="col-md-1 BANNER_QUANGCAO" style="text-align:left">
                     <img src="@Planner2.Common.SettingData.BANNER_RIGHT" />
                 </div>
+            }
             </div>
         @*<div id="content" class="site-content ">
                 <div class="container">
