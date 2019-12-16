@@ -302,6 +302,7 @@
     <Compile Include="Controllers\BanksController.cs" />
     <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\ChoDuyetController.cs" />
     <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\CustomPagesController.cs" />
     <Compile Include="Controllers\FutureTaskController.cs" />
@@ -1641,6 +1642,7 @@
     <Content Include="Views\TableEdittor\Viewer.cshtml" />
     <Content Include="Views\Banks\Viewer.cshtml" />
     <Content Include="Views\Banks\SupportViewer.cshtml" />
+    <Content Include="Views\ChoDuyet\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

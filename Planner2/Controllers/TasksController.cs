@@ -470,7 +470,11 @@ namespace Planner2.Controllers
                         {
                             item.Picture = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/No_image_3x4.svg/1280px-No_image_3x4.svg.png";
                         }
-
+                            item.XetDuyet = 0;
+                        if (nguoidung.SupperAdmin==1)
+                        {
+                            item.XetDuyet = 1;
+                        }
                         item.CategoryList = string.Join(",", ChuDeVIP);
 
                         item.Created = DateTime.Now;

@@ -141,6 +141,7 @@
           <Property Name="TinMuaBan" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="StartDate" Type="date" />
           <Property Name="FinishDate" Type="date" />
+          <Property Name="XetDuyet" Type="int" />
         </EntityType>
         <EntityType Name="MainTask_ChuDe">
           <Key>
@@ -414,6 +415,7 @@
           <Property Name="TinMuaBan" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="StartDate" Type="DateTime" Precision="0" />
           <Property Name="FinishDate" Type="DateTime" Precision="0" />
+          <Property Name="XetDuyet" Type="Int32" />
         </EntityType>
         <EntityType Name="MainTask_ChuDe">
           <Key>
@@ -628,6 +630,7 @@
           <EntitySetMapping Name="MainTasks">
             <EntityTypeMapping TypeName="Planner2Model.MainTask">
               <MappingFragment StoreEntitySet="MainTask">
+                <ScalarProperty Name="XetDuyet" ColumnName="XetDuyet" />
                 <ScalarProperty Name="FinishDate" ColumnName="FinishDate" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="TinMuaBan" ColumnName="TinMuaBan" />

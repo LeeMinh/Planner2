@@ -54,7 +54,7 @@ namespace Planner2.Controllers
                 }
                 ViewBag.TitleChuDe = cd.CategoryName;
                 ViewBag.SeoUrl = cd.SeoUrl;
-                string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID} where t1.StartDate <=CONVERT(DATE,getdate()) AND t1.FinishDate >=CONVERT(DATE,getdate()) ORDER BY T1.NgayDang DESC";
+                string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID} where t1.StartDate <=CONVERT(DATE,getdate()) AND t1.FinishDate >=CONVERT(DATE,getdate()) and t1.xetduyet=1  ORDER BY T1.NgayDang DESC";
                 var data = db.Database.SqlQuery<MainTask>(sql).ToList();
                
                 return PartialView(data);
@@ -77,7 +77,7 @@ namespace Planner2.Controllers
                 }
                 ViewBag.TitleChuDe = cd.CategoryName;
                 ViewBag.SeoUrl = cd.SeoUrl;
-                string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID} WHERE  t1.StartDate <=CONVERT(DATE,getdate()) AND t1.FinishDate >=CONVERT(DATE,getdate()) ORDER BY T1.NgayDang DESC";
+                string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID} WHERE  t1.StartDate <=CONVERT(DATE,getdate()) AND t1.FinishDate >=CONVERT(DATE,getdate()) and t1.xetduyet=1 ORDER BY T1.NgayDang DESC";
                 var data = db.Database.SqlQuery<MainTask>(sql).ToList();
                 
                 return PartialView(data);
@@ -101,7 +101,7 @@ namespace Planner2.Controllers
                 ViewBag.TitleChuDe = cd.CategoryName;
                 ViewBag.SeoUrl = cd.SeoUrl;
                 string sql = $"select TOP 10 t1.* from MainTask as t1 inner join MainTask_ChuDe as t2 on t1.Id=t2.TaskID and t2.CategoryRowID={cd.CategoryRowID}" +
-                    $"where t1.StartDate <=CONVERT(DATE,getdate()) AND t1.FinishDate >=CONVERT(DATE,getdate()) ORDER BY T1.NgayDang DESC";
+                    $"where t1.StartDate <=CONVERT(DATE,getdate()) AND t1.FinishDate >=CONVERT(DATE,getdate())  and t1.xetduyet=1 ORDER BY T1.NgayDang DESC";
                 var data = db.Database.SqlQuery<MainTask>(sql).ToList();
                 
                 return PartialView(data);

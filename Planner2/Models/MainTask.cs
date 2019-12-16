@@ -51,5 +51,6 @@ namespace Planner2.Models
         public string TinMuaBan { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
         public Nullable<System.DateTime> FinishDate { get; set; }
+        public Nullable<int> XetDuyet { get; set; }
     }
 }

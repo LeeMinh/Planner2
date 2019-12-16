@@ -1,7 +1,7 @@
 ﻿@{
     var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
         var ST = String.Format(System.Globalization.CultureInfo.GetCultureInfo("vi-VN"), "{0:n0}", nguoidung.SoTien) + " VND";
-
+    Planner2Entities db = new Planner2Entities();
 }
 <!DOCTYPE html>
 <html>
@@ -149,6 +149,16 @@
                                                 Tất cả bài đăng
 
 
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/ChoDuyet/index" class="nav-link">
+                                            <i class="nav-icon fa fa-stack-exchange "></i>
+                                            <p>
+                                                Chờ duyệt
+                                                
+                                                <span class="right badge badge-primary">@db.MainTasks.Where(v=>v.XetDuyet==0).Count()</span>
                                             </p>
                                         </a>
                                     </li>

@@ -15,6 +15,7 @@ namespace Planner2.Extentions
              db.MainTask_ChuDe.Any(z => z.TaskID == v.Id && CategoryRowID.Contains(z.CategoryRowID))
             );
             data = data.Where(v => v.Status == Common.ConstTrangThai.CongKhai);
+            data = data.Where(v => v.XetDuyet ==1);
 
             return data;
         }
