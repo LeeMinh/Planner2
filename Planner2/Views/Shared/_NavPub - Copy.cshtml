@@ -89,7 +89,7 @@
 
         @@media screen and (min-width: 768px) {
             .carousel-indicators {
-                bottom: 50px !important;
+                bottom:  50px!important;
             }
         }
 
@@ -174,24 +174,6 @@
                 transform: scale(.75);
             }
         }
-        #BANNER_LEFT,#BANNER_RIGHT{
-             z-index:1000;
-             position: -webkit-sticky; /* Safari */
-  position: sticky;
-  top: 0;
-        }
-        @@media (max-width: 991px) {
-                 #BANNER_LEFT,#BANNER_RIGHT {
-                display:none
-            }
-        } 
-           #BANNER_LEFT{
-               float:left
-           }
-           
-           #BANNER_RIGHT{
-               float:right
-           }
     </style>
 
     @Html.Raw(Planner2.Common.SettingData.HeaderHTML)
@@ -346,8 +328,8 @@
                 <div class="row">
                     @if (!(ViewBag.LEFTHIDEN == true && Request.Browser.IsMobileDevice))
                     {
-                        <img id="BANNER_LEFT" src="@Planner2.Common.SettingData.BANNER_LEFT" />
-                        <div class="  col-xs-12 col-sm-12 col-md-2  " role="complementary">
+
+                        <div class="  col-xs-12 col-sm-12 col-md-3  " role="complementary">
                             @{
                                 Html.RenderAction("Timkiem", "post");
                             }
@@ -362,9 +344,8 @@
                     <div id="primary" class=" col-xs-12 col-sm-12  col-md-6">
                         @RenderBody()
                     </div>
-                    <img id="BANNER_RIGHT" src="@Planner2.Common.SettingData.BANNER_RIGHT" />
-                    <div class="col-xs-12 col-sm-12 col-md-2" role="complementary">
-                        <div id="hrm-widget_tin_bds-widget-2" class="widget-odd widget-first widget-1 widget hrm-widget-tin-bds hrm-recent-realty feature">
+                    <div class="col-xs-12 col-sm-12 col-md-3" role="complementary">
+                        <div id="hrm-widget_tin_bds-widget-2" style="display:inline-grid!important" class="widget-odd widget-first widget-1 widget hrm-widget-tin-bds hrm-recent-realty feature">
                             @{
                                 var video = db.MainTasks.Where(v => !string.IsNullOrEmpty(v.Youtube)).OrderByDescending(Z => Z.NgayDang).Skip(0).Take(2).ToList();
                                 if (video.Count > 0)
@@ -378,7 +359,6 @@
                                 Html.RenderAction("TinChuDe", "post", new { ChuDe = item.SeoUrl });
                             }
                         </div>
-
                     </div><!-- #secondary -->
                 </div><!-- .row -->
             </div><!-- .container -->
