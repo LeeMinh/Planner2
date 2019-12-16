@@ -34,7 +34,8 @@ namespace Planner2.Controllers
                 var data = rrc_db.SettingDatas.Where(v => v.KeyID == ID).FirstOrDefault();
                 data.Value = "";
                 rrc_db.SaveChanges();
-                 return Json("",JsonRequestBehavior.AllowGet);
+                MvcApplication.ReloadSetting();
+                return Json("",JsonRequestBehavior.AllowGet);
             }
         }
         [HttpPost]
@@ -46,6 +47,7 @@ namespace Planner2.Controllers
                 var data = rrc_db.SettingDatas.Where(v => v.KeyID == BannerID).FirstOrDefault();
                 data.Value = file.FirstOrDefault();
                 rrc_db.SaveChanges();
+                MvcApplication.ReloadSetting();
                 return RedirectToAction("index");
             }
         }
