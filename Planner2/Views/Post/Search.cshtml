@@ -55,6 +55,7 @@
             $('[name=DienTich]').val('@ViewBag.DienTich').change();
             $('[name=Map_SoPhongNgu]').val('@item.Map_SoPhongNgu').change();
             $('[name=Map_Huong]').val('@Html.Raw(item.Map_Huong)').change();
+            $('.lazy').Lazy();
 
         }, 1000);
 

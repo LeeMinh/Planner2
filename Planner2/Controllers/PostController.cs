@@ -194,11 +194,13 @@ namespace Planner2.Controllers
             {
                 int pageNumber = (page ?? 1);
                 int pageSize = 10;
-                if (pageNumber != 1)
+                if (pageNumber != -1 && Session["dataSearch"] !=null)
                 {
                     Localdata = (List<MainTask>)Session["dataSearch"];
                     goto End;
                 }
+                pageNumber = 1;
+
                 var date = DateTime.Now.Date;
 
                 data = db.MainTasks
