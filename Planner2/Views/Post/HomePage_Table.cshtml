@@ -21,6 +21,7 @@
                 <th>STT</th>
                 <th>Hình ảnh</th>
                 <th>Ngày đăng</th>
+                <th>Ngày kết thúc</th>
                 <th>Tiêu đề</th>
                 <th>Vị trí</th>
                 <th>Hướng</th>
@@ -45,7 +46,9 @@
                         </a>
                     </td>
                     <td>
-                        @item.NgayDang.ToString_N()
+                        @item.StartDate.ToString_N()
+                    </td>   <td>
+                        @item.FinishDate.ToString_N()
                     </td>
                     <td>
                         <h4>

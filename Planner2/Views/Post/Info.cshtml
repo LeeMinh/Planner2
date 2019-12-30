@@ -6,7 +6,7 @@
 
 }
 @model  Planner2.Models.MainTask
-
+@using Planner2.Extentions
 @if (Model.Status != Planner2.Common.ConstTrangThai.CongKhai)
 {
     <h1 style="border: 4px solid #009688;
@@ -38,7 +38,12 @@
 
                 <p>
                     <i class="fa fa-clock-o" aria-hidden="true"></i>
-                    Ngày đăng: @Model.NgayDang.Value.ToString("dd/MM/yyyy")
+                    Ngày đăng: @Model.StartDate.ToString_N()
+                </p>
+            
+                <p>
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    Ngày kết thúc: @Model.FinishDate.ToString_N()
                 </p>
 
                 <p><i class="fa fa-eye" aria-hidden="true"></i> Lượt xem @(Model.Viewer.HasValue ? Model.Viewer.Value.ToString("#,###") : "")</p>

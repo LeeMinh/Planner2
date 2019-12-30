@@ -2,6 +2,7 @@
 @{
     Planner2Entities db = new Planner2Entities();
 }
+@using Planner2.Extentions
 @foreach (var item in Model)
 {
     <li>
@@ -15,23 +16,28 @@
             <div class="col-md-9">
                 <div class="info-realty">
                     <h4><a href="/post/info/?id=@item.SeoUrl">@item.TaskName</a></h4>
-                    <p class="date">
-                        <i class="fa fa-clock-o"></i>
-                        Ngày đăng: @item.NgayDang.Value.ToString("dd/MM/yyyy")
-                    </p>
+
 
 
                 </div>
                 <div class="details">
-                    @if ( item.TinMuaBan=="NHADAT")
+                    <div class="huong-dat">
+                        <label style="width:100%">Ngày đăng: @item.StartDate.ToString_N() </label>
+                    </div>
+                    <div class="location">
+                        <label>Ngày kết thúc: @item.FinishDate.ToString_N() </label>
+                    </div>
+                    @if (item.TinMuaBan == "NHADAT")
                     {
-                        if (item.Gia.HasValue)
-                        {
-                            <div class="price">
-                                <label>Giá<span>:</span></label>
-                                @item.Gia @item.TyGia
-                            </div>
-                        }
+
+                        <div class="price">
+                            <label>Giá<span>:</span></label>
+                            @if (item.Gia.HasValue&& item.Gia!=0)
+                            {<span>@item.Gia</span>
+                            }
+                            @item.TyGia
+                        </div>
+
                         if (item.Gia.HasValue)
                         {
                             <div class="area">
@@ -60,9 +66,9 @@
                     else
                     {
                         var nd = Planner2.Module.HtmlUtilities.ConvertToPlainText(item.Description);
-                <span>
-                    @Html.Raw(nd.Substring(0, nd.Length<150 ? nd.Length : 150)) ...
-                </span>
+                        <span>
+                            @Html.Raw(nd.Substring(0, nd.Length < 150 ? nd.Length : 150)) ...
+                        </span>
                     }
                     <a href="/post/info/?id=@item.SeoUrl" class="view-more">Xem chi tiết</a>
                 </div>

@@ -3405,7 +3405,7 @@ span.icon-title.news-realty {
 }
 .list-realty ul li .info-realty {
   width: 95%;
-  padding-left: 20px;
+  padding-left: 0;
   float: left;
 }
 .list-realty ul li:last-child {
