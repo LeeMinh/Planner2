@@ -324,6 +324,7 @@
     <Compile Include="Extentions\DateTimeExtention.cs" />
     <Compile Include="Extentions\PostExtentions.cs" />
     <Compile Include="Extentions\SeoUrl.cs" />
+    <Compile Include="Extentions\UserInfo.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

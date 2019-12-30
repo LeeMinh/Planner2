@@ -1,8 +1,8 @@
 ﻿@{
     Layout = "~/Views/Shared/_NavPub.cshtml";
     Random rd = new Random();
-    int a = rd.Next(1,10);
-    int b = rd.Next(1,10);
+    int a = rd.Next(1, 10);
+    int b = rd.Next(1, 10);
     int c = a + b;
 }
 <div class="row">
@@ -17,40 +17,63 @@
             </div>
         </div>
         <div>
-            <form class="form-horizontal" method="post" action="/login/register" id="frmregister" role="form">
+            <form class="form-horizontal" method="post" action="/login/register" id="frmregister" enctype="multipart/form-data" role="form">
                 <div class="mod-login clearfix">
                     <div class="mod-login-col1 clearfix">
                         <div class="mod-input mod-login-input-email mod-input-id">
                             <label>Tên đăng nhập</label>
-                            <input type="text"   placeholder="Vui lòng nhập tên tài khoản" name="username" id="username" value="" required >
-                            
+                            <input type="text" placeholder="Vui lòng nhập tên tài khoản" name="username" id="username" value="" required>
+
                         </div>
 
                         <div class="mod-input mod-input-password mod-login-input-password mod-input-password">
                             <label>Mật khẩu</label>
-                            <input type="password" name="pwd1" id="pwd1"  placeholder="Mật khẩu" value="" required >
-                           
+                            <input type="password" name="pwd1" id="pwd1" placeholder="Mật khẩu" value="" required>
+
                         </div>
 
                         <div class="mod-input mod-input-password mod-login-input-re-password mod-input-re-password">
                             <label>Nhập lại mật khẩu</label>
-                            <input type="password" name="pwd2" id="pwd2"  placeholder="Nhập lại mật khẩu" value="" required>
-                           
+                            <input type="password" name="pwd2" id="pwd2" placeholder="Nhập lại mật khẩu" value="" required>
+
                         </div>
                         <div class="mod-input mod-input-captcha">
                             <label>@a + @b = ?</label>
                             <input id="captcha" name="answer" type="number">
                         </div>
-                    
+                        <div class="mod-input mod-login-input-email mod-input-id">
+                            <label>Tên người dùng</label>
+                            <input type="text" placeholder="Vui lòng nhập tên người dùng" required name="StaffName" id="StaffName" value="">
+
+                        </div>
                         <input type="hidden" id="post_nonce_field" name="post_nonce_field" value="ac3fc9d856"><input type="hidden" name="_wp_http_referer" value="/dang-ky/">							<div class="mod-input mod-login-input-email mod-input-email">
                             <label>Địa chỉ email</label>
-                            <input type="email" name="email" id="email" placeholder="Email" value="" required >
-                          
+                            <input type="email" name="email" id="email" placeholder="Email" value="" required>
+
+                            <div class="mod-input mod-login-input-email mod-input-id">
+                                <label>Số điện thoại</label>
+                                <input type="text" placeholder="Vui lòng nhập số điện thoại" name="SDT" id="SDT" value="">
+
+                            </div>
+                            <div class="mod-input mod-login-input-email mod-input-id">
+                                <label>Địa chỉ</label>
+                                <input type="text" placeholder="Vui lòng nhập địa chỉ" name="DiaChi" id="DiaChi" value="">
+
+                            </div>
+                            <div class="mod-input mod-login-input-email mod-input-id">
+                                <label>Ảnh đại diện</label>
+                                <input type="file" name="AvartaImg" id="AvartaImg" value="">
+
+                            </div>
+
+
                         </div>
+
+
                         <div class="mod-login-btn">
                             <button type="submit" class="next-btn next-btn-primary next-btn-large">ĐĂNG KÍ</button>
-                         </div>
-                        
+                        </div>
+
                     </div>
 
                 </div>
@@ -79,5 +102,5 @@
 
         });
     </script>
-   
+
 </div>

@@ -52,44 +52,7 @@ namespace Planner2.Controllers
             }
         }
 
-        public List<string> SubmitFile(List<HttpPostedFileBase> files)
-        {
-
-            List<string> FileUp = new List<string>();
-            if (files == null)
-            {
-                return FileUp;
-            }
-            for (int i = 0; i < files.Count; i++)
-            {
-                HttpPostedFileBase file = files[i];
-                if (file == null)
-                {
-                    continue;
-                }
-                string fname;
-                if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
-                {
-                    string[] testfiles = file.FileName.Split(new char[] { '\\' });
-                    fname = testfiles[testfiles.Length - 1];
-                }
-                else
-                {
-                    fname = DateTime.Now.ToString("ddhhmmss") + "_" + file.FileName;
-                }
-                string ext = Path.GetExtension(fname);
-                Guid g = Guid.NewGuid();
-                string newnane = "/FileUpload/" + fname;
-                FileUp.Add(newnane);
-
-                fname = Path.Combine(Server.MapPath("~/FileUpload/"), fname);
-                file.SaveAs(fname);
-            }
-
-            return FileUp;
-        }
-
-
+  
         [HttpPost]
         public JsonResult Update_StaffOn(SettingData obj)
         {

@@ -26,5 +26,8 @@ namespace Planner2.Models
         public string Password { get; set; }
         public string Active { get; set; }
         public Nullable<int> SoTien { get; set; }
+        public string SDT { get; set; }
+        public string DiaChi { get; set; }
+        public string AvartaImg { get; set; }
     }
 }

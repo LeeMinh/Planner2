@@ -124,18 +124,69 @@ namespace Planner2.Controllers
                 return sw.GetStringBuilder().ToString();
             }
         }
+        public List<string> SubmitFile(List<HttpPostedFileBase> files)
+        {
+
+            List<string> FileUp = new List<string>();
+            if (files == null)
+            {
+                return FileUp;
+            }
+            for (int i = 0; i < files.Count; i++)
+            {
+                HttpPostedFileBase file = files[i];
+                if (file == null)
+                {
+                    continue;
+                }
+                string fname;
+                if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
+                {
+                    string[] testfiles = file.FileName.Split(new char[] { '\\' });
+                    fname = testfiles[testfiles.Length - 1];
+                }
+                else
+                {
+                    fname = DateTime.Now.ToString("ddhhmmss") + "_" + file.FileName;
+                }
+                string ext = Path.GetExtension(fname);
+                Guid g = Guid.NewGuid();
+                string newnane = "/FileUpload/" + fname;
+                FileUp.Add(newnane);
+
+                fname = Path.Combine(Server.MapPath("~/FileUpload/"), fname);
+                file.SaveAs(fname);
+            }
+
+            return FileUp;
+        }
+
         [HttpPost]
-        public ActionResult Register(string username, string pwd1, string email)
+        public ActionResult Register(string username = "", string pwd1 = "", string email = "", string DiaChi = "", string SDT = "", string StaffName ="", HttpPostedFileBase AvartaImg = null)
         {
             pwd1 = EncryptPassword(pwd1);
             using (Models.Planner2Entities db = new Models.Planner2Entities())
             {
+                if (db.Users.Where(v => v.UserName.ToUpper() == username.ToUpper()).Count()>0)
+                {
+                    return Content("<h1>User này đã được sử dụng bởi 1 người khác, vui lòng sử dụng User khác</h1>");
+                }
+
+                var file = SubmitFile(new List<HttpPostedFileBase> { AvartaImg });
                 var item = new Models.User();
                 item.Email = email;
                 item.UserName = username;
                 item.Password = pwd1;
+                item.StaffName = StaffName;
+                item.SDT = SDT;
+                item.DiaChi = DiaChi;
                 item.Active = "Hoạt động";
                 item.SupperAdmin = 0;
+                if (file.Count > 0)
+                {
+                    item.AvartaImg = string.Join("|", file);
+                }
+
                 db.Users.Add(item);
                 db.SaveChanges();
             }

@@ -246,6 +246,9 @@
           <Property Name="Password" Type="nvarchar" MaxLength="500" />
           <Property Name="Active" Type="nvarchar" MaxLength="50" />
           <Property Name="SoTien" Type="int" />
+          <Property Name="SDT" Type="nvarchar" MaxLength="50" />
+          <Property Name="DiaChi" Type="nvarchar" MaxLength="500" />
+          <Property Name="AvartaImg" Type="nvarchar" MaxLength="1550" />
         </EntityType>
         <Function Name="SplitString" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="List" Type="nvarchar(max)" Mode="In" />
@@ -502,6 +505,9 @@
           <Property Name="Password" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SoTien" Type="Int32" />
+          <Property Name="SDT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DiaChi" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="AvartaImg" Type="String" MaxLength="1550" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SettingData">
           <Key>
@@ -747,6 +753,9 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="Planner2Model.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="AvartaImg" ColumnName="AvartaImg" />
+                <ScalarProperty Name="DiaChi" ColumnName="DiaChi" />
+                <ScalarProperty Name="SDT" ColumnName="SDT" />
                 <ScalarProperty Name="SoTien" ColumnName="SoTien" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Password" ColumnName="Password" />

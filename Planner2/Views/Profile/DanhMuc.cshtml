@@ -1,247 +1,43 @@
-﻿
-<div class="dx-viewport">
-    <div class="demo-container">
-        <a class="btn btn-success text-white"  href="/Profile/addDanhMuc">Mua thêm chủ đề </a>
-        <div id="DataGrid"></div>
-        <div id="panelLoader"></div>
+﻿@{ 
 
-        <div style="height:0px;overflow:hidden">
-            <input class="form-control" type="file" id="UploadFile_Staff" name="fileInput" onchange="return Onchange_ImportExcel_Staff()">
+    var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
+
+}
+<form class="form-horizontal" action="/Profile/Edit" method="post" enctype="multipart/form-data">
+    <div class="form-group ">
+        <label for="inputName" class="col-sm-2 col-form-label">Họ tên</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="StaffName" value="@nguoidung.StaffName" >
         </div>
     </div>
-</div>
-
-<script>
-    function getFormattedDate(date) {
-        let year = date.getFullYear();
-        let month = (1 + date.getMonth()).toString().padStart(2, '0');
-        let day = date.getDate().toString().padStart(2, '0');
-
-        return day + '/' + month + '/' + year;
-    }
-
-    function FromJsonToDate(value) {
-        if (value != null) {
-            return new Date(parseInt(value.replace('/Date(', '')));
-        }
-        return;
-    }
-    var dlx = [];
-    $.ajax({
-        type: "POST",
-        url: "/User_Category/GetUserName",
-        dataType: "json",
-        async: false,
-        success: function (response) {
-            dlx = response;
-            console.log(dlx);
-        }
-    });
-    var dlxCategory = [];
-    $.ajax({
-        type: "POST",
-        url: "/User_Category/GeCategory",
-        dataType: "json",
-        async: false,
-        success: function (response) {
-            dlxCategory = response;
-        }
-    });
-
-    var DataGrid = $("#DataGrid").dxDataGrid({
-        dataSource: [],
-        showRowLines: true,
-        showBorders: true,
-        autoExpandAll: true,
-        paging: {
-            enabled: true,
-            pageSize: 100
-        },
-        filterRow: {
-            visible: true,
-            applyFilter: "auto"
-        },
-        columnChooser: {
-            enabled: true
-        },
-        scrolling: {
-            scrollByContent: true
-        },
-        pager: {
-            showPageSizeSelector: true,
-            allowedPageSizes: [100, 200, 500, 1000],
-            showNavigationButtons: true
-        },
-        allowColumnResizing: true,
-        columnFixing: {
-            enabled: true
-        },
-        hoverStateEnabled: true,
-        headerFilter: {
-            visible: true
-        },
-        wordWrapEnabled: true,
-        searchPanel: {
-            visible: true,
-            width: 240,
-            placeholder: "Search..."
-        },
-
-        columnsAutoWidth: true,
-        allowColumnReordering: true,
-        rowAlternationEnabled: true,
-        "export": {
-            enabled: true,
-            fileName: "DataList",
-            allowExportSelectedData: true
-        },
-        editing: {
-            mode: "popup",
-
-            useIcons: true
-        },
-        filterPanel: { visible: true },
-        summary: {
-            totalItems: [{
-                column: "KeyID",
-                summaryType: "count"
-            }]
-        },
-        columnMinWidth: 200,
-        columns:
-            [
-
-                {
-                    dataField: "UserName",
-                    caption: "UserName",
-                    editorOptions: {
-                        showClearButton: true
-                    },
-                    width: 250,
-                    allowEditing: true
-                    , lookup: {
-                        dataSource: function (rowData) {
-
-
-                            var dataSourceConfiguration = {
-                                store: dlx
-                            };
-
-                            return dataSourceConfiguration;
-
-                        },
-
-                        valueExpr: "UserName",
-                        displayExpr: "UserName",
-                        searchMode: 'startswith'
-                    },
-
-                },
-                {
-                    dataField: "CategoryRowID",
-                    caption: "CategoryRowID",
-                    editorOptions: {
-                        showClearButton: true
-                    },
-                    width: 250,
-                    allowEditing: true
-                    , lookup: {
-                        dataSource: function (rowData) {
-
-
-                            var dataSourceConfiguration = {
-                                store: dlxCategory
-                            };
-
-                            return dataSourceConfiguration;
-
-                        },
-
-                        valueExpr: "CategoryRowID",
-                        displayExpr: "CategoryName",
-                        searchMode: 'startswith'
-                    },
-
-                },
-                {
-                    dataField: "NgayHetHan",
-                    caption: "Ngày hết hạn",
-                    editorOptions: {
-                        showClearButton: true
-                    },
-                    dataType: "date",
-                    format: "dd/MM/yyyy"
-
-
-                }
-
-            ],
-
-
-        onCellPrepared: function onCellPrepared(e) {
-            if (e.rowType == "header") {
-                e.cellElement.css("text-align", "left");
-                e.cellElement.addClass('headerTree');
-                e.cellElement.css("vertical-align", "middle");
-            }
-
-            if (e.rowType == "data") {
-                e.cellElement.css("text-align", "left");
-
-
-                e.cellElement.css("vertical-align", "middle");
-            }
-        },
-    });
-
-    $(function () {
-        LoadData_Data();
-    });
-
-    function LoadData_Data() {
-        $("#loadPanel").dxLoadPanel({
-            closeOnOutsideClick: false,
-            message: "Xin chờ ...",
-            visible: true,
-            position: {
-                of: "#DataGrid",
-                at: "center",
-                my: "center"
-            },
-            shading: true
-        });
-
-        $.ajax({
-            url: '/Profile/GetData_Data',
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                  $.each(data, function (i, item) {
-                           item.NgayHetHan = FromJsonToDate(item.NgayHetHan);
-
-                        });
-                var datagrid = $("#DataGrid").dxDataGrid("instance");
-                datagrid.option("dataSource", data);
-                datagrid.columnOption('ParentID', 'lookup.dataSource', data);
-
-                $("#loadPanel").dxLoadPanel({
-                    closeOnOutsideClick: false,
-                    message: "Xin ch? ...",
-                    visible: false,
-                    position: {
-                        of: "#DataGrid",
-                        at: "center",
-                        my: "center"
-                    },
-                    shading: true
-                });
-
-            },
-            error: function (err) {
-            }
-        });
-    }
-
-
-
-</script>
+    <div class="form-group ">
+        <label for="inputEmail" class="col-sm-2 col-form-label">Số điện thoại</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="SDT" value="@nguoidung.SDT">
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="inputName2" class="col-sm-2 col-form-label">Địa chỉ</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="DiaChi"  value="@nguoidung.DiaChi">
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="inputExperience" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-10">
+            <input type="email" class="form-control" name="Email" value="@nguoidung.Email">
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="inputSkills" class="col-sm-2 col-form-label">Ảnh đại diện</label>
+        <div class="col-sm-10">
+            <input type="file" class="form-control" name="AvartaImg"  >
+        </div>
+    </div>
+     
+    <div class="form-group ">
+        <div class=" col-sm-10">
+            <button type="submit" class="btn btn-danger">Lưu thông tin</button>
+        </div>
+    </div>
+</form>

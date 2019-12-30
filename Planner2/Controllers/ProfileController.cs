@@ -29,6 +29,27 @@ namespace Planner2.Controllers
                 return Json(data, JsonRequestBehavior.AllowGet);
 
             }
+        }  [HttpPost]
+        public ActionResult Edit(User item,HttpPostedFileBase AvartaImg = null)
+        {
+            using (Models.Planner2Entities db = new Planner2Entities())
+            {
+            
+                var file = SubmitFile(new List<HttpPostedFileBase> { AvartaImg });
+                var nguoidung = (Planner2.Models.User)Session[Planner2.Controllers.LoginAuth.NameSession];
+                var user = db.Users.Where(v => v.Id == nguoidung.Id).FirstOrDefault();
+                user.Email = item.Email;
+                user.SDT = item.SDT;
+                user.DiaChi  = item.DiaChi;
+                user.StaffName = item.StaffName;
+                if (file.Count>0)
+                {
+                    user.AvartaImg = string.Join("|", file);
+                }
+                db.SaveChanges();
+                Session[Planner2.Controllers.LoginAuth.NameSession] = user;
+                return RedirectToAction("index", "Profile");
+            }
         }
         [HttpPost]
         public ActionResult addDanhMuc(int DM, string TYPECHOOSE)
